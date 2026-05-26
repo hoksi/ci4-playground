@@ -12,7 +12,7 @@ if (! function_exists('format_filesize')) {
             $bytes /= 1024;
             $i++;
         }
-        return round($bytes, $decimals) . ' ' . $units[$i];
+        return number_format($bytes, $i === 0 ? 0 : $decimals) . ' ' . $units[$i];
     }
 }
 

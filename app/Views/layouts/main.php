@@ -216,6 +216,9 @@
     <a href="<?= base_url('examples/cli') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/cli') ? 'active' : '' ?>">
         <i class="bi bi-terminal"></i> CLI 커맨드
     </a>
+    <a href="<?= base_url('examples/testing') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/testing') ? 'active' : '' ?>">
+        <i class="bi bi-check2-circle"></i> 테스팅
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
