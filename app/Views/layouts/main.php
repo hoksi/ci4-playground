@@ -245,6 +245,9 @@
     <a href="<?= base_url('examples/apiauth') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/apiauth') ? 'active' : '' ?>">
         <i class="bi bi-key"></i> API 인증
     </a>
+    <a href="<?= base_url('examples/securitydemo') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/securitydemo') ? 'active' : '' ?>">
+        <i class="bi bi-shield-lock"></i> Security
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">

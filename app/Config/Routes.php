@@ -148,6 +148,11 @@ $routes->group('examples', function ($routes) {
     $routes->post('apiauth/test',             'Examples\ApiAuth::testApi');
     $routes->get('apiauth/protected',         'Examples\ApiAuth::protected', ['filter' => 'api-key']);
 
+    // 30. Security 클래스
+    $routes->get('securitydemo',              'Examples\SecurityDemo::index');
+    $routes->post('securitydemo/sanitize',    'Examples\SecurityDemo::sanitize');
+    $routes->post('securitydemo/xss',         'Examples\SecurityDemo::xss');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

@@ -761,6 +761,35 @@
         </div>
     </div>
 
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #198754 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f0fdf4;">
+                        <i class="bi bi-shield-lock fs-4" style="color:#198754;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Security 클래스</h5>
+                        <small class="text-muted">XSS / Sanitize / CSRF</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">esc() 컨텍스트별 이스케이프, sanitizeFilename() 파일명 보안, CSRF 보호 설정을 실습합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">esc()</span>
+                    <span class="badge bg-light text-dark border">sanitizeFilename</span>
+                    <span class="badge bg-light text-dark border">XSS</span>
+                    <span class="badge bg-light text-dark border">CSRF</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/securitydemo') ?>" class="demo-btn" style="background:#198754;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">
