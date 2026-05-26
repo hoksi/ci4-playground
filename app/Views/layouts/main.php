@@ -193,6 +193,9 @@
     <a href="<?= base_url('examples/httpclient') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/httpclient') ? 'active' : '' ?>">
         <i class="bi bi-globe"></i> HTTP 클라이언트
     </a>
+    <a href="<?= base_url('examples/email') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/email') ? 'active' : '' ?>">
+        <i class="bi bi-envelope"></i> 이메일 발송
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
