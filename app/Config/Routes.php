@@ -141,6 +141,13 @@ $routes->group('examples', function ($routes) {
     $routes->post('advancedvalidation/group',       'Examples\AdvancedValidation::group');
     $routes->post('advancedvalidation/conditional', 'Examples\AdvancedValidation::conditional');
 
+    // 29. API 인증 (API Key)
+    $routes->get('apiauth',                   'Examples\ApiAuth::index');
+    $routes->post('apiauth/generate',         'Examples\ApiAuth::generate');
+    $routes->post('apiauth/revoke',           'Examples\ApiAuth::revoke');
+    $routes->post('apiauth/test',             'Examples\ApiAuth::testApi');
+    $routes->get('apiauth/protected',         'Examples\ApiAuth::protected', ['filter' => 'api-key']);
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

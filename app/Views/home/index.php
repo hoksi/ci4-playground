@@ -732,6 +732,35 @@
         </div>
     </div>
 
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #fd7e14 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#fff8f0;">
+                        <i class="bi bi-key fs-4" style="color:#fd7e14;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">API 인증</h5>
+                        <small class="text-muted">API Key Authentication</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">API Key 발급, Bearer 토큰 헤더 검증 필터, 키 활성화/비활성화 관리로 API 보안을 구현합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">ApiKeyFilter</span>
+                    <span class="badge bg-light text-dark border">Bearer 토큰</span>
+                    <span class="badge bg-light text-dark border">401/403</span>
+                    <span class="badge bg-light text-dark border">키 관리</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/apiauth') ?>" class="demo-btn" style="background:#fd7e14;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">
