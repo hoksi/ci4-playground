@@ -98,6 +98,10 @@ $routes->group('examples', function ($routes) {
     $routes->get('lang',                         'Examples\Lang::index');
     $routes->get('lang/switch/(:segment)',       'Examples\Lang::switchLang/$1');
 
+    // 17. 이벤트 시스템
+    $routes->get('events',                       'Examples\EventSystem::index');
+    $routes->post('events/trigger',              'Examples\EventSystem::trigger');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
