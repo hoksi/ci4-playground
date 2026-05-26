@@ -19,7 +19,13 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <span class="text-muted">총 <strong><?= $pager->getTotal() ?></strong>개의 게시글</span>
-    <span class="badge bg-secondary"><i class="bi bi-lock me-1"></i>읽기 전용 데모</span>
+    <?php if ($readOnly): ?>
+        <span class="badge bg-secondary py-2"><i class="bi bi-lock me-1"></i>읽기 전용 데모</span>
+    <?php else: ?>
+        <a href="<?= base_url('examples/board/create') ?>" class="demo-btn">
+            <i class="bi bi-pencil-square"></i> 새 글 작성
+        </a>
+    <?php endif; ?>
 </div>
 
 <div class="example-card">

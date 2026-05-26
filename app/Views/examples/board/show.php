@@ -27,7 +27,20 @@
 
 <div class="d-flex justify-content-between mt-3">
     <a href="<?= base_url('examples/board') ?>" class="demo-btn outline">← 목록</a>
-    <span class="badge bg-secondary"><i class="bi bi-lock me-1"></i>읽기 전용 데모</span>
+    <?php if (! $readOnly): ?>
+    <div class="d-flex gap-2">
+        <a href="<?= base_url("examples/board/{$post->id}/edit") ?>" class="demo-btn" style="background:#fd7e14;">
+            <i class="bi bi-pencil"></i> 수정
+        </a>
+        <a href="<?= base_url("examples/board/{$post->id}/delete") ?>"
+           class="demo-btn" style="background:#dc3545;"
+           onclick="return confirm('정말 삭제하시겠습니까?')">
+            <i class="bi bi-trash"></i> 삭제
+        </a>
+    </div>
+    <?php else: ?>
+        <span class="badge bg-secondary py-2"><i class="bi bi-lock me-1"></i>읽기 전용 데모</span>
+    <?php endif; ?>
 </div>
 
 <div class="example-card mt-4">
