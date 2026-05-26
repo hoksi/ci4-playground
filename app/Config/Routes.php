@@ -89,6 +89,11 @@ $routes->group('examples', function ($routes) {
     // 14. 커스텀 헬퍼
     $routes->get('helper',                       'Examples\Helper::index');
 
+    // 15. 캐싱
+    $routes->get('cache',                        'Examples\Cache::index');
+    $routes->get('cache/clear',                  'Examples\Cache::clear');
+    $routes->get('cache/clear-all',              'Examples\Cache::clearAll');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
