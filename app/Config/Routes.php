@@ -81,6 +81,11 @@ $routes->group('examples', function ($routes) {
     $routes->get('email',                        'Examples\Email::index');
     $routes->post('email/send',                  'Examples\Email::send');
 
+    // 13. 서비스 레이어
+    $routes->get('servicelayer',                 'Examples\ServiceLayer::index');
+    $routes->get('servicelayer/search',          'Examples\ServiceLayer::search');
+    $routes->post('servicelayer/create',         'Examples\ServiceLayer::create');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

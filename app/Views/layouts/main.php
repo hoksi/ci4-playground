@@ -197,6 +197,11 @@
         <i class="bi bi-envelope"></i> 이메일 발송
     </a>
 
+    <div class="nav-section-title mt-2">아키텍처 패턴</div>
+    <a href="<?= base_url('examples/servicelayer') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/servicelayer') ? 'active' : '' ?>">
+        <i class="bi bi-layers"></i> 서비스 레이어
+    </a>
+
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
         <i class="bi bi-card-list"></i> 게시판 CRUD
