@@ -19,14 +19,11 @@ use CodeIgniter\Config\BaseService;
  */
 class Services extends BaseService
 {
-    /*
-     * public static function example($getShared = true)
-     * {
-     *     if ($getShared) {
-     *         return static::getSharedInstance('example');
-     *     }
-     *
-     *     return new \CodeIgniter\Example();
-     * }
-     */
+    public static function postService(bool $getShared = true): \App\Services\PostService
+    {
+        if ($getShared) {
+            return static::getSharedInstance('postService');
+        }
+        return new \App\Services\PostService(new \App\Models\PostModel());
+    }
 }
