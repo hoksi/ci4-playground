@@ -337,15 +337,10 @@ class Security extends BaseConfig
 <?= $this->section('scripts') ?>
 <script>
 function setInput(val) {
-    // HTML 엔티티를 실제 문자로 변환해서 입력란에 설정
-    const txt = document.createElement('textarea');
-    txt.innerHTML = val;
-    document.getElementById('sanitizeInput').value = txt.value;
+    document.getElementById('sanitizeInput').value = val;
 }
 function setXssInput(val) {
-    const txt = document.createElement('textarea');
-    txt.innerHTML = val;
-    document.getElementById('xssInput').value = txt.value;
+    document.getElementById('xssInput').value = val;
 }
 
 document.getElementById('btnSanitize').addEventListener('click', async () => {
