@@ -9,5 +9,6 @@ class AllSeeder extends Seeder
     public function run(): void
     {
         $this->call('PostSeeder');
+        $this->call('AccountSeeder');
     }
 }
