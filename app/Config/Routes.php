@@ -66,6 +66,11 @@ $routes->group('examples', function ($routes) {
     $routes->post('session/cookie/set',          'Examples\Session::setCookie');
     $routes->post('session/cookie/delete',       'Examples\Session::deleteCookie');
 
+    // 10. 유효성 검사
+    $routes->get('validation',                   'Examples\Validation::index');
+    $routes->post('validation/basic',            'Examples\Validation::basic');
+    $routes->post('validation/custom',           'Examples\Validation::custom');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

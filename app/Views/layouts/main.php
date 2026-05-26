@@ -187,6 +187,9 @@
     <a href="<?= base_url('examples/session') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/session') ? 'active' : '' ?>">
         <i class="bi bi-archive"></i> 세션 & 쿠키
     </a>
+    <a href="<?= base_url('examples/validation') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/validation') ? 'active' : '' ?>">
+        <i class="bi bi-shield-check"></i> 유효성 검사
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
