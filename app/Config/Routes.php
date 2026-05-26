@@ -114,6 +114,10 @@ $routes->group('examples', function ($routes) {
     $routes->post('transaction/transfer','Examples\Transaction::transfer');
     $routes->get('transaction/reset',    'Examples\Transaction::reset');
 
+    // 23. 로깅
+    $routes->get('logging',              'Examples\Logging::index');
+    $routes->post('logging/write',       'Examples\Logging::write');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

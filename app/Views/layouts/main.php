@@ -224,6 +224,9 @@
     <a href="<?= base_url('examples/transaction') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/transaction') ? 'active' : '' ?>">
         <i class="bi bi-arrow-left-right"></i> DB 트랜잭션
     </a>
+    <a href="<?= base_url('examples/logging') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/logging') ? 'active' : '' ?>">
+        <i class="bi bi-journal-text"></i> 로깅
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
