@@ -201,6 +201,9 @@
     <a href="<?= base_url('examples/servicelayer') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/servicelayer') ? 'active' : '' ?>">
         <i class="bi bi-layers"></i> 서비스 레이어
     </a>
+    <a href="<?= base_url('examples/helper') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/helper') ? 'active' : '' ?>">
+        <i class="bi bi-tools"></i> 커스텀 헬퍼
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
