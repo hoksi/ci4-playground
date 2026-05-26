@@ -172,12 +172,19 @@
         <i class="bi bi-database"></i> 모델 & 데이터베이스
     </a>
 
+    <a href="<?= base_url('examples/entityadvanced') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/entityadvanced') ? 'active' : '' ?>">
+        <i class="bi bi-box"></i> Entity 심화
+    </a>
+
     <div class="nav-section-title mt-2">고급 기능</div>
     <a href="<?= base_url('examples/filters') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/filters') ? 'active' : '' ?>">
         <i class="bi bi-funnel"></i> 필터
     </a>
     <a href="<?= base_url('examples/api') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/api') ? 'active' : '' ?>">
         <i class="bi bi-braces"></i> RESTful API
+    </a>
+    <a href="<?= base_url('examples/apiv2') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/apiv2') ? 'active' : '' ?>">
+        <i class="bi bi-braces-asterisk"></i> RESTful API v2 (JWT)
     </a>
 
     <div class="nav-section-title mt-2">입출력 처리</div>
@@ -200,6 +207,9 @@
     <div class="nav-section-title mt-2">아키텍처 패턴</div>
     <a href="<?= base_url('examples/servicelayer') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/servicelayer') ? 'active' : '' ?>">
         <i class="bi bi-layers"></i> 서비스 레이어
+    </a>
+    <a href="<?= base_url('examples/repository') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/repository') ? 'active' : '' ?>">
+        <i class="bi bi-diagram-3"></i> Repository 패턴
     </a>
     <a href="<?= base_url('examples/helper') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/helper') ? 'active' : '' ?>">
         <i class="bi bi-tools"></i> 커스텀 헬퍼
@@ -251,10 +261,25 @@
     <a href="<?= base_url('examples/querybuilderadvanced') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/querybuilderadvanced') ? 'active' : '' ?>">
         <i class="bi bi-database-gear"></i> Query Builder 고급
     </a>
+    <a href="<?= base_url('examples/paginationadvanced') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/paginationadvanced') ? 'active' : '' ?>">
+        <i class="bi bi-collection"></i> Pagination 심화
+    </a>
+    <a href="<?= base_url('examples/multidb') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/multidb') ? 'active' : '' ?>">
+        <i class="bi bi-database-add"></i> 다중 DB 연결
+    </a>
+    <a href="<?= base_url('examples/imageprocess') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/imageprocess') ? 'active' : '' ?>">
+        <i class="bi bi-image"></i> 이미지 처리
+    </a>
+    <a href="<?= base_url('examples/encryption') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/encryption') ? 'active' : '' ?>">
+        <i class="bi bi-lock"></i> 암호화 & 해싱
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
         <i class="bi bi-card-list"></i> 게시판 CRUD
+    </a>
+    <a href="<?= base_url('examples/auth') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/auth') ? 'active' : '' ?>">
+        <i class="bi bi-person-lock"></i> 회원 인증
     </a>
 </nav>
 
