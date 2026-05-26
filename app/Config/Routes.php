@@ -71,6 +71,12 @@ $routes->group('examples', function ($routes) {
     $routes->post('validation/basic',            'Examples\Validation::basic');
     $routes->post('validation/custom',           'Examples\Validation::custom');
 
+    // 11. HTTP 클라이언트
+    $routes->get('httpclient',                   'Examples\HttpClient::index');
+    $routes->post('httpclient/get',              'Examples\HttpClient::getRequest');
+    $routes->post('httpclient/post',             'Examples\HttpClient::postRequest');
+    $routes->post('httpclient/list',             'Examples\HttpClient::getList');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
