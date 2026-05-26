@@ -1056,6 +1056,36 @@
         </div>
     </div>
 
+    <!-- 40. 큐 시스템 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #6f42c1 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f5f0ff;">
+                        <i class="bi bi-collection-play fs-4" style="color:#6f42c1;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">큐(Queue) 시스템</h5>
+                        <small class="text-muted">DB-based Job Queue</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">DB 기반 커스텀 큐 — 잡 추가(push) · 처리(process) · 재시도(retry) · 실패 관리까지 큐 시스템 전체 흐름 실습.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">push/pop</span>
+                    <span class="badge bg-light text-dark border">retry</span>
+                    <span class="badge bg-light text-dark border">failed jobs</span>
+                    <span class="badge bg-light text-dark border">delay</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/queue') ?>" class="demo-btn" style="background:#6f42c1;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">

@@ -209,4 +209,12 @@ $routes->group('examples', function ($routes) {
     $routes->get('apiv2/users',                'Examples\ApiV2::users');
     $routes->get('apiv2/users/(:num)',         'Examples\ApiV2::user/$1');
     $routes->post('apiv2/users',               'Examples\ApiV2::createUser');
+
+    // 40. 큐 시스템
+    $routes->get('queue',                      'Examples\Queue::index');
+    $routes->post('queue/push',                'Examples\Queue::push');
+    $routes->post('queue/process',             'Examples\Queue::process');
+    $routes->post('queue/retry',               'Examples\Queue::retry');
+    $routes->get('queue/clear',                'Examples\Queue::clear');
+    $routes->get('queue/stats',                'Examples\Queue::stats');
 });
