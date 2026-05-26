@@ -57,6 +57,15 @@ $routes->group('examples', function ($routes) {
     $routes->post('fileupload/multi',            'Examples\FileUpload::multi');
     $routes->get('fileupload/delete/(:segment)', 'Examples\FileUpload::delete/$1');
 
+    // 9. 세션 & 쿠키
+    $routes->get('session',                      'Examples\Session::index');
+    $routes->post('session/set',                 'Examples\Session::setSession');
+    $routes->post('session/remove',              'Examples\Session::removeSession');
+    $routes->post('session/destroy',             'Examples\Session::destroySession');
+    $routes->post('session/flash',               'Examples\Session::setFlash');
+    $routes->post('session/cookie/set',          'Examples\Session::setCookie');
+    $routes->post('session/cookie/delete',       'Examples\Session::deleteCookie');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

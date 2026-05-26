@@ -184,6 +184,9 @@
     <a href="<?= base_url('examples/fileupload') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/fileupload') ? 'active' : '' ?>">
         <i class="bi bi-cloud-upload"></i> 파일 업로드
     </a>
+    <a href="<?= base_url('examples/session') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/session') ? 'active' : '' ?>">
+        <i class="bi bi-archive"></i> 세션 & 쿠키
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
