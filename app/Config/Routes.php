@@ -127,6 +127,11 @@ $routes->group('examples', function ($routes) {
     $routes->post('throttler/hit',       'Examples\Throttler::hit');
     $routes->get('throttler/reset',      'Examples\Throttler::reset');
 
+    // 26. Model 콜백
+    $routes->get('modelcallback',        'Examples\ModelCallback::index');
+    $routes->post('modelcallback/store', 'Examples\ModelCallback::store');
+    $routes->get('modelcallback/reset',  'Examples\ModelCallback::reset');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

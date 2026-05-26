@@ -233,6 +233,9 @@
     <a href="<?= base_url('examples/throttler') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/throttler') ? 'active' : '' ?>">
         <i class="bi bi-speedometer2"></i> Throttler
     </a>
+    <a href="<?= base_url('examples/modelcallback') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/modelcallback') ? 'active' : '' ?>">
+        <i class="bi bi-arrow-repeat"></i> Model 콜백
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
