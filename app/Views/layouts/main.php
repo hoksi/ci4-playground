@@ -145,8 +145,8 @@
     </a>
     <span class="version-badge">v4.7.3</span>
     <div class="ms-auto d-flex align-items-center gap-3">
-        <a href="https://codeigniter.com/user_guide/" target="_blank" class="text-white-50 text-decoration-none" style="font-size:.85rem;">
-            <i class="bi bi-book"></i> 공식 문서
+        <a href="https://www.cikorea.net" target="_blank" class="text-white-50 text-decoration-none" style="font-size:.85rem;">
+            <i class="bi bi-book"></i> 한국어문서
         </a>
     </div>
 </header>
