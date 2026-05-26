@@ -86,6 +86,9 @@ $routes->group('examples', function ($routes) {
     $routes->get('servicelayer/search',          'Examples\ServiceLayer::search');
     $routes->post('servicelayer/create',         'Examples\ServiceLayer::create');
 
+    // 14. 커스텀 헬퍼
+    $routes->get('helper',                       'Examples\Helper::index');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
