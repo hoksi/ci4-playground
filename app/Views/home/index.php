@@ -819,6 +819,243 @@
         </div>
     </div>
 
+    <!-- 32. 이미지 처리 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #20c997 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f0fdf9;">
+                        <i class="bi bi-image fs-4" style="color:#20c997;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">이미지 처리</h5>
+                        <small class="text-muted">Image Service</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">GD/Imagick로 리사이즈, 썸네일(fit/crop), 회전, 텍스트 워터마크를 한 번에 처리합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">resize</span>
+                    <span class="badge bg-light text-dark border">fit(crop)</span>
+                    <span class="badge bg-light text-dark border">rotate</span>
+                    <span class="badge bg-light text-dark border">watermark</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/imageprocess') ?>" class="demo-btn" style="background:#20c997;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 33. 암호화 & 해싱 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #6f42c1 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f5f0ff;">
+                        <i class="bi bi-lock fs-4" style="color:#6f42c1;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">암호화 & 해싱</h5>
+                        <small class="text-muted">Encryption / Hashing</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">password_hash로 bcrypt 해시 생성, password_verify로 검증. 암호화 vs 해싱 차이까지.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">bcrypt</span>
+                    <span class="badge bg-light text-dark border">password_hash</span>
+                    <span class="badge bg-light text-dark border">password_verify</span>
+                    <span class="badge bg-light text-dark border">cost</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/encryption') ?>" class="demo-btn" style="background:#6f42c1;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 34. Entity 심화 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #fd7e14 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#fff8f0;">
+                        <i class="bi bi-box fs-4" style="color:#fd7e14;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Entity 심화</h5>
+                        <small class="text-muted">Casts / Virtual / Datamap</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">$casts 자동 타입 변환, $datamap 별칭, virtual property(getter), setter 정규화 패턴을 실습합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">$casts</span>
+                    <span class="badge bg-light text-dark border">$datamap</span>
+                    <span class="badge bg-light text-dark border">getter/setter</span>
+                    <span class="badge bg-light text-dark border">json/csv</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/entityadvanced') ?>" class="demo-btn" style="background:#fd7e14;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 35. Repository 패턴 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #495057 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f8f9fa;">
+                        <i class="bi bi-diagram-3 fs-4" style="color:#495057;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Repository 패턴</h5>
+                        <small class="text-muted">Repository Pattern</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">Interface → Repository → Controller 레이어로 데이터 접근을 추상화하고 테스트 용이성을 확보합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">Interface</span>
+                    <span class="badge bg-light text-dark border">DI</span>
+                    <span class="badge bg-light text-dark border">CRUD 추상화</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/repository') ?>" class="demo-btn" style="background:#495057;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 36. Pagination 심화 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #0dcaf0 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f0fdff;">
+                        <i class="bi bi-collection fs-4" style="color:#0dcaf0;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Pagination 심화</h5>
+                        <small class="text-muted">Advanced Pagination</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">서버 페이저, AJAX 페이지네이션, Intersection Observer 무한 스크롤 세 가지 패턴 비교.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">paginate()</span>
+                    <span class="badge bg-light text-dark border">AJAX</span>
+                    <span class="badge bg-light text-dark border">Infinite Scroll</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/paginationadvanced') ?>" class="demo-btn" style="background:#0dcaf0;color:#000;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 37. 다중 DB 연결 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #6610f2 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f5f0ff;">
+                        <i class="bi bi-database-add fs-4" style="color:#6610f2;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">다중 DB 연결</h5>
+                        <small class="text-muted">Multi-DB Connection</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">기본/보조 DB 그룹 동시 연결, 런타임 설정 배열, Model의 $DBGroup으로 DB 분리 패턴을 실습합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">Database::connect</span>
+                    <span class="badge bg-light text-dark border">$DBGroup</span>
+                    <span class="badge bg-light text-dark border">멀티 테넌트</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/multidb') ?>" class="demo-btn" style="background:#6610f2;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 38. 회원 인증 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#fff5f5;">
+                        <i class="bi bi-person-lock fs-4" style="color:#dc3545;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">회원 인증</h5>
+                        <small class="text-muted">Auth System</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">회원가입 / 로그인 / 로그아웃 / 보호 페이지 / 비밀번호 변경까지 전체 인증 흐름을 실제로 동작시킵니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">register</span>
+                    <span class="badge bg-light text-dark border">login</span>
+                    <span class="badge bg-light text-dark border">세션 인증</span>
+                    <span class="badge bg-light text-dark border">bcrypt</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/auth') ?>" class="demo-btn" style="background:#dc3545;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 39. RESTful API v2 (JWT) -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #198754 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f0fdf4;">
+                        <i class="bi bi-braces-asterisk fs-4" style="color:#198754;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">RESTful API v2 (JWT)</h5>
+                        <small class="text-muted">JWT Authentication</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">JWT 토큰 발급/검증을 라이브러리 없이 직접 구현. Bearer 헤더로 인증되는 Stateless RESTful API.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">JWT</span>
+                    <span class="badge bg-light text-dark border">HS256</span>
+                    <span class="badge bg-light text-dark border">Bearer</span>
+                    <span class="badge bg-light text-dark border">Stateless</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/apiv2') ?>" class="demo-btn" style="background:#198754;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">

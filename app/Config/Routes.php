@@ -168,4 +168,45 @@ $routes->group('examples', function ($routes) {
     $routes->get('board/(:num)/edit',          'Examples\Board::edit/$1');
     $routes->post('board/(:num)/update',       'Examples\Board::update/$1');
     $routes->get('board/(:num)/delete',        'Examples\Board::delete/$1');
+
+    // 32. 이미지 처리
+    $routes->get('imageprocess',               'Examples\ImageProcess::index');
+    $routes->post('imageprocess/upload',       'Examples\ImageProcess::upload');
+
+    // 33. 암호화 & 해싱
+    $routes->get('encryption',                 'Examples\EncryptionDemo::index');
+    $routes->post('encryption/hash',           'Examples\EncryptionDemo::hash');
+    $routes->post('encryption/verify',         'Examples\EncryptionDemo::verify');
+
+    // 34. Entity 심화
+    $routes->get('entityadvanced',             'Examples\EntityAdvanced::index');
+    $routes->post('entityadvanced/demo',       'Examples\EntityAdvanced::demo');
+
+    // 35. Repository 패턴
+    $routes->get('repository',                 'Examples\Repository::index');
+    $routes->get('repository/list',            'Examples\Repository::list');
+    $routes->post('repository/store',          'Examples\Repository::store');
+
+    // 36. Pagination 심화
+    $routes->get('paginationadvanced',         'Examples\PaginationAdvanced::index');
+    $routes->get('paginationadvanced/data',    'Examples\PaginationAdvanced::data');
+
+    // 37. 다중 DB 연결
+    $routes->get('multidb',                    'Examples\MultiDb::index');
+    $routes->post('multidb/query',             'Examples\MultiDb::query');
+
+    // 38. 회원 인증
+    $routes->get('auth',                       'Examples\Auth::index');
+    $routes->match(['get', 'post'], 'auth/register', 'Examples\Auth::register');
+    $routes->match(['get', 'post'], 'auth/login',    'Examples\Auth::login');
+    $routes->get('auth/logout',                'Examples\Auth::logout');
+    $routes->get('auth/dashboard',             'Examples\Auth::dashboard');
+    $routes->post('auth/profile',              'Examples\Auth::profile');
+
+    // 39. RESTful API v2 (JWT)
+    $routes->get('apiv2',                      'Examples\ApiV2::index');
+    $routes->post('apiv2/auth/token',          'Examples\ApiV2::token');
+    $routes->get('apiv2/users',                'Examples\ApiV2::users');
+    $routes->get('apiv2/users/(:num)',         'Examples\ApiV2::user/$1');
+    $routes->post('apiv2/users',               'Examples\ApiV2::createUser');
 });
