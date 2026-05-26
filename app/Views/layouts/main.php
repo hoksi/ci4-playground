@@ -230,6 +230,9 @@
     <a href="<?= base_url('examples/exception') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/exception') ? 'active' : '' ?>">
         <i class="bi bi-shield-exclamation"></i> 예외 처리
     </a>
+    <a href="<?= base_url('examples/throttler') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/throttler') ? 'active' : '' ?>">
+        <i class="bi bi-speedometer2"></i> Throttler
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">

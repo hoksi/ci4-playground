@@ -616,6 +616,35 @@
         </div>
     </div>
 
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#fff5f5;">
+                        <i class="bi bi-speedometer2 fs-4" style="color:#dc3545;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Throttler</h5>
+                        <small class="text-muted">Rate Limiting</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">토큰 버킷 알고리즘 기반 IP Rate Limiting, ThrottleFilter로 API 과부하 방지를 학습합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">Throttler::check()</span>
+                    <span class="badge bg-light text-dark border">429</span>
+                    <span class="badge bg-light text-dark border">토큰버킷</span>
+                    <span class="badge bg-light text-dark border">ThrottleFilter</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/throttler') ?>" class="demo-btn" style="background:#dc3545;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">

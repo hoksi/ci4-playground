@@ -122,6 +122,11 @@ $routes->group('examples', function ($routes) {
     $routes->get('exception',            'Examples\ExceptionHandling::index');
     $routes->post('exception/demo',      'Examples\ExceptionHandling::demo');
 
+    // 25. Throttler
+    $routes->get('throttler',            'Examples\Throttler::index');
+    $routes->post('throttler/hit',       'Examples\Throttler::hit');
+    $routes->get('throttler/reset',      'Examples\Throttler::reset');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
