@@ -106,6 +106,9 @@ $routes->group('examples', function ($routes) {
     $routes->get('cli',                          'Examples\CliCommand::index');
     $routes->post('cli/run',                     'Examples\CliCommand::run');
 
+    // 21. 테스팅
+    $routes->match(['get','post'], 'testing',    'Examples\Testing::index');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

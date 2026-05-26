@@ -61,10 +61,10 @@ class PostService
      */
     public function create(array $data): array
     {
-        $validator = \Config\Services::validation();
+        $validator = \Config\Services::validation(null, false);
         $validator->setRules([
-            'title'   => ['label' => '제목',  'rules' => 'required|max_length[200]'],
-            'content' => ['label' => '본문',   'rules' => 'required'],
+            'title'   => ['label' => '제목',  'rules' => 'required|min_length[2]|max_length[200]'],
+            'content' => ['label' => '본문',   'rules' => 'required|min_length[10]'],
             'author'  => ['label' => '작성자', 'rules' => 'max_length[50]'],
         ]);
 
