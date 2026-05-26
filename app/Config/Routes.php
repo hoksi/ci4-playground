@@ -118,6 +118,10 @@ $routes->group('examples', function ($routes) {
     $routes->get('logging',              'Examples\Logging::index');
     $routes->post('logging/write',       'Examples\Logging::write');
 
+    // 24. 예외 처리
+    $routes->get('exception',            'Examples\ExceptionHandling::index');
+    $routes->post('exception/demo',      'Examples\ExceptionHandling::demo');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
