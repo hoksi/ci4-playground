@@ -236,6 +236,9 @@
     <a href="<?= base_url('examples/modelcallback') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/modelcallback') ? 'active' : '' ?>">
         <i class="bi bi-arrow-repeat"></i> Model 콜백
     </a>
+    <a href="<?= base_url('examples/configenv') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/configenv') ? 'active' : '' ?>">
+        <i class="bi bi-sliders"></i> Config 환경 분리
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">

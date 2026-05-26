@@ -132,6 +132,9 @@ $routes->group('examples', function ($routes) {
     $routes->post('modelcallback/store', 'Examples\ModelCallback::store');
     $routes->get('modelcallback/reset',  'Examples\ModelCallback::reset');
 
+    // 27. Config 환경 분리
+    $routes->get('configenv', 'Examples\ConfigEnv::index');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
