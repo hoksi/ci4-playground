@@ -51,6 +51,12 @@ $routes->group('examples', function ($routes) {
         $routes->post('users',                 'Api::createUser');
     });
 
+    // 8. 파일 업로드
+    $routes->get('fileupload',                   'Examples\FileUpload::index');
+    $routes->post('fileupload/upload',           'Examples\FileUpload::upload');
+    $routes->post('fileupload/multi',            'Examples\FileUpload::multi');
+    $routes->get('fileupload/delete/(:segment)', 'Examples\FileUpload::delete/$1');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

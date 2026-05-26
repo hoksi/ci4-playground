@@ -180,6 +180,11 @@
         <i class="bi bi-braces"></i> RESTful API
     </a>
 
+    <div class="nav-section-title mt-2">입출력 처리</div>
+    <a href="<?= base_url('examples/fileupload') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/fileupload') ? 'active' : '' ?>">
+        <i class="bi bi-cloud-upload"></i> 파일 업로드
+    </a>
+
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
         <i class="bi bi-card-list"></i> 게시판 CRUD
