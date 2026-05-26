@@ -30,15 +30,15 @@ class EventSystem extends BaseController
         } elseif ($scenario === 'priority') {
             CI4Events::on('playground_order', function () use (&$log) {
                 $log[] = "[우선순위 10] 나중에 실행 (기본값)";
-            }, EVENT_PRIORITY_NORMAL);
+            }, CI4Events::PRIORITY_NORMAL);
 
             CI4Events::on('playground_order', function () use (&$log) {
                 $log[] = "[우선순위 1] 가장 먼저 실행 (높은 우선순위)";
-            }, EVENT_PRIORITY_HIGH);
+            }, CI4Events::PRIORITY_HIGH);
 
             CI4Events::on('playground_order', function () use (&$log) {
                 $log[] = "[우선순위 200] 가장 나중에 실행 (낮은 우선순위)";
-            }, EVENT_PRIORITY_LOW);
+            }, CI4Events::PRIORITY_LOW);
 
             CI4Events::trigger('playground_order');
 
