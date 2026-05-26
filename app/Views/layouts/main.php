@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= esc($title ?? 'CI4 Playground') ?> — CodeIgniter 4</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --header-height: 56px;
+            --ci-red: #dd4814;
+            --ci-dark: #1a1a2e;
+        }
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+
+        /* Header */
+        .app-header {
+            height: var(--header-height);
+            background: var(--ci-dark);
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1030;
+            display: flex; align-items: center; padding: 0 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,.3);
+        }
+        .app-header .brand { color: #fff; font-weight: 700; font-size: 1.15rem; text-decoration: none; }
+        .app-header .brand span { color: var(--ci-red); }
+        .app-header .version-badge {
+            background: var(--ci-red); color: #fff;
+            font-size: .7rem; padding: 2px 8px; border-radius: 20px;
+            margin-left: .5rem; font-weight: 600;
+        }
+
+        /* Sidebar */
+        .app-sidebar {
+            width: var(--sidebar-width);
+            position: fixed; top: var(--header-height); left: 0; bottom: 0;
+            background: #fff; overflow-y: auto; border-right: 1px solid #e9ecef;
+            padding: 1rem 0;
+        }
+        .nav-section-title {
+            font-size: .7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: .08em; color: #adb5bd;
+            padding: .5rem 1.25rem .25rem;
+        }
+        .app-sidebar .nav-link {
+            color: #495057; padding: .45rem 1.25rem;
+            font-size: .9rem; border-radius: 0;
+            display: flex; align-items: center; gap: .6rem;
+        }
+        .app-sidebar .nav-link:hover { background: #f8f9fa; color: var(--ci-red); }
+        .app-sidebar .nav-link.active {
+            background: #fff3ef; color: var(--ci-red); font-weight: 600;
+            border-right: 3px solid var(--ci-red);
+        }
+        .app-sidebar .nav-link .bi { font-size: 1rem; opacity: .7; }
+
+        /* Main content */
+        .app-main {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 2rem;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        /* Page header */
+        .page-header {
+            background: linear-gradient(135deg, var(--ci-dark) 0%, #16213e 100%);
+            color: #fff; border-radius: 12px; padding: 2rem 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .page-header h1 { font-size: 1.8rem; font-weight: 700; margin: 0 0 .5rem; }
+        .page-header p { margin: 0; opacity: .8; font-size: .95rem; }
+
+        /* Example cards */
+        .example-card {
+            background: #fff; border-radius: 10px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05);
+            margin-bottom: 1.5rem; overflow: hidden;
+        }
+        .example-card-header {
+            background: #f8f9fa; padding: .75rem 1.25rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex; align-items: center; gap: .75rem;
+        }
+        .example-card-header h5 { margin: 0; font-size: 1rem; font-weight: 600; }
+        .example-card-body { padding: 1.25rem; }
+
+        /* Code blocks */
+        pre { margin: 0; border-radius: 8px; }
+        pre code { font-size: .84rem; line-height: 1.6; }
+        .code-label {
+            font-size: .75rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: .06em; color: #6c757d; margin-bottom: .4rem;
+        }
+
+        /* Result box */
+        .result-box {
+            background: #f0fdf4; border: 1px solid #bbf7d0;
+            border-radius: 8px; padding: 1rem 1.25rem;
+        }
+        .result-box.info { background: #eff6ff; border-color: #bfdbfe; }
+        .result-box.warning { background: #fffbeb; border-color: #fde68a; }
+        .result-box.danger { background: #fef2f2; border-color: #fecaca; }
+
+        /* Demo link buttons */
+        .demo-btn {
+            display: inline-flex; align-items: center; gap: .4rem;
+            background: var(--ci-red); color: #fff;
+            padding: .35rem .9rem; border-radius: 6px;
+            font-size: .85rem; text-decoration: none; font-weight: 500;
+        }
+        .demo-btn:hover { background: #c03a0f; color: #fff; }
+        .demo-btn.outline {
+            background: transparent; border: 1px solid var(--ci-red); color: var(--ci-red);
+        }
+        .demo-btn.outline:hover { background: var(--ci-red); color: #fff; }
+
+        /* Breadcrumb */
+        .breadcrumb { font-size: .85rem; }
+        .breadcrumb-item a { color: var(--ci-red); text-decoration: none; }
+
+        /* Footer */
+        .app-footer {
+            margin-left: var(--sidebar-width); padding: 1rem 2rem;
+            border-top: 1px solid #e9ecef; font-size: .8rem; color: #adb5bd;
+            background: #fff;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .app-sidebar { display: none; }
+            .app-main, .app-footer { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="app-header">
+    <a href="<?= base_url() ?>" class="brand">
+        <span>CI4</span> Playground
+    </a>
+    <span class="version-badge">v4.7.3</span>
+    <div class="ms-auto d-flex align-items-center gap-3">
+        <a href="https://codeigniter.com/user_guide/" target="_blank" class="text-white-50 text-decoration-none" style="font-size:.85rem;">
+            <i class="bi bi-book"></i> 공식 문서
+        </a>
+    </div>
+</header>
+
+<!-- Sidebar -->
+<nav class="app-sidebar">
+    <div class="nav-section-title">시작하기</div>
+    <a href="<?= base_url() ?>" class="nav-link <?= uri_string() === '' ? 'active' : '' ?>">
+        <i class="bi bi-house-door"></i> 홈 / 목차
+    </a>
+
+    <div class="nav-section-title mt-2">핵심 기능</div>
+    <a href="<?= base_url('examples/routing') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/routing') ? 'active' : '' ?>">
+        <i class="bi bi-sign-turn-right"></i> 라우팅
+    </a>
+    <a href="<?= base_url('examples/controllers') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/controllers') ? 'active' : '' ?>">
+        <i class="bi bi-cpu"></i> 컨트롤러
+    </a>
+    <a href="<?= base_url('examples/views') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/views') ? 'active' : '' ?>">
+        <i class="bi bi-window"></i> 뷰
+    </a>
+    <a href="<?= base_url('examples/models') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/models') ? 'active' : '' ?>">
+        <i class="bi bi-database"></i> 모델 & 데이터베이스
+    </a>
+
+    <div class="nav-section-title mt-2">고급 기능</div>
+    <a href="<?= base_url('examples/filters') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/filters') ? 'active' : '' ?>">
+        <i class="bi bi-funnel"></i> 필터
+    </a>
+    <a href="<?= base_url('examples/api') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/api') ? 'active' : '' ?>">
+        <i class="bi bi-braces"></i> RESTful API
+    </a>
+
+    <div class="nav-section-title mt-2">실전 예제</div>
+    <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
+        <i class="bi bi-card-list"></i> 게시판 CRUD
+    </a>
+</nav>
+
+<!-- Main -->
+<main class="app-main">
+    <?= $this->renderSection('content') ?>
+</main>
+
+<!-- Footer -->
+<footer class="app-footer">
+    <div class="d-flex justify-content-between align-items-center">
+        <span>CI4 Playground &mdash; CodeIgniter <?= \CodeIgniter\CodeIgniter::CI_VERSION ?> 예제 모음</span>
+        <span>PHP <?= phpversion() ?></span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+    });
+</script>
+<?= $this->renderSection('scripts') ?>
+</body>
+</html>
