@@ -207,6 +207,9 @@
     <a href="<?= base_url('examples/cache') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/cache') ? 'active' : '' ?>">
         <i class="bi bi-lightning-charge"></i> 캐싱
     </a>
+    <a href="<?= base_url('examples/lang') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/lang') ? 'active' : '' ?>">
+        <i class="bi bi-translate"></i> 다국어 (i18n)
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
