@@ -153,6 +153,13 @@ $routes->group('examples', function ($routes) {
     $routes->post('securitydemo/sanitize',    'Examples\SecurityDemo::sanitize');
     $routes->post('securitydemo/xss',         'Examples\SecurityDemo::xss');
 
+    // 31. Query Builder 고급
+    $routes->get('querybuilderadvanced',            'Examples\QueryBuilderAdvanced::index');
+    $routes->get('querybuilderadvanced/joins',      'Examples\QueryBuilderAdvanced::joins');
+    $routes->get('querybuilderadvanced/subquery',   'Examples\QueryBuilderAdvanced::subquery');
+    $routes->get('querybuilderadvanced/aggregate',  'Examples\QueryBuilderAdvanced::aggregate');
+    $routes->get('querybuilderadvanced/raw',        'Examples\QueryBuilderAdvanced::raw');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
