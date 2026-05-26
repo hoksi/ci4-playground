@@ -94,6 +94,10 @@ $routes->group('examples', function ($routes) {
     $routes->get('cache/clear',                  'Examples\Cache::clear');
     $routes->get('cache/clear-all',              'Examples\Cache::clearAll');
 
+    // 16. 다국어
+    $routes->get('lang',                         'Examples\Lang::index');
+    $routes->get('lang/switch/(:segment)',       'Examples\Lang::switchLang/$1');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
