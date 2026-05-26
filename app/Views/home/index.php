@@ -645,6 +645,180 @@
         </div>
     </div>
 
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #20c997 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f0fdf9;">
+                        <i class="bi bi-arrow-repeat fs-4" style="color:#20c997;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Model 콜백</h5>
+                        <small class="text-muted">Model Callbacks</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">beforeInsert/beforeUpdate로 비밀번호 자동 해싱, afterFind로 민감 데이터 마스킹 처리를 실습합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">beforeInsert</span>
+                    <span class="badge bg-light text-dark border">afterFind</span>
+                    <span class="badge bg-light text-dark border">password_hash</span>
+                    <span class="badge bg-light text-dark border">마스킹</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/modelcallback') ?>" class="demo-btn" style="background:#20c997;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #0dcaf0 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f0fbff;">
+                        <i class="bi bi-sliders fs-4" style="color:#0dcaf0;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Config 환경 분리</h5>
+                        <small class="text-muted">Config &amp; Environment</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">BaseConfig 클래스 작성, .env 오버라이드, config() / env() 헬퍼로 개발/운영 환경을 분리합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">BaseConfig</span>
+                    <span class="badge bg-light text-dark border">.env</span>
+                    <span class="badge bg-light text-dark border">config()</span>
+                    <span class="badge bg-light text-dark border">env()</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/configenv') ?>" class="demo-btn" style="background:#0dcaf0; color:#000;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #6610f2 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f5f0ff;">
+                        <i class="bi bi-shield-check fs-4" style="color:#6610f2;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">유효성 검사 고급</h5>
+                        <small class="text-muted">Advanced Validation</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">커스텀 규칙 클래스, 규칙 그룹, permit_empty/if_exist 조건부 규칙으로 고급 유효성 검사를 구현합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">커스텀 규칙</span>
+                    <span class="badge bg-light text-dark border">permit_empty</span>
+                    <span class="badge bg-light text-dark border">if_exist</span>
+                    <span class="badge bg-light text-dark border">규칙 그룹</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/advancedvalidation') ?>" class="demo-btn" style="background:#6610f2;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #fd7e14 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#fff8f0;">
+                        <i class="bi bi-key fs-4" style="color:#fd7e14;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">API 인증</h5>
+                        <small class="text-muted">API Key Authentication</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">API Key 발급, Bearer 토큰 헤더 검증 필터, 키 활성화/비활성화 관리로 API 보안을 구현합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">ApiKeyFilter</span>
+                    <span class="badge bg-light text-dark border">Bearer 토큰</span>
+                    <span class="badge bg-light text-dark border">401/403</span>
+                    <span class="badge bg-light text-dark border">키 관리</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/apiauth') ?>" class="demo-btn" style="background:#fd7e14;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #198754 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f0fdf4;">
+                        <i class="bi bi-shield-lock fs-4" style="color:#198754;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Security 클래스</h5>
+                        <small class="text-muted">XSS / Sanitize / CSRF</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">esc() 컨텍스트별 이스케이프, sanitizeFilename() 파일명 보안, CSRF 보호 설정을 실습합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">esc()</span>
+                    <span class="badge bg-light text-dark border">sanitizeFilename</span>
+                    <span class="badge bg-light text-dark border">XSS</span>
+                    <span class="badge bg-light text-dark border">CSRF</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/securitydemo') ?>" class="demo-btn" style="background:#198754;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #0d6efd !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#eff6ff;">
+                        <i class="bi bi-database-gear fs-4" style="color:#0d6efd;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Query Builder 고급</h5>
+                        <small class="text-muted">Advanced Query Builder</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">JOIN, 서브쿼리, GROUP BY/HAVING 집계, Raw SQL 직접 실행 등 Query Builder 고급 기능을 학습합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">JOIN</span>
+                    <span class="badge bg-light text-dark border">서브쿼리</span>
+                    <span class="badge bg-light text-dark border">GROUP BY</span>
+                    <span class="badge bg-light text-dark border">Raw SQL</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/querybuilderadvanced') ?>" class="demo-btn" style="background:#0d6efd;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">

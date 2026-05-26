@@ -127,6 +127,39 @@ $routes->group('examples', function ($routes) {
     $routes->post('throttler/hit',       'Examples\Throttler::hit');
     $routes->get('throttler/reset',      'Examples\Throttler::reset');
 
+    // 26. Model 콜백
+    $routes->get('modelcallback',        'Examples\ModelCallback::index');
+    $routes->post('modelcallback/store', 'Examples\ModelCallback::store');
+    $routes->get('modelcallback/reset',  'Examples\ModelCallback::reset');
+
+    // 27. Config 환경 분리
+    $routes->get('configenv', 'Examples\ConfigEnv::index');
+
+    // 28. 유효성 검사 고급
+    $routes->get('advancedvalidation',              'Examples\AdvancedValidation::index');
+    $routes->post('advancedvalidation/basic',       'Examples\AdvancedValidation::basic');
+    $routes->post('advancedvalidation/group',       'Examples\AdvancedValidation::group');
+    $routes->post('advancedvalidation/conditional', 'Examples\AdvancedValidation::conditional');
+
+    // 29. API 인증 (API Key)
+    $routes->get('apiauth',                   'Examples\ApiAuth::index');
+    $routes->post('apiauth/generate',         'Examples\ApiAuth::generate');
+    $routes->post('apiauth/revoke',           'Examples\ApiAuth::revoke');
+    $routes->post('apiauth/test',             'Examples\ApiAuth::testApi');
+    $routes->get('apiauth/protected',         'Examples\ApiAuth::protected', ['filter' => 'api-key']);
+
+    // 30. Security 클래스
+    $routes->get('securitydemo',              'Examples\SecurityDemo::index');
+    $routes->post('securitydemo/sanitize',    'Examples\SecurityDemo::sanitize');
+    $routes->post('securitydemo/xss',         'Examples\SecurityDemo::xss');
+
+    // 31. Query Builder 고급
+    $routes->get('querybuilderadvanced',            'Examples\QueryBuilderAdvanced::index');
+    $routes->get('querybuilderadvanced/joins',      'Examples\QueryBuilderAdvanced::joins');
+    $routes->get('querybuilderadvanced/subquery',   'Examples\QueryBuilderAdvanced::subquery');
+    $routes->get('querybuilderadvanced/aggregate',  'Examples\QueryBuilderAdvanced::aggregate');
+    $routes->get('querybuilderadvanced/raw',        'Examples\QueryBuilderAdvanced::raw');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
