@@ -560,7 +560,7 @@
 <div class="card border-0 shadow-sm mt-4" style="background:#1a1a2e; color:#fff;">
     <div class="card-body p-4">
         <h5 class="mb-3"><i class="bi bi-terminal me-2"></i>빠른 시작</h5>
-        <pre style="background:#0d1117; border-radius:8px; padding:1rem; margin:0;"><code class="language-bash">git clone https://github.com/your-username/ci4-playground.git
+        <pre style="background:#0d1117; border-radius:8px; padding:1rem; margin:0;"><code class="language-bash">git clone https://github.com/hoksi/ci4-playground.git
 cd ci4-playground
 composer install
 php spark migrate --all
