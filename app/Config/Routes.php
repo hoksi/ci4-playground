@@ -114,6 +114,19 @@ $routes->group('examples', function ($routes) {
     $routes->post('transaction/transfer','Examples\Transaction::transfer');
     $routes->get('transaction/reset',    'Examples\Transaction::reset');
 
+    // 23. 로깅
+    $routes->get('logging',              'Examples\Logging::index');
+    $routes->post('logging/write',       'Examples\Logging::write');
+
+    // 24. 예외 처리
+    $routes->get('exception',            'Examples\ExceptionHandling::index');
+    $routes->post('exception/demo',      'Examples\ExceptionHandling::demo');
+
+    // 25. Throttler
+    $routes->get('throttler',            'Examples\Throttler::index');
+    $routes->post('throttler/hit',       'Examples\Throttler::hit');
+    $routes->get('throttler/reset',      'Examples\Throttler::reset');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
