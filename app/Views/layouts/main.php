@@ -213,6 +213,9 @@
     <a href="<?= base_url('examples/events') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/events') ? 'active' : '' ?>">
         <i class="bi bi-bell"></i> 이벤트 시스템
     </a>
+    <a href="<?= base_url('examples/cli') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/cli') ? 'active' : '' ?>">
+        <i class="bi bi-terminal"></i> CLI 커맨드
+    </a>
 
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
