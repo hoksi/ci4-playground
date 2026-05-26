@@ -109,6 +109,11 @@ $routes->group('examples', function ($routes) {
     // 21. 테스팅
     $routes->match(['get','post'], 'testing',    'Examples\Testing::index');
 
+    // 22. DB 트랜잭션
+    $routes->get('transaction',          'Examples\Transaction::index');
+    $routes->post('transaction/transfer','Examples\Transaction::transfer');
+    $routes->get('transaction/reset',    'Examples\Transaction::reset');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');

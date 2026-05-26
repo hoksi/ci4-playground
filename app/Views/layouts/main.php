@@ -220,6 +220,11 @@
         <i class="bi bi-check2-circle"></i> 테스팅
     </a>
 
+    <div class="nav-section-title mt-2">실무 패턴</div>
+    <a href="<?= base_url('examples/transaction') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/transaction') ? 'active' : '' ?>">
+        <i class="bi bi-arrow-left-right"></i> DB 트랜잭션
+    </a>
+
     <div class="nav-section-title mt-2">실전 예제</div>
     <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
         <i class="bi bi-card-list"></i> 게시판 CRUD
