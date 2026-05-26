@@ -135,6 +135,12 @@ $routes->group('examples', function ($routes) {
     // 27. Config 환경 분리
     $routes->get('configenv', 'Examples\ConfigEnv::index');
 
+    // 28. 유효성 검사 고급
+    $routes->get('advancedvalidation',              'Examples\AdvancedValidation::index');
+    $routes->post('advancedvalidation/basic',       'Examples\AdvancedValidation::basic');
+    $routes->post('advancedvalidation/group',       'Examples\AdvancedValidation::group');
+    $routes->post('advancedvalidation/conditional', 'Examples\AdvancedValidation::conditional');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
