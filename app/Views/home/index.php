@@ -471,6 +471,35 @@
         </div>
     </div>
 
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #343a40 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#f8f9fa;">
+                        <i class="bi bi-terminal fs-4" style="color:#343a40;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">CLI 커맨드</h5>
+                        <small class="text-muted">Spark Commands</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">BaseCommand로 커스텀 spark 명령어를 만들고 인자/옵션/테이블 출력을 실습합니다.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">BaseCommand</span>
+                    <span class="badge bg-light text-dark border">CLI::write()</span>
+                    <span class="badge bg-light text-dark border">--options</span>
+                    <span class="badge bg-light text-dark border">table()</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/cli') ?>" class="demo-btn" style="background:#343a40;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">
