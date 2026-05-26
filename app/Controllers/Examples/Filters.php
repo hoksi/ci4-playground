@@ -27,9 +27,9 @@ class Filters extends BaseController
         ]);
     }
 
-    public function login(): string
+    public function login()
     {
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->is('post')) {
             $id       = $this->request->getPost('user_id');
             $password = $this->request->getPost('password');
 
