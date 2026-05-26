@@ -24,27 +24,16 @@ class Board extends BaseController
         ]);
     }
 
-    public function create(): string
+    public function create()
     {
-        return view('examples/board/create', ['title' => '게시글 작성']);
+        return redirect()->to(base_url('examples/board'))
+            ->with('error', '읽기 전용 데모입니다. 쓰기 기능은 비활성화되어 있습니다.');
     }
 
     public function store()
     {
-        if (! $this->validate($this->model->validationRules)) {
-            return redirect()->back()
-                ->withInput()
-                ->with('errors', $this->validator->getErrors());
-        }
-
-        $this->model->insert([
-            'title'   => $this->request->getPost('title'),
-            'content' => $this->request->getPost('content'),
-            'author'  => $this->request->getPost('author'),
-        ]);
-
         return redirect()->to(base_url('examples/board'))
-            ->with('success', '게시글이 작성되었습니다.');
+            ->with('error', '읽기 전용 데모입니다. 쓰기 기능은 비활성화되어 있습니다.');
     }
 
     public function show(int $id): string
@@ -62,52 +51,21 @@ class Board extends BaseController
         ]);
     }
 
-    public function edit(int $id): string
+    public function edit(int $id)
     {
-        $post = $this->model->find($id);
-        if (! $post) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
-        return view('examples/board/edit', [
-            'title' => '게시글 수정',
-            'post'  => $post,
-        ]);
+        return redirect()->to(base_url("examples/board/{$id}"))
+            ->with('error', '읽기 전용 데모입니다. 쓰기 기능은 비활성화되어 있습니다.');
     }
 
     public function update(int $id)
     {
-        $post = $this->model->find($id);
-        if (! $post) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
-        if (! $this->validate($this->model->validationRules)) {
-            return redirect()->back()
-                ->withInput()
-                ->with('errors', $this->validator->getErrors());
-        }
-
-        $this->model->update($id, [
-            'title'   => $this->request->getPost('title'),
-            'content' => $this->request->getPost('content'),
-            'author'  => $this->request->getPost('author'),
-        ]);
-
         return redirect()->to(base_url("examples/board/{$id}"))
-            ->with('success', '게시글이 수정되었습니다.');
+            ->with('error', '읽기 전용 데모입니다. 쓰기 기능은 비활성화되어 있습니다.');
     }
 
     public function delete(int $id)
     {
-        $post = $this->model->find($id);
-        if (! $post) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
-        $this->model->delete($id);
-
         return redirect()->to(base_url('examples/board'))
-            ->with('success', '게시글이 삭제되었습니다.');
+            ->with('error', '읽기 전용 데모입니다. 쓰기 기능은 비활성화되어 있습니다.');
     }
 }
