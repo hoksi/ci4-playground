@@ -40,8 +40,8 @@ $routes->group('examples', function ($routes) {
     $routes->get('filters',                    'Examples\Filters::index');
     $routes->get('filters/public',             'Examples\Filters::publicPage');
     $routes->get('filters/protected',          'Examples\Filters::protectedPage', ['filter' => 'auth-example']);
-    $routes->get('filters/login',              'Examples\Filters::login');
-    $routes->get('filters/logout',             'Examples\Filters::logout');
+    $routes->match(['get', 'post'], 'filters/login',  'Examples\Filters::login');
+    $routes->get('filters/logout',                    'Examples\Filters::logout');
 
     // 6. API
     $routes->get('api',                        'Examples\Api::index');
