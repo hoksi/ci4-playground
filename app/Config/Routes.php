@@ -77,6 +77,10 @@ $routes->group('examples', function ($routes) {
     $routes->post('httpclient/post',             'Examples\HttpClient::postRequest');
     $routes->post('httpclient/list',             'Examples\HttpClient::getList');
 
+    // 12. 이메일 발송
+    $routes->get('email',                        'Examples\Email::index');
+    $routes->post('email/send',                  'Examples\Email::send');
+
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
