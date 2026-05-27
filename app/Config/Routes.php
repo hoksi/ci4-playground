@@ -217,4 +217,12 @@ $routes->group('examples', function ($routes) {
     $routes->post('queue/retry',               'Examples\Queue::retry');
     $routes->get('queue/clear',                'Examples\Queue::clear');
     $routes->get('queue/stats',                'Examples\Queue::stats');
+
+    // 41. CSV/Excel 내보내기·가져오기
+    $routes->get('csv-excel',                  'Examples\CsvExcel::index');
+    $routes->get('csv-excel/export-csv',       'Examples\CsvExcel::exportCsv');
+    $routes->post('csv-excel/import-csv',      'Examples\CsvExcel::importCsv');
+    $routes->get('csv-excel/export-excel',     'Examples\CsvExcel::exportExcel');
+    $routes->post('csv-excel/import-excel',    'Examples\CsvExcel::importExcel');
+    $routes->get('csv-excel/reset',            'Examples\CsvExcel::reset');
 });

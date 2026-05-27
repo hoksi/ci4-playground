@@ -10,5 +10,6 @@ class AllSeeder extends Seeder
     {
         $this->call('PostSeeder');
         $this->call('AccountSeeder');
+        $this->call('ProductsSeeder');
     }
 }

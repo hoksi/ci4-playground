@@ -1086,6 +1086,36 @@
         </div>
     </div>
 
+    <!-- 41. CSV/Excel 내보내기·가져오기 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #198754 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#e8f5e9;">
+                        <i class="bi bi-file-earmark-spreadsheet fs-4" style="color:#198754;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">CSV/Excel 내보내기·가져오기</h5>
+                        <small class="text-muted">fputcsv · PhpSpreadsheet</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">순수 PHP로 CSV 내보내기·가져오기(UTF-8 BOM 처리), PhpSpreadsheet로 스타일이 적용된 XLSX 파일 생성 및 읽기.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">fputcsv</span>
+                    <span class="badge bg-light text-dark border">fgetcsv</span>
+                    <span class="badge bg-light text-dark border">PhpSpreadsheet</span>
+                    <span class="badge bg-light text-dark border">UTF-8 BOM</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/csv-excel') ?>" class="demo-btn" style="background:#198754;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">
