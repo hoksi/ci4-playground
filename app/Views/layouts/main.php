@@ -284,6 +284,9 @@
     <a href="<?= base_url('examples/queue') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/queue') ? 'active' : '' ?>">
         <i class="bi bi-collection-play"></i> 큐(Queue) 시스템
     </a>
+    <a href="<?= base_url('examples/csv-excel') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/csv-excel') ? 'active' : '' ?>">
+        <i class="bi bi-file-earmark-spreadsheet"></i> CSV/Excel
+    </a>
 </nav>
 
 <!-- Main -->
