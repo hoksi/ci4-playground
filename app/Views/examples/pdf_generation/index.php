@@ -25,26 +25,11 @@
 ══════════════════════════════════════════════════════ -->
 <div class="tab-pane fade show active" id="tab-demo">
 
-    <!-- 한글 폰트 상태 -->
-    <div class="card border-0 shadow-sm mb-4" id="fontStatusCard">
-        <div class="card-body d-flex align-items-center gap-3 flex-wrap py-3">
-            <div id="fontStatusIcon" class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                 style="width:40px;height:40px;background:#fff3cd;">
-                <i class="bi bi-fonts fs-5 text-warning"></i>
-            </div>
-            <div class="flex-grow-1">
-                <div class="fw-semibold" id="fontStatusTitle">한글 폰트 확인 중...</div>
-                <small class="text-muted" id="fontStatusDesc">NotoSansKR 폰트 설치 여부를 확인하고 있습니다.</small>
-            </div>
-            <button class="btn btn-warning btn-sm d-none" id="btnInstallFont">
-                <i class="bi bi-download me-1"></i>NotoSansKR 설치 (~4MB)
-            </button>
-            <span class="badge bg-success d-none" id="fontInstalledBadge">
-                <i class="bi bi-check-circle me-1"></i>한글 폰트 설치됨
-            </span>
-        </div>
-        <div class="progress d-none" id="fontInstallProgress" style="height:3px;border-radius:0 0 .375rem .375rem;">
-            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning w-100"></div>
+    <div class="alert alert-success d-flex align-items-center gap-2 mb-4 py-2">
+        <i class="bi bi-fonts fs-5"></i>
+        <div>
+            <strong>NotoSansKR 한글 폰트 내장</strong> —
+            <code>resources/fonts/NotoSansKR-Regular.ttf</code>로 번들됨. 별도 설치 없이 한글이 출력됩니다.
         </div>
     </div>
 
@@ -146,71 +131,6 @@
     </div>
 
 <script>
-// ── 한글 폰트 상태 확인 ──────────────────────────────────
-(function checkFontStatus() {
-    fetch('<?= base_url('examples/pdfgeneration/font-status') ?>')
-        .then(r => r.json())
-        .then(data => {
-            const icon    = document.getElementById('fontStatusIcon');
-            const title   = document.getElementById('fontStatusTitle');
-            const desc    = document.getElementById('fontStatusDesc');
-            const btnInst = document.getElementById('btnInstallFont');
-            const badge   = document.getElementById('fontInstalledBadge');
-
-            if (data.installed) {
-                icon.style.background = '#d1fae5';
-                icon.innerHTML = '<i class="bi bi-fonts fs-5 text-success"></i>';
-                title.textContent = '한글 폰트 설치됨 (NotoSansKR)';
-                desc.textContent  = `PDF에서 한글이 정상 출력됩니다. (${data.size})`;
-                badge.classList.remove('d-none');
-            } else {
-                icon.style.background = '#fff3cd';
-                icon.innerHTML = '<i class="bi bi-fonts fs-5 text-warning"></i>';
-                title.textContent = '한글 폰트 미설치';
-                desc.textContent  = 'NotoSansKR 폰트를 설치하면 PDF에서 한글이 출력됩니다.';
-                btnInst.classList.remove('d-none');
-            }
-        })
-        .catch(() => {});
-})();
-
-document.getElementById('btnInstallFont').addEventListener('click', function() {
-    const btn      = this;
-    const progress = document.getElementById('fontInstallProgress');
-    btn.disabled   = true;
-    btn.innerHTML  = '<span class="spinner-border spinner-border-sm me-1"></span>설치 중...';
-    progress.classList.remove('d-none');
-
-    fetch('<?= base_url('examples/pdfgeneration/install-font') ?>', {
-        method: 'POST',
-        headers: {'X-Requested-With': 'XMLHttpRequest',
-                  'Content-Type': 'application/x-www-form-urlencoded'},
-        body: '<?= csrf_token() ?>=<?= csrf_hash() ?>',
-    })
-    .then(r => r.json())
-    .then(data => {
-        progress.classList.add('d-none');
-        if (data.ok) {
-            document.getElementById('fontStatusIcon').style.background = '#d1fae5';
-            document.getElementById('fontStatusIcon').innerHTML = '<i class="bi bi-fonts fs-5 text-success"></i>';
-            document.getElementById('fontStatusTitle').textContent = '한글 폰트 설치 완료!';
-            document.getElementById('fontStatusDesc').textContent  = data.message + ` (${data.size})`;
-            btn.classList.add('d-none');
-            document.getElementById('fontInstalledBadge').classList.remove('d-none');
-        } else {
-            btn.disabled  = false;
-            btn.innerHTML = '<i class="bi bi-download me-1"></i>NotoSansKR 설치 (~4MB)';
-            document.getElementById('fontStatusDesc').textContent = '오류: ' + data.error;
-        }
-    })
-    .catch(e => {
-        progress.classList.add('d-none');
-        btn.disabled  = false;
-        btn.innerHTML = '<i class="bi bi-download me-1"></i>NotoSansKR 설치 (~4MB)';
-    });
-});
-
-// ── PDF 미리보기 ───────────────────────────────────────────
 document.querySelectorAll('.preview-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const url   = btn.dataset.url;
