@@ -243,6 +243,8 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
                 background: var(--ci-dark);
                 padding: .5rem 0 1rem;
                 border-top: 1px solid rgba(255,255,255,.1);
+                max-height: calc(100vh - var(--header-height));
+                overflow-y: auto;
             }
             .app-navbar .dropdown-menu {
                 box-shadow: none; border-radius: 0;
