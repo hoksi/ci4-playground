@@ -111,7 +111,7 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
 
         /* ── Top Navbar ── */
         .app-navbar {
-            height: var(--header-height);
+            min-height: var(--header-height);
             background: var(--ci-dark);
             position: fixed; top: 0; left: 0; right: 0; z-index: 1030;
             box-shadow: 0 2px 8px rgba(0,0,0,.3);
@@ -231,7 +231,21 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
 
         /* ── Mobile ── */
         @media (max-width: 991px) {
-            .app-navbar .dropdown-menu { box-shadow: none; border-top: 1px solid #e9ecef; border-radius: 0; }
+            .app-navbar .navbar-collapse {
+                background: var(--ci-dark);
+                padding: .5rem 0 1rem;
+                border-top: 1px solid rgba(255,255,255,.1);
+            }
+            .app-navbar .dropdown-menu {
+                box-shadow: none; border-radius: 0;
+                background: rgba(255,255,255,.06);
+                border: none; padding-left: 1rem;
+            }
+            .app-navbar .dropdown-item { color: rgba(255,255,255,.8); }
+            .app-navbar .dropdown-item:hover,
+            .app-navbar .dropdown-item.active {
+                background: rgba(255,255,255,.1); color: #fff;
+            }
         }
     </style>
 </head>
