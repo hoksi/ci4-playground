@@ -44,6 +44,7 @@ $allExamples = [
     ['url' => 'examples/taskscheduler',       'label' => 'Task Scheduler',   'icon' => 'clock-history'],
     ['url' => 'examples/pdfgeneration',       'label' => 'PDF 생성',         'icon' => 'file-earmark-pdf-fill'],
     ['url' => 'examples/sse',                 'label' => 'SSE 실시간',       'icon' => 'broadcast'],
+    ['url' => 'examples/notification',        'label' => '알림 시스템',      'icon' => 'bell'],
 ];
 
 $navGroups = [
@@ -73,7 +74,7 @@ $navGroups = [
     '실전 예제' => [
         'examples/board', 'examples/auth', 'examples/queue',
         'examples/csv-excel', 'examples/official-queue', 'examples/taskscheduler',
-        'examples/pdfgeneration', 'examples/sse',
+        'examples/pdfgeneration', 'examples/sse', 'examples/notification',
     ],
 ];
 
@@ -119,7 +120,7 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
         .app-navbar .navbar-brand {
             color: #fff; font-weight: 700; font-size: 1.15rem;
         }
-        .app-navbar .navbar-brand span { color: var(--ci-red); }
+        .app-navbar .navbar-brand span:not(.version-badge) { color: var(--ci-red); }
         .version-badge {
             background: var(--ci-red); color: #fff;
             font-size: .7rem; padding: 2px 8px; border-radius: 20px;
@@ -371,6 +372,29 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+
+        // 모바일: 네비게이션 열릴 때 현재 페이지 카테고리 드롭다운 자동 펼침
+        const activeItem = document.querySelector('.app-navbar .dropdown-item.active');
+        if (activeItem) {
+            const dropdownMenu   = activeItem.closest('.dropdown-menu');
+            const dropdownToggle = dropdownMenu?.previousElementSibling;
+            const mainNav        = document.getElementById('mainNav');
+
+            if (dropdownMenu && dropdownToggle && mainNav) {
+                mainNav.addEventListener('shown.bs.collapse', () => {
+                    if (window.innerWidth < 992) {
+                        dropdownToggle.classList.add('show');
+                        dropdownToggle.setAttribute('aria-expanded', 'true');
+                        dropdownMenu.classList.add('show');
+                    }
+                });
+                mainNav.addEventListener('hidden.bs.collapse', () => {
+                    dropdownToggle.classList.remove('show');
+                    dropdownToggle.setAttribute('aria-expanded', 'false');
+                    dropdownMenu.classList.remove('show');
+                });
+            }
+        }
     });
 </script>
 <?= $this->renderSection('scripts') ?>

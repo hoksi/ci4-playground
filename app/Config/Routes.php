@@ -247,4 +247,13 @@ $routes->group('examples', function ($routes) {
     // 45. Server-Sent Events
     $routes->get('sse',                        'Examples\Sse::index');
     $routes->get('sse/stream',                 'Examples\Sse::stream');
+
+    // 46. 알림 시스템
+    $routes->get('notification',               'Examples\Notification::index');
+    $routes->post('notification/create',       'Examples\Notification::create');
+    $routes->post('notification/read/(:num)',  'Examples\Notification::read/$1');
+    $routes->post('notification/read-all',     'Examples\Notification::readAll');
+    $routes->post('notification/clear',        'Examples\Notification::clear');
+    $routes->get('notification/count',         'Examples\Notification::count');
+    $routes->get('notification/stream',        'Examples\Notification::stream');
 });
