@@ -15,9 +15,9 @@ class PdfGeneration extends BaseController
 
     public function __construct()
     {
-        $this->fontDir   = ROOTPATH . 'resources/fonts/';   // TTF 원본 (git 추적)
-        $this->fontFile  = $this->fontDir . 'NotoSansKR-Regular.ttf';
-        $this->fontCache = WRITEPATH . 'fonts/';            // UFM 캐시 (런타임 생성)
+        $this->fontDir   = WRITEPATH . 'fonts/';                               // UFM/TTF 런타임 저장소 (쓰기 가능)
+        $this->fontFile  = ROOTPATH . 'resources/fonts/NotoSansKR-Regular.ttf'; // TTF 원본 (git 추적)
+        $this->fontCache = WRITEPATH . 'fonts/';                               // installed-fonts.json 저장소
     }
 
     public function index(): string
@@ -84,14 +84,14 @@ class PdfGeneration extends BaseController
     {
         $hasBundledFont = file_exists($this->fontFile);
 
+        if (!is_dir($this->fontDir)) {
+            mkdir($this->fontDir, 0755, true);
+        }
+
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', false);
-        if (!is_dir($this->fontCache)) {
-            mkdir($this->fontCache, 0755, true);
-        }
-
-        $options->setChroot([FCPATH, APPPATH . 'Views/', $this->fontDir]);
+        $options->setChroot([FCPATH, APPPATH . 'Views/', ROOTPATH . 'resources/fonts/']);
         $options->setFontDir($this->fontDir);
         $options->setFontCache($this->fontCache);
         $options->set('defaultFont', $hasBundledFont ? 'NotoSansKR' : 'DejaVu Sans');
@@ -99,10 +99,16 @@ class PdfGeneration extends BaseController
         $dompdf = new Dompdf($options);
 
         if ($hasBundledFont) {
-            $dompdf->getFontMetrics()->registerFont(
-                ['family' => 'NotoSansKR', 'style' => 'normal', 'weight' => 'normal'],
-                $this->fontFile
-            );
+            $fontMetrics = $dompdf->getFontMetrics();
+            // 첫 요청에만 등록 (이후엔 installed-fonts.json에서 자동 로드)
+            if (!isset($fontMetrics->getFontFamilies()['notosanskr'])) {
+                // file:// 스킴 필수 — DOMPDF allowedProtocols에 "" 빈 프로토콜 없음
+                $fontMetrics->registerFont(
+                    ['family' => 'NotoSansKR', 'style' => 'normal', 'weight' => 'normal'],
+                    'file://' . $this->fontFile
+                );
+                $fontMetrics->saveFontFamilies();
+            }
         }
 
         return $dompdf;
