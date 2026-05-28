@@ -120,7 +120,7 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
         .app-navbar .navbar-brand {
             color: #fff; font-weight: 700; font-size: 1.15rem;
         }
-        .app-navbar .navbar-brand span { color: var(--ci-red); }
+        .app-navbar .navbar-brand span:not(.version-badge) { color: var(--ci-red); }
         .version-badge {
             background: var(--ci-red); color: #fff;
             font-size: .7rem; padding: 2px 8px; border-radius: 20px;
