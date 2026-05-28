@@ -46,7 +46,7 @@ class OfficialQueue extends BaseController
             ? $queue->setDelay($delay)->push($this->queueName, $jobKey, $dataMap[$jobKey])
             : $queue->push($this->queueName, $jobKey, $dataMap[$jobKey]);
 
-        if ($result->isSuccess()) {
+        if ($result->getStatus()) {
             return $this->response->setJSON([
                 'ok'      => true,
                 'message' => "잡 [{$jobKey}] 추가 완료 (ID: {$result->getJobId()})",
@@ -54,7 +54,7 @@ class OfficialQueue extends BaseController
             ]);
         }
 
-        return $this->response->setJSON(['ok' => false, 'message' => '잡 추가 실패: ' . $result->getMessage()]);
+        return $this->response->setJSON(['ok' => false, 'message' => '잡 추가 실패: ' . $result->getError()]);
     }
 
     // ─── 잡 처리 (1건) ───────────────────────────────────────────────────────
