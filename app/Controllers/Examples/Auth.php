@@ -29,7 +29,7 @@ class Auth extends BaseController
     // ─── 회원가입 ─────────────────────────────────────────
     public function register()
     {
-        if (strtoupper($this->request->getMethod()) === 'POST') {
+        if ($this->request->is('post')) {
             $rules = [
                 'username'         => 'required|min_length[2]|max_length[50]',
                 'email'            => 'required|valid_email|is_unique[auth_users.email]',
@@ -73,7 +73,7 @@ class Auth extends BaseController
     // ─── 로그인 ───────────────────────────────────────────
     public function login()
     {
-        if (strtoupper($this->request->getMethod()) === 'POST') {
+        if ($this->request->is('post')) {
             $email    = strtolower(trim((string) $this->request->getPost('email')));
             $password = (string) $this->request->getPost('password');
 
