@@ -1178,6 +1178,36 @@
         </div>
     </div>
 
+    <!-- 45. SSE -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #198754 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#e8f5e9;">
+                        <i class="bi bi-broadcast fs-4" style="color:#198754;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">Server-Sent Events</h5>
+                        <small class="text-muted">실시간 서버 푸시</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">SSE로 서버 → 클라이언트 단방향 실시간 스트림. 시스템 정보·큐 현황·알림을 <code>EventSource</code> API로 수신.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">EventSource</span>
+                    <span class="badge bg-light text-dark border">text/event-stream</span>
+                    <span class="badge bg-light text-dark border">자동재연결</span>
+                    <span class="badge bg-light text-dark border">커스텀이벤트</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/sse') ?>" class="demo-btn" style="background:#198754;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 44. PDF 생성 -->
     <div class="col-md-6 col-xl-4">
         <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #e53935 !important;">

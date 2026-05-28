@@ -296,6 +296,9 @@
     <a href="<?= base_url('examples/pdfgeneration') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/pdfgeneration') ? 'active' : '' ?>">
         <i class="bi bi-file-earmark-pdf-fill"></i> PDF 생성
     </a>
+    <a href="<?= base_url('examples/sse') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/sse') ? 'active' : '' ?>">
+        <i class="bi bi-broadcast"></i> SSE 실시간
+    </a>
 </nav>
 
 <!-- Main -->
