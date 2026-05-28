@@ -44,6 +44,7 @@ $allExamples = [
     ['url' => 'examples/taskscheduler',       'label' => 'Task Scheduler',   'icon' => 'clock-history'],
     ['url' => 'examples/pdfgeneration',       'label' => 'PDF 생성',         'icon' => 'file-earmark-pdf-fill'],
     ['url' => 'examples/sse',                 'label' => 'SSE 실시간',       'icon' => 'broadcast'],
+    ['url' => 'examples/notification',        'label' => '알림 시스템',      'icon' => 'bell'],
 ];
 
 $navGroups = [
@@ -73,7 +74,7 @@ $navGroups = [
     '실전 예제' => [
         'examples/board', 'examples/auth', 'examples/queue',
         'examples/csv-excel', 'examples/official-queue', 'examples/taskscheduler',
-        'examples/pdfgeneration', 'examples/sse',
+        'examples/pdfgeneration', 'examples/sse', 'examples/notification',
     ],
 ];
 
