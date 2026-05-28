@@ -190,10 +190,68 @@ php spark playground:reset --files-only
 
 ### 자동 리셋 (cron)
 
+#### 1. PHP 실행 경로 확인
+
 ```bash
-# crontab -e  — 매일 새벽 3시 자동 리셋
-0 3 * * * cd /var/www/playground && php spark playground:reset --quiet >> writable/logs/reset.log 2>&1
+which php
+# 예: /usr/bin/php  또는  /usr/bin/php8.3
 ```
+
+#### 2. 로그 디렉터리 생성 및 권한 설정
+
+```bash
+mkdir -p /var/www/playground/writable/logs
+chmod 775 /var/www/playground/writable/logs
+# 웹 서버 사용자(www-data 등)가 쓸 수 있도록 소유자 설정
+chown www-data:www-data /var/www/playground/writable/logs
+```
+
+#### 3. crontab 등록
+
+```bash
+# 웹 서버 사용자로 crontab 편집 (www-data 권장)
+sudo crontab -u www-data -e
+```
+
+아래 줄을 추가합니다:
+
+```
+# CI4 Playground — 매일 새벽 3시 전체 리셋
+0 3 * * * cd /var/www/playground && /usr/bin/php spark playground:reset --quiet >> writable/logs/reset.log 2>&1
+```
+
+> **팁**: 주기를 조정하려면 앞의 `0 3 * * *` 부분을 변경합니다.
+> - `0 */6 * * *` — 6시간마다
+> - `0 3 * * 1` — 매주 월요일 새벽 3시
+
+#### 4. cron 등록 확인
+
+```bash
+sudo crontab -u www-data -l
+```
+
+#### 5. 로그 로테이션 설정 (선택)
+
+`/etc/logrotate.d/ci4-playground` 파일을 생성합니다:
+
+```
+/var/www/playground/writable/logs/reset.log {
+    weekly
+    rotate 4
+    compress
+    missingok
+    notifempty
+}
+```
+
+#### 6. 즉시 테스트
+
+```bash
+# cron 실행 전 수동으로 동작 확인
+cd /var/www/playground && /usr/bin/php spark playground:reset
+```
+
+---
 
 리셋 동작:
 - **DB** — 모든 플레이그라운드 테이블 truncate 후 초기 샘플 데이터 재입력
