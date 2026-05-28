@@ -47,10 +47,11 @@
                     <h5>상품 목록 보고서</h5>
                     <p class="text-muted small">playground_products 데이터를<br>스타일된 표 형식 PDF로 출력</p>
                     <div class="d-grid gap-2 mt-3">
-                        <a href="<?= base_url('examples/pdfgeneration/products') ?>"
-                           target="_blank" class="btn btn-outline-danger">
-                            <i class="bi bi-eye me-1"></i>브라우저에서 보기
-                        </a>
+                        <button class="btn btn-outline-danger preview-btn"
+                                data-url="<?= base_url('examples/pdfgeneration/products') ?>"
+                                data-title="상품 목록 보고서">
+                            <i class="bi bi-eye me-1"></i>미리보기
+                        </button>
                         <a href="<?= base_url('examples/pdfgeneration/products?download=1') ?>"
                            class="btn btn-danger btn-sm">
                             <i class="bi bi-download me-1"></i>PDF 다운로드
@@ -71,10 +72,11 @@
                     <h5>인보이스 샘플</h5>
                     <p class="text-muted small">로고·항목·합계·부가세가 포함된<br>전문적인 인보이스 PDF</p>
                     <div class="d-grid gap-2 mt-3">
-                        <a href="<?= base_url('examples/pdfgeneration/invoice') ?>"
-                           target="_blank" class="btn btn-outline-success">
-                            <i class="bi bi-eye me-1"></i>브라우저에서 보기
-                        </a>
+                        <button class="btn btn-outline-success preview-btn"
+                                data-url="<?= base_url('examples/pdfgeneration/invoice') ?>"
+                                data-title="인보이스 샘플">
+                            <i class="bi bi-eye me-1"></i>미리보기
+                        </button>
                         <a href="<?= base_url('examples/pdfgeneration/invoice?download=1') ?>"
                            class="btn btn-success btn-sm">
                             <i class="bi bi-download me-1"></i>PDF 다운로드
@@ -95,10 +97,11 @@
                     <h5>게시글 목록</h5>
                     <p class="text-muted small">posts 테이블 최근 20개를<br>목록 형식 PDF로 출력</p>
                     <div class="d-grid gap-2 mt-3">
-                        <a href="<?= base_url('examples/pdfgeneration/posts') ?>"
-                           target="_blank" class="btn btn-outline-primary">
-                            <i class="bi bi-eye me-1"></i>브라우저에서 보기
-                        </a>
+                        <button class="btn btn-outline-primary preview-btn"
+                                data-url="<?= base_url('examples/pdfgeneration/posts') ?>"
+                                data-title="게시글 목록">
+                            <i class="bi bi-eye me-1"></i>미리보기
+                        </button>
                         <a href="<?= base_url('examples/pdfgeneration/posts?download=1') ?>"
                            class="btn btn-primary btn-sm">
                             <i class="bi bi-download me-1"></i>PDF 다운로드
@@ -113,16 +116,50 @@
     <!-- 인라인 미리보기 -->
     <div class="card border-0 shadow-sm mt-4">
         <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-display me-2"></i>인라인 미리보기 (iframe)</span>
-            <small class="text-muted">위 "브라우저에서 보기" 클릭 후 여기에 표시됩니다</small>
+            <span><i class="bi bi-display me-2"></i>인라인 미리보기 — <span id="previewTitle" class="text-muted fw-normal">미리보기할 PDF를 선택하세요</span></span>
+            <button class="btn btn-sm btn-outline-secondary" id="btnClosePreview" style="display:none">
+                <i class="bi bi-x-lg"></i> 닫기
+            </button>
         </div>
         <div class="card-body p-0">
             <div class="text-center text-muted py-5" id="previewPlaceholder">
                 <i class="bi bi-file-earmark-pdf display-4 text-danger opacity-25"></i>
-                <p class="mt-2">PDF를 생성하면 여기에 미리보기가 표시됩니다</p>
+                <p class="mt-2 mb-0">위 <strong>미리보기</strong> 버튼을 클릭하면 여기에 PDF가 표시됩니다</p>
             </div>
+            <iframe id="pdfFrame" src="" style="display:none;width:100%;height:700px;border:0;"
+                    title="PDF 미리보기"></iframe>
         </div>
     </div>
+
+<script>
+document.querySelectorAll('.preview-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const url   = btn.dataset.url;
+        const title = btn.dataset.title;
+        const frame = document.getElementById('pdfFrame');
+        const placeholder = document.getElementById('previewPlaceholder');
+        const closeBtn    = document.getElementById('btnClosePreview');
+
+        document.getElementById('previewTitle').textContent = title;
+        placeholder.style.display = 'none';
+        frame.style.display = 'block';
+        frame.src = url;
+        closeBtn.style.display = '';
+
+        // 스크롤을 미리보기 영역으로 이동
+        frame.closest('.card').scrollIntoView({behavior: 'smooth', block: 'start'});
+    });
+});
+
+document.getElementById('btnClosePreview').addEventListener('click', () => {
+    const frame = document.getElementById('pdfFrame');
+    frame.src = '';
+    frame.style.display = 'none';
+    document.getElementById('previewPlaceholder').style.display = '';
+    document.getElementById('btnClosePreview').style.display = 'none';
+    document.getElementById('previewTitle').textContent = '미리보기할 PDF를 선택하세요';
+});
+</script>
 
 </div>
 
