@@ -372,6 +372,29 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+
+        // 모바일: 네비게이션 열릴 때 현재 페이지 카테고리 드롭다운 자동 펼침
+        const activeItem = document.querySelector('.app-navbar .dropdown-item.active');
+        if (activeItem) {
+            const dropdownMenu   = activeItem.closest('.dropdown-menu');
+            const dropdownToggle = dropdownMenu?.previousElementSibling;
+            const mainNav        = document.getElementById('mainNav');
+
+            if (dropdownMenu && dropdownToggle && mainNav) {
+                mainNav.addEventListener('shown.bs.collapse', () => {
+                    if (window.innerWidth < 992) {
+                        dropdownToggle.classList.add('show');
+                        dropdownToggle.setAttribute('aria-expanded', 'true');
+                        dropdownMenu.classList.add('show');
+                    }
+                });
+                mainNav.addEventListener('hidden.bs.collapse', () => {
+                    dropdownToggle.classList.remove('show');
+                    dropdownToggle.setAttribute('aria-expanded', 'false');
+                    dropdownMenu.classList.remove('show');
+                });
+            }
+        }
     });
 </script>
 <?= $this->renderSection('scripts') ?>
