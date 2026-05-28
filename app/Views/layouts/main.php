@@ -293,6 +293,9 @@
     <a href="<?= base_url('examples/taskscheduler') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/taskscheduler') ? 'active' : '' ?>">
         <i class="bi bi-clock-history"></i> Task Scheduler
     </a>
+    <a href="<?= base_url('examples/pdfgeneration') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/pdfgeneration') ? 'active' : '' ?>">
+        <i class="bi bi-file-earmark-pdf-fill"></i> PDF 생성
+    </a>
 </nav>
 
 <!-- Main -->
