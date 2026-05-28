@@ -11,74 +11,18 @@ class PdfGeneration extends BaseController
     private string $fontDir  = '';
     private string $fontFile = '';
 
+    private string $fontCache = '';
+
     public function __construct()
     {
-        $this->fontDir  = WRITEPATH . 'fonts/';
-        $this->fontFile = $this->fontDir . 'NotoSansKR-Regular.ttf';
+        $this->fontDir   = ROOTPATH . 'resources/fonts/';   // TTF 원본 (git 추적)
+        $this->fontFile  = $this->fontDir . 'NotoSansKR-Regular.ttf';
+        $this->fontCache = WRITEPATH . 'fonts/';            // UFM 캐시 (런타임 생성)
     }
 
     public function index(): string
     {
-        return view('examples/pdf_generation/index', [
-            'fontInstalled' => $this->isFontInstalled(),
-        ]);
-    }
-
-    /** 한글 폰트 설치 상태 JSON */
-    public function fontStatus(): \CodeIgniter\HTTP\ResponseInterface
-    {
-        $installed = $this->isFontInstalled();
-        return $this->response->setJSON([
-            'installed' => $installed,
-            'size'      => $installed ? round(filesize($this->fontFile) / 1024 / 1024, 1) . ' MB' : null,
-        ]);
-    }
-
-    /** NotoSansKR 폰트 다운로드 및 DOMPDF 등록 */
-    public function installFont(): \CodeIgniter\HTTP\ResponseInterface
-    {
-        if (!is_dir($this->fontDir)) {
-            mkdir($this->fontDir, 0755, true);
-        }
-
-        // ① 폰트 다운로드 (jsDelivr → GitHub google/fonts 미러)
-        if (!file_exists($this->fontFile)) {
-            $urls = [
-                'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanskr/static/NotoSansKR-Regular.ttf',
-                'https://github.com/google/fonts/raw/main/ofl/notosanskr/static/NotoSansKR-Regular.ttf',
-            ];
-
-            $data = false;
-            foreach ($urls as $url) {
-                $data = $this->fetchUrl($url);
-                if ($data && strlen($data) > 10000) {
-                    break;
-                }
-            }
-
-            if (!$data || strlen($data) < 10000) {
-                return $this->response->setJSON([
-                    'ok'    => false,
-                    'error' => '폰트 다운로드 실패. 수동 설치 방법을 참고하세요.',
-                ]);
-            }
-
-            file_put_contents($this->fontFile, $data);
-        }
-
-        // ② DOMPDF에 폰트 메트릭스 등록 (UFM 캐시 파일 생성)
-        // buildDompdf() 내부에서 isFontInstalled() → registerFont() 자동 호출
-        try {
-            $this->buildDompdf();
-        } catch (\Throwable $e) {
-            return $this->response->setJSON(['ok' => false, 'error' => $e->getMessage()]);
-        }
-
-        return $this->response->setJSON([
-            'ok'      => true,
-            'message' => 'NotoSansKR 폰트 설치 완료! 이제 PDF에서 한글이 출력됩니다.',
-            'size'    => round(filesize($this->fontFile) / 1024 / 1024, 1) . ' MB',
-        ]);
+        return view('examples/pdf_generation/index');
     }
 
     /** 상품 목록 PDF */
@@ -136,31 +80,25 @@ class PdfGeneration extends BaseController
 
     // ─── 내부 헬퍼 ────────────────────────────────────────────────────────────
 
-    private function isFontInstalled(): bool
-    {
-        return file_exists($this->fontFile) && filesize($this->fontFile) > 10000;
-    }
-
     private function buildDompdf(): Dompdf
     {
+        $hasBundledFont = file_exists($this->fontFile);
+
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', false);
-        $options->setChroot([FCPATH, APPPATH . 'Views/']);
-
-        $fontInstalled = $this->isFontInstalled();
-
-        if (is_dir($this->fontDir)) {
-            $options->setFontDir($this->fontDir);
-            $options->setFontCache($this->fontDir);
+        if (!is_dir($this->fontCache)) {
+            mkdir($this->fontCache, 0755, true);
         }
 
-        $options->set('defaultFont', $fontInstalled ? 'NotoSansKR' : 'DejaVu Sans');
+        $options->setChroot([FCPATH, APPPATH . 'Views/', $this->fontDir]);
+        $options->setFontDir($this->fontDir);
+        $options->setFontCache($this->fontCache);
+        $options->set('defaultFont', $hasBundledFont ? 'NotoSansKR' : 'DejaVu Sans');
 
         $dompdf = new Dompdf($options);
 
-        // 커스텀 폰트가 설치돼 있으면 매 요청마다 등록 (UFM 캐시 재사용)
-        if ($fontInstalled) {
+        if ($hasBundledFont) {
             $dompdf->getFontMetrics()->registerFont(
                 ['family' => 'NotoSansKR', 'style' => 'normal', 'weight' => 'normal'],
                 $this->fontFile
@@ -193,24 +131,5 @@ class PdfGeneration extends BaseController
             ->setBody($dompdf->output())
             ->send();
         exit;
-    }
-
-    private function fetchUrl(string $url): string|false
-    {
-        if (function_exists('curl_init')) {
-            $ch = curl_init($url);
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_TIMEOUT        => 30,
-                CURLOPT_USERAGENT      => 'CI4-Playground/1.0',
-            ]);
-            $data = curl_exec($ch);
-            curl_close($ch);
-            return $data;
-        }
-
-        return @file_get_contents($url);
     }
 }
