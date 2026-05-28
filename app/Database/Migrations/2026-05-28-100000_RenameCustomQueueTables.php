@@ -16,7 +16,18 @@ class RenameCustomQueueTables extends Migration
     {
         $db = \Config\Database::connect();
 
-        // 커스텀 큐 잡 테이블 (job_class 컬럼 포함)
+        // ① 기존 배포에서 커스텀 스키마(job_class 컬럼)의 queue_jobs가 남아 있으면
+        //    custom_queue_jobs 로 이름을 바꾼다.
+        //    이렇게 해야 이후 CreateOfficialQueueJobsTable 이 올바른 공식 스키마로
+        //    queue_jobs 를 새로 생성할 수 있다.
+        if ($db->tableExists('queue_jobs') && ! $db->tableExists('custom_queue_jobs')) {
+            $columns = array_column($db->getFieldData('queue_jobs'), 'name');
+            if (in_array('job_class', $columns)) {
+                $db->query('ALTER TABLE queue_jobs RENAME TO custom_queue_jobs');
+            }
+        }
+
+        // ② custom_queue_jobs 가 아직 없으면 새로 생성
         if (! $db->tableExists('custom_queue_jobs')) {
             $this->forge->addField([
                 'id'           => ['type' => 'INTEGER', 'constraint' => 11, 'auto_increment' => true],
@@ -34,7 +45,7 @@ class RenameCustomQueueTables extends Migration
             $this->forge->createTable('custom_queue_jobs');
         }
 
-        // 커스텀 큐 실패 잡 테이블 이름 변경 또는 생성
+        // ③ 커스텀 큐 실패 잡 테이블 이름 변경 또는 생성
         if ($db->tableExists('queue_failed_jobs') && ! $db->tableExists('custom_queue_failed_jobs')) {
             $db->query('ALTER TABLE queue_failed_jobs RENAME TO custom_queue_failed_jobs');
         } elseif (! $db->tableExists('custom_queue_failed_jobs')) {
