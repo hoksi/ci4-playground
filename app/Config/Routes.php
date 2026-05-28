@@ -237,4 +237,10 @@ $routes->group('examples', function ($routes) {
     // 43. Task Scheduler
     $routes->get('taskscheduler',              'Examples\TaskScheduler::index');
     $routes->post('taskscheduler/run',         'Examples\TaskScheduler::run');
+
+    // 44. PDF 생성
+    $routes->get('pdfgeneration',              'Examples\PdfGeneration::index');
+    $routes->get('pdfgeneration/products',     'Examples\PdfGeneration::products');
+    $routes->get('pdfgeneration/posts',        'Examples\PdfGeneration::posts');
+    $routes->get('pdfgeneration/invoice',      'Examples\PdfGeneration::invoice');
 });

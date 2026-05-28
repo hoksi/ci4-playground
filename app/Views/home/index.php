@@ -1178,6 +1178,37 @@
         </div>
     </div>
 
+    <!-- 44. PDF 생성 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #e53935 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#fce4ec;">
+                        <i class="bi bi-file-earmark-pdf-fill fs-4" style="color:#e53935;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">PDF 생성</h5>
+                        <small class="text-muted">dompdf/dompdf 패키지</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3"><code>dompdf/dompdf</code>로 HTML 뷰를 PDF로 변환. 상품 보고서·인보이스·게시글 목록을 인라인 보기 및 다운로드로 출력.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">loadHtml</span>
+                    <span class="badge bg-light text-dark border">setPaper</span>
+                    <span class="badge bg-light text-dark border">stream</span>
+                    <span class="badge bg-light text-dark border">download</span>
+                    <span class="badge bg-light text-dark border">한글폰트</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/pdfgeneration') ?>" class="demo-btn" style="background:#e53935;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">
