@@ -91,13 +91,10 @@ cd ci4-playground
 # 2. 의존성 설치
 composer install
 
-# 3. 환경 설정
+# 3. 환경 설정 ★ 필수
 cp .env.example .env
-# .env 파일에서 아래 값 확인/수정
-# CI_ENVIRONMENT = development
-# app.baseURL = 'http://localhost:8080'
-# database.default.DBDriver = SQLite3
-# database.default.database = database.db
+# 로컬 개발 시: .env 파일의 app.baseURL = 'http://localhost:8080' 확인
+# 공개 서버 배포 시: app.baseURL 을 실제 도메인으로 변경
 
 # 4. 데이터베이스 초기화 및 샘플 데이터 입력
 php spark migrate --all
@@ -107,6 +104,8 @@ php spark db:seed AllSeeder
 php spark serve
 # → http://localhost:8080 접속
 ```
+
+> SQLite를 사용하므로 별도 DB 설치 없이 바로 실행됩니다.
 
 ## 요구 사항
 
