@@ -40,17 +40,20 @@ class Email extends BaseController
         $emailService->setMessage($isHtml ? $message : nl2br(esc($message)));
         $emailService->setMailType($isHtml ? 'html' : 'text');
 
-        $sent    = false;
-        $errMsg  = '';
-        $preview = $emailService->printDebugger(['headers', 'subject', 'body']);
+        $sent   = false;
+        $errMsg = '';
 
         try {
             $sent = $emailService->send(false);
-            if (! $sent) {
-                $errMsg = $emailService->printDebugger();
-            }
         } catch (\Throwable $e) {
             $errMsg = $e->getMessage();
+        }
+
+        // send() 이후 호출해야 헤더·본문이 준비된 상태로 출력됨
+        $preview = $emailService->printDebugger(['headers', 'subject', 'body']);
+
+        if (! $sent && $errMsg === '') {
+            $errMsg = $emailService->printDebugger();
         }
 
         return view('examples/email/index', [
