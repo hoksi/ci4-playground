@@ -248,6 +248,13 @@ $routes->group('examples', function ($routes) {
     $routes->get('sse',                        'Examples\Sse::index');
     $routes->get('sse/stream',                 'Examples\Sse::stream');
 
+    // 47. 파일 업로드 심화
+    $routes->get('fileupload-advanced',                    'Examples\FileUploadAdvanced::index');
+    $routes->post('fileupload-advanced/upload',            'Examples\FileUploadAdvanced::upload');
+    $routes->get('fileupload-advanced/list',               'Examples\FileUploadAdvanced::list');
+    $routes->get('fileupload-advanced/thumb/(:segment)',   'Examples\FileUploadAdvanced::thumb/$1');
+    $routes->post('fileupload-advanced/delete/(:segment)', 'Examples\FileUploadAdvanced::delete/$1');
+
     // 46. 알림 시스템
     $routes->get('notification',               'Examples\Notification::index');
     $routes->post('notification/create',       'Examples\Notification::create');

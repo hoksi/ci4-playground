@@ -211,6 +211,36 @@
         </div>
     </div>
 
+    <!-- 47. 파일 업로드 심화 -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #0d6efd !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#e7f0ff;">
+                        <i class="bi bi-cloud-upload-fill fs-4" style="color:#0d6efd;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">파일 업로드 심화</h5>
+                        <small class="text-muted">Drag &amp; Drop · AJAX · 진행률</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">Drag &amp; Drop 업로드, FileReader 이미지 미리보기, XHR <code>upload.onprogress</code> 진행률 표시 패턴.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">Drag&amp;Drop</span>
+                    <span class="badge bg-light text-dark border">FileReader</span>
+                    <span class="badge bg-light text-dark border">XHR Progress</span>
+                    <span class="badge bg-light text-dark border">AJAX</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/fileupload-advanced') ?>" class="demo-btn" style="background:#0d6efd;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-6 col-xl-4">
         <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #6610f2 !important;">
             <div class="card-body">
