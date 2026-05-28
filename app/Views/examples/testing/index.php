@@ -354,6 +354,8 @@ final class PostServiceTest extends CIUnitTestCase
                     <div class="d-flex align-items-center gap-2 mb-2">
                         <?php if ($exitCode === 0): ?>
                             <span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>PASS</span>
+                        <?php elseif ($exitCode === 127): ?>
+                            <span class="badge bg-warning text-dark fs-6"><i class="bi bi-exclamation-triangle me-1"></i>PHPUnit 없음</span>
                         <?php else: ?>
                             <span class="badge bg-danger fs-6"><i class="bi bi-x-circle me-1"></i>FAIL</span>
                         <?php endif; ?>
