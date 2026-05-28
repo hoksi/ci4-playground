@@ -233,4 +233,8 @@ $routes->group('examples', function ($routes) {
     $routes->post('official-queue/retry',      'Examples\OfficialQueue::retryFailed');
     $routes->post('official-queue/clear',      'Examples\OfficialQueue::clear');
     $routes->get('official-queue/stats',       'Examples\OfficialQueue::statsJson');
+
+    // 43. Task Scheduler
+    $routes->get('taskscheduler',              'Examples\TaskScheduler::index');
+    $routes->post('taskscheduler/run',         'Examples\TaskScheduler::run');
 });

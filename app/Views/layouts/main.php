@@ -290,6 +290,9 @@
     <a href="<?= base_url('examples/official-queue') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/official-queue') ? 'active' : '' ?>">
         <i class="bi bi-collection-play-fill"></i> CI4 공식 Queue
     </a>
+    <a href="<?= base_url('examples/taskscheduler') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/taskscheduler') ? 'active' : '' ?>">
+        <i class="bi bi-clock-history"></i> Task Scheduler
+    </a>
 </nav>
 
 <!-- Main -->
