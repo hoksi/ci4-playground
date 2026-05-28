@@ -15,9 +15,9 @@ class PdfGeneration extends BaseController
 
     public function __construct()
     {
-        $this->fontDir   = WRITEPATH . 'fonts/';                               // UFM/TTF 런타임 저장소 (쓰기 가능)
+        $this->fontDir   = WRITEPATH . 'fonts/';                                // UFM/TTF 복사본 (쓰기 가능, 런타임)
         $this->fontFile  = ROOTPATH . 'resources/fonts/NotoSansKR-Regular.ttf'; // TTF 원본 (git 추적)
-        $this->fontCache = WRITEPATH . 'fonts/';                               // installed-fonts.json 저장소
+        $this->fontCache = WRITEPATH . 'fonts/';                                // installed-fonts.json
     }
 
     public function index(): string
@@ -91,6 +91,7 @@ class PdfGeneration extends BaseController
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', false);
+        // chroot: TTF 원본 경로 포함 (registerFont 시 file:// 로 읽음)
         $options->setChroot([FCPATH, APPPATH . 'Views/', ROOTPATH . 'resources/fonts/']);
         $options->setFontDir($this->fontDir);
         $options->setFontCache($this->fontCache);
@@ -99,19 +100,35 @@ class PdfGeneration extends BaseController
         $dompdf = new Dompdf($options);
 
         if ($hasBundledFont) {
-            $fontMetrics = $dompdf->getFontMetrics();
-            // 첫 요청에만 등록 (이후엔 installed-fonts.json에서 자동 로드)
-            if (!isset($fontMetrics->getFontFamilies()['notosanskr'])) {
-                // file:// 스킴 필수 — DOMPDF allowedProtocols에 "" 빈 프로토콜 없음
-                $fontMetrics->registerFont(
-                    ['family' => 'NotoSansKR', 'style' => 'normal', 'weight' => 'normal'],
-                    'file://' . $this->fontFile
-                );
-                $fontMetrics->saveFontFamilies();
-            }
+            $this->registerKoreanFont($dompdf);
         }
 
         return $dompdf;
+    }
+
+    private function registerKoreanFont(Dompdf $dompdf): void
+    {
+        $fontMetrics = $dompdf->getFontMetrics();
+        $families    = $fontMetrics->getFontFamilies();
+
+        // bold 포함 4변형 모두 등록 — 미등록 시에만 실행 (이후엔 installed-fonts.json 자동 로드)
+        if (isset($families['notosanskr']['bold'])) {
+            return;
+        }
+
+        $uri      = 'file://' . $this->fontFile;
+        $variants = [
+            ['family' => 'NotoSansKR', 'style' => 'normal', 'weight' => 'normal'],
+            ['family' => 'NotoSansKR', 'style' => 'normal', 'weight' => 'bold'],
+            ['family' => 'NotoSansKR', 'style' => 'italic', 'weight' => 'normal'],
+            ['family' => 'NotoSansKR', 'style' => 'italic', 'weight' => 'bold'],
+        ];
+
+        foreach ($variants as $v) {
+            $fontMetrics->registerFont($v, $uri);
+        }
+
+        $fontMetrics->saveFontFamilies();
     }
 
     private function renderHtml(string $view, array $data = []): string
