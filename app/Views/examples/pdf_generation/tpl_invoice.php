@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: "DejaVu Sans", sans-serif; font-size: 11px; color: #222; padding: 30px 40px; }
+body { font-family: "NotoSansKR", "DejaVu Sans", sans-serif; font-size: 11px; color: #222; padding: 30px 40px; }
 
 .top { display: table; width: 100%; margin-bottom: 30px; }
 .company { display: table-cell; width: 60%; vertical-align: top; }
