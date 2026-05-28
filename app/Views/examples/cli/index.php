@@ -71,7 +71,7 @@
 
     <!-- 출력 결과 -->
     <?php if (isset($output)): ?>
-    <div class="example-card">
+    <div class="example-card" id="cli-result">
         <div class="example-card-header"><h5><i class="bi bi-terminal me-2"></i>실행 결과: <code>php spark <?= esc($ran) ?></code></h5></div>
         <div class="example-card-body">
             <pre style="background:#0d1117; color:#e6e6e6; border-radius:8px; padding:1rem; font-size:.83rem; margin:0; white-space:pre-wrap;"><?= esc($output) ?></pre>
@@ -165,6 +165,13 @@ function showTab(name) {
     document.getElementById('tab-' + name).style.display = 'block';
     document.querySelectorAll('#cliTab .nav-link').forEach(el => el.classList.remove('active'));
     event.target.classList.add('active');
+}
+
+const resultEl = document.getElementById('cli-result');
+if (resultEl) {
+    const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 56;
+    const top = resultEl.getBoundingClientRect().top + window.scrollY - offset - 16;
+    window.scrollTo({ top, behavior: 'smooth' });
 }
 </script>
 <?= $this->endSection() ?>
