@@ -85,7 +85,7 @@
     </div>
 
     <?php if (isset($preview)): ?>
-    <div class="example-card mt-3">
+    <div class="example-card mt-3" id="email-result">
         <div class="example-card-header"><h5><i class="bi bi-eye me-2"></i>디버그 정보 (이메일 내용 미리보기)</h5></div>
         <div class="example-card-body">
             <pre style="background:#0d1117; color:#e6e6e6; border-radius:8px; padding:1rem; font-size:.8rem; overflow:auto; max-height:400px;"><?= esc($preview) ?></pre>
@@ -158,6 +158,13 @@ function showTab(name) {
     document.getElementById('tab-' + name).style.display = 'block';
     document.querySelectorAll('#emailTab .nav-link').forEach(el => el.classList.remove('active'));
     event.target.classList.add('active');
+}
+
+const resultEl = document.getElementById('email-result');
+if (resultEl) {
+    const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 56;
+    const top = resultEl.getBoundingClientRect().top + window.scrollY - offset - 16;
+    window.scrollTo({ top, behavior: 'smooth' });
 }
 </script>
 <?= $this->endSection() ?>
