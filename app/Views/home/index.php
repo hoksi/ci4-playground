@@ -1116,6 +1116,37 @@
         </div>
     </div>
 
+    <!-- 42. CI4 공식 Queue -->
+    <div class="col-md-6 col-xl-4">
+        <div class="card h-100 border-0 shadow-sm" style="border-top: 4px solid #0dcaf0 !important;">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:48px;height:48px;background:#e0f7fa;">
+                        <i class="bi bi-collection-play-fill fs-4" style="color:#0dcaf0;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">CI4 공식 Queue 시스템</h5>
+                        <small class="text-muted">codeigniter4/queue 패키지</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-3">공식 <code>codeigniter4/queue</code> 패키지로 Database 핸들러 기반 잡 추가·처리·재시도·우선순위·체이닝 실습. DIY 큐(#40)와 비교.</p>
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                    <span class="badge bg-light text-dark border">push/pop</span>
+                    <span class="badge bg-light text-dark border">queue:work</span>
+                    <span class="badge bg-light text-dark border">setDelay</span>
+                    <span class="badge bg-light text-dark border">chain</span>
+                    <span class="badge bg-light text-dark border">retry</span>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0">
+                <a href="<?= base_url('examples/official-queue') ?>" class="demo-btn" style="background:#0dcaf0;color:#000;">
+                    <i class="bi bi-arrow-right-circle"></i> 예제 보기
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 예제 -->
     <div class="col-12">
         <div class="card border-0 shadow-sm" style="border-top: 4px solid #dc3545 !important; background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);">
@@ -1150,12 +1181,13 @@
         <pre style="background:#0d1117; border-radius:8px; padding:1rem; margin:0;"><code class="language-bash">git clone https://github.com/hoksi/ci4-playground.git
 cd ci4-playground
 composer install
+cp .env.example .env          # 환경 설정 (baseURL 확인)
 php spark migrate --all
 php spark db:seed AllSeeder
 php spark serve</code></pre>
         <p class="mt-3 mb-0" style="opacity:.7; font-size:.85rem;">
             <i class="bi bi-info-circle me-1"></i>
-            SQLite를 사용하므로 별도 DB 설치 없이 바로 실행됩니다. PHP 8.1+ 필요.
+            SQLite를 사용하므로 별도 DB 설치 없이 바로 실행됩니다. PHP 8.2+ 필요.
         </p>
     </div>
 </div>

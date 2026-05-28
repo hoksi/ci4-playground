@@ -225,4 +225,12 @@ $routes->group('examples', function ($routes) {
     $routes->get('csv-excel/export-excel',     'Examples\CsvExcel::exportExcel');
     $routes->post('csv-excel/import-excel',    'Examples\CsvExcel::importExcel');
     $routes->get('csv-excel/reset',            'Examples\CsvExcel::reset');
+
+    // 42. CI4 공식 Queue
+    $routes->get('official-queue',             'Examples\OfficialQueue::index');
+    $routes->post('official-queue/push',       'Examples\OfficialQueue::push');
+    $routes->post('official-queue/process',    'Examples\OfficialQueue::processNext');
+    $routes->post('official-queue/retry',      'Examples\OfficialQueue::retryFailed');
+    $routes->post('official-queue/clear',      'Examples\OfficialQueue::clear');
+    $routes->get('official-queue/stats',       'Examples\OfficialQueue::statsJson');
 });
