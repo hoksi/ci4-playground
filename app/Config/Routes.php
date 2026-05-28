@@ -243,4 +243,8 @@ $routes->group('examples', function ($routes) {
     $routes->get('pdfgeneration/products',     'Examples\PdfGeneration::products');
     $routes->get('pdfgeneration/posts',        'Examples\PdfGeneration::posts');
     $routes->get('pdfgeneration/invoice',      'Examples\PdfGeneration::invoice');
+
+    // 45. Server-Sent Events
+    $routes->get('sse',                        'Examples\Sse::index');
+    $routes->get('sse/stream',                 'Examples\Sse::stream');
 });
