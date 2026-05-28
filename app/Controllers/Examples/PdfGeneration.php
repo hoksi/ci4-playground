@@ -86,6 +86,16 @@ class PdfGeneration extends BaseController
         $dompdf->loadHtml($html, 'UTF-8');
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-        $dompdf->stream($filename, ['Attachment' => (int) $download]);
+
+        // CI4 response 객체를 통해 전송 — dompdf->stream()의 직접 header() 호출을 피함
+        $disposition = $download ? 'attachment' : 'inline';
+        $this->response
+            ->setHeader('Content-Type', 'application/pdf')
+            ->setHeader('Content-Disposition', "{$disposition}; filename=\"{$filename}\"")
+            ->setHeader('Cache-Control', 'private, max-age=0, must-revalidate')
+            ->setHeader('Pragma', 'public')
+            ->setBody($dompdf->output())
+            ->send();
+        exit;
     }
 }
