@@ -11,7 +11,7 @@ class Testing extends BaseController
         $output   = null;
         $exitCode = null;
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->is('post')) {
             $suite = $this->request->getPost('suite') ?? 'all';
             $cmd   = $this->buildCommand($suite);
             exec($cmd, $lines, $exitCode);
@@ -30,9 +30,9 @@ class Testing extends BaseController
         $base = 'cd ' . escapeshellarg(ROOTPATH) . ' && ./vendor/bin/phpunit';
 
         return match($suite) {
-            'helper'  => $base . ' tests/app/Helpers/PlaygroundHelperTest.php --testdox 2>&1',
-            'service' => $base . ' tests/app/Services/PostServiceTest.php --testdox 2>&1',
-            default   => $base . ' --testdox 2>&1',
+            'helper'  => $base . ' tests/app/Helpers/PlaygroundHelperTest.php --testdox --no-coverage 2>&1',
+            'service' => $base . ' tests/app/Services/PostServiceTest.php --testdox --no-coverage 2>&1',
+            default   => $base . ' --testdox --no-coverage 2>&1',
         };
     }
 }
