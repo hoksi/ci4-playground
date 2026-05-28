@@ -31,7 +31,7 @@ class PlaygroundReset extends BaseCommand
         'playground_products' => 'ProductsSeeder',
         'users_demo'        => null,
         'api_keys'          => null,
-        'auth_users'        => null,
+        'auth_users'               => null,
         'custom_queue_jobs'        => null,
         'custom_queue_failed_jobs' => null,
         'queue_jobs'               => null,
