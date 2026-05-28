@@ -337,7 +337,7 @@ php spark migrate --all</code></pre>
                     <div class="card-header bg-light border-top"><strong class="small">지원 핸들러</strong></div>
                     <div class="card-body p-3">
                         <ul class="small mb-0">
-                            <li><strong>Database</strong> — MySQL, SQLite, PostgreSQL (이 예제)</li>
+                            <li><strong>Database</strong> — MySQL, SQLite, PostgreSQL <span class="badge bg-primary ms-1">이 예제 (SQLite)</span></li>
                             <li><strong>Redis</strong> — 고성능 인메모리 큐</li>
                             <li><strong>Predis</strong> — PHP Redis 클라이언트</li>
                             <li><strong>RabbitMQ</strong> — 엔터프라이즈 메시지 브로커</li>

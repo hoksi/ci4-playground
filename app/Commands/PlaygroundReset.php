@@ -32,8 +32,10 @@ class PlaygroundReset extends BaseCommand
         'users_demo'        => null,
         'api_keys'          => null,
         'auth_users'        => null,
-        'queue_jobs'        => null,
-        'queue_failed_jobs' => null,
+        'custom_queue_jobs'        => null,
+        'custom_queue_failed_jobs' => null,
+        'queue_jobs'               => null,
+        'queue_jobs_failed'        => null,
     ];
 
     public function run(array $params): void

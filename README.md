@@ -92,7 +92,7 @@ cd ci4-playground
 composer install
 
 # 3. 환경 설정
-cp env .env
+cp .env.example .env
 # .env 파일에서 아래 값 확인/수정
 # CI_ENVIRONMENT = development
 # app.baseURL = 'http://localhost:8080'
