@@ -221,6 +221,7 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
         .page-nav-btn .nav-dir { font-size: .72rem; color: #adb5bd; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: .1rem; }
         .page-nav-btn .nav-label { font-size: .9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .page-nav-btn .nav-icon { font-size: 1.4rem; flex-shrink: 0; opacity: .5; }
+        .page-nav-btn > div { min-width: 0; overflow: hidden; }
         .page-nav-spacer { flex: 1; }
 
         /* ── Footer ── */
@@ -230,6 +231,12 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
         }
 
         /* ── Mobile ── */
+        @media (max-width: 576px) {
+            .page-nav { gap: .5rem; }
+            .page-nav-btn { padding: .65rem .75rem; }
+            .page-nav-btn .nav-label { font-size: .8rem; }
+            .page-nav-btn .nav-icon { font-size: 1.1rem; }
+        }
         @media (max-width: 991px) {
             .app-navbar .navbar-collapse {
                 background: var(--ci-dark);
