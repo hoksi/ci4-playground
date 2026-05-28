@@ -46,7 +46,7 @@
                 <div class="code-label mt-4">컨트롤러 처리 코드</div>
                 <pre><code class="language-php">public function login()
 {
-    if ($this->request->getMethod() === 'post') {
+    if ($this->request->is('post')) {
         if ($id === 'demo' && $password === '1234') {
             session()->set(['filter_logged_in' => true, 'filter_user' => $id]);
             return redirect()->to(base_url('examples/filters/protected'));
