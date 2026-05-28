@@ -39,10 +39,11 @@ class Testing extends BaseController
     {
         $base = 'cd ' . escapeshellarg(ROOTPATH) . ' && ./vendor/bin/phpunit';
 
+        // --do-not-cache-result: 프로젝트 루트 .phpunit.result.cache 쓰기 방지 (배포 서버 권한 오류)
         return match($suite) {
-            'helper'  => $base . ' tests/app/Helpers/PlaygroundHelperTest.php --testdox --no-coverage 2>&1',
-            'service' => $base . ' tests/app/Services/PostServiceTest.php --testdox --no-coverage 2>&1',
-            default   => $base . ' --testdox --no-coverage 2>&1',
+            'helper'  => $base . ' tests/app/Helpers/PlaygroundHelperTest.php --testdox --no-coverage --do-not-cache-result 2>&1',
+            'service' => $base . ' tests/app/Services/PostServiceTest.php --testdox --no-coverage --do-not-cache-result 2>&1',
+            default   => $base . ' --testdox --no-coverage --do-not-cache-result 2>&1',
         };
     }
 }
