@@ -1181,12 +1181,13 @@
         <pre style="background:#0d1117; border-radius:8px; padding:1rem; margin:0;"><code class="language-bash">git clone https://github.com/hoksi/ci4-playground.git
 cd ci4-playground
 composer install
+cp .env.example .env          # 환경 설정 (baseURL 확인)
 php spark migrate --all
 php spark db:seed AllSeeder
 php spark serve</code></pre>
         <p class="mt-3 mb-0" style="opacity:.7; font-size:.85rem;">
             <i class="bi bi-info-circle me-1"></i>
-            SQLite를 사용하므로 별도 DB 설치 없이 바로 실행됩니다. PHP 8.1+ 필요.
+            SQLite를 사용하므로 별도 DB 설치 없이 바로 실행됩니다. PHP 8.2+ 필요.
         </p>
     </div>
 </div>
