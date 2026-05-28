@@ -1,3 +1,97 @@
+<?php
+// 전체 예제 순서 (이전/다음 네비게이션)
+$allExamples = [
+    ['url' => 'examples/routing',             'label' => '라우팅',           'icon' => 'sign-turn-right'],
+    ['url' => 'examples/controllers',         'label' => '컨트롤러',         'icon' => 'cpu'],
+    ['url' => 'examples/views',               'label' => '뷰',               'icon' => 'window'],
+    ['url' => 'examples/models',              'label' => '모델 & 데이터베이스','icon' => 'database'],
+    ['url' => 'examples/entityadvanced',      'label' => 'Entity 심화',      'icon' => 'box'],
+    ['url' => 'examples/filters',             'label' => '필터',             'icon' => 'funnel'],
+    ['url' => 'examples/api',                 'label' => 'RESTful API',      'icon' => 'braces'],
+    ['url' => 'examples/apiv2',               'label' => 'RESTful API v2 (JWT)','icon' => 'braces-asterisk'],
+    ['url' => 'examples/fileupload',          'label' => '파일 업로드',      'icon' => 'cloud-upload'],
+    ['url' => 'examples/session',             'label' => '세션 & 쿠키',      'icon' => 'archive'],
+    ['url' => 'examples/validation',          'label' => '유효성 검사',      'icon' => 'shield-check'],
+    ['url' => 'examples/httpclient',          'label' => 'HTTP 클라이언트',  'icon' => 'globe'],
+    ['url' => 'examples/email',               'label' => '이메일 발송',      'icon' => 'envelope'],
+    ['url' => 'examples/servicelayer',        'label' => '서비스 레이어',    'icon' => 'layers'],
+    ['url' => 'examples/repository',          'label' => 'Repository 패턴', 'icon' => 'diagram-3'],
+    ['url' => 'examples/helper',              'label' => '커스텀 헬퍼',      'icon' => 'tools'],
+    ['url' => 'examples/cache',               'label' => '캐싱',             'icon' => 'lightning-charge'],
+    ['url' => 'examples/lang',                'label' => '다국어 (i18n)',    'icon' => 'translate'],
+    ['url' => 'examples/events',              'label' => '이벤트 시스템',    'icon' => 'bell'],
+    ['url' => 'examples/cli',                 'label' => 'CLI 커맨드',       'icon' => 'terminal'],
+    ['url' => 'examples/testing',             'label' => '테스팅',           'icon' => 'check2-circle'],
+    ['url' => 'examples/transaction',         'label' => 'DB 트랜잭션',      'icon' => 'arrow-left-right'],
+    ['url' => 'examples/logging',             'label' => '로깅',             'icon' => 'journal-text'],
+    ['url' => 'examples/exception',           'label' => '예외 처리',        'icon' => 'shield-exclamation'],
+    ['url' => 'examples/throttler',           'label' => 'Throttler',        'icon' => 'speedometer2'],
+    ['url' => 'examples/modelcallback',       'label' => 'Model 콜백',       'icon' => 'arrow-repeat'],
+    ['url' => 'examples/configenv',           'label' => 'Config 환경 분리', 'icon' => 'sliders'],
+    ['url' => 'examples/advancedvalidation',  'label' => '유효성 검사 고급', 'icon' => 'shield-check'],
+    ['url' => 'examples/apiauth',             'label' => 'API 인증',         'icon' => 'key'],
+    ['url' => 'examples/securitydemo',        'label' => 'Security',         'icon' => 'shield-lock'],
+    ['url' => 'examples/querybuilderadvanced','label' => 'Query Builder 고급','icon' => 'database-gear'],
+    ['url' => 'examples/paginationadvanced',  'label' => 'Pagination 심화',  'icon' => 'collection'],
+    ['url' => 'examples/multidb',             'label' => '다중 DB 연결',     'icon' => 'database-add'],
+    ['url' => 'examples/imageprocess',        'label' => '이미지 처리',      'icon' => 'image'],
+    ['url' => 'examples/encryption',          'label' => '암호화 & 해싱',    'icon' => 'lock'],
+    ['url' => 'examples/board',               'label' => '게시판 CRUD',      'icon' => 'card-list'],
+    ['url' => 'examples/auth',                'label' => '회원 인증',        'icon' => 'person-lock'],
+    ['url' => 'examples/queue',               'label' => '큐 시스템',        'icon' => 'collection-play'],
+    ['url' => 'examples/csv-excel',           'label' => 'CSV/Excel',        'icon' => 'file-earmark-spreadsheet'],
+    ['url' => 'examples/official-queue',      'label' => 'CI4 공식 Queue',   'icon' => 'collection-play-fill'],
+    ['url' => 'examples/taskscheduler',       'label' => 'Task Scheduler',   'icon' => 'clock-history'],
+    ['url' => 'examples/pdfgeneration',       'label' => 'PDF 생성',         'icon' => 'file-earmark-pdf-fill'],
+    ['url' => 'examples/sse',                 'label' => 'SSE 실시간',       'icon' => 'broadcast'],
+];
+
+$navGroups = [
+    '핵심 기능' => [
+        'examples/routing', 'examples/controllers', 'examples/views',
+        'examples/models', 'examples/entityadvanced',
+    ],
+    '고급 기능' => [
+        'examples/filters', 'examples/api', 'examples/apiv2',
+    ],
+    '입출력 처리' => [
+        'examples/fileupload', 'examples/session', 'examples/validation',
+        'examples/httpclient', 'examples/email',
+    ],
+    '아키텍처 패턴' => [
+        'examples/servicelayer', 'examples/repository', 'examples/helper',
+        'examples/cache', 'examples/lang', 'examples/events',
+        'examples/cli', 'examples/testing',
+    ],
+    '실무 패턴' => [
+        'examples/transaction', 'examples/logging', 'examples/exception',
+        'examples/throttler', 'examples/modelcallback', 'examples/configenv',
+        'examples/advancedvalidation', 'examples/apiauth', 'examples/securitydemo',
+        'examples/querybuilderadvanced', 'examples/paginationadvanced',
+        'examples/multidb', 'examples/imageprocess', 'examples/encryption',
+    ],
+    '실전 예제' => [
+        'examples/board', 'examples/auth', 'examples/queue',
+        'examples/csv-excel', 'examples/official-queue', 'examples/taskscheduler',
+        'examples/pdfgeneration', 'examples/sse',
+    ],
+];
+
+// 현재 예제 인덱스 파악 (이전/다음)
+$exampleByUrl = [];
+foreach ($allExamples as $i => $ex) { $exampleByUrl[$ex['url']] = $i; }
+
+$currentUri = uri_string();
+$currentIdx = -1;
+foreach ($allExamples as $i => $ex) {
+    if (str_starts_with($currentUri, $ex['url'])) { $currentIdx = $i; break; }
+}
+$prevEx = $currentIdx > 0 ? $allExamples[$currentIdx - 1] : null;
+$nextEx = $currentIdx >= 0 && $currentIdx < count($allExamples) - 1 ? $allExamples[$currentIdx + 1] : null;
+
+// 각 URL에 해당하는 example 정보 맵
+$exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
+?>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -9,86 +103,75 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <style>
         :root {
-            --sidebar-width: 260px;
             --header-height: 56px;
             --ci-red: #dd4814;
             --ci-dark: #1a1a2e;
         }
-        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; padding-top: var(--header-height); }
 
-        /* Header */
-        .app-header {
+        /* ── Top Navbar ── */
+        .app-navbar {
             height: var(--header-height);
             background: var(--ci-dark);
             position: fixed; top: 0; left: 0; right: 0; z-index: 1030;
-            display: flex; align-items: center; padding: 0 1.5rem;
             box-shadow: 0 2px 8px rgba(0,0,0,.3);
         }
-        .app-header .brand { color: #fff; font-weight: 700; font-size: 1.15rem; text-decoration: none; }
-        .app-header .brand span { color: var(--ci-red); }
-        .app-header .version-badge {
+        .app-navbar .navbar-brand {
+            color: #fff; font-weight: 700; font-size: 1.15rem;
+        }
+        .app-navbar .navbar-brand span { color: var(--ci-red); }
+        .version-badge {
             background: var(--ci-red); color: #fff;
             font-size: .7rem; padding: 2px 8px; border-radius: 20px;
-            margin-left: .5rem; font-weight: 600;
+            margin-left: .4rem; font-weight: 600; vertical-align: middle;
+        }
+        .app-navbar .nav-link {
+            color: rgba(255,255,255,.85) !important;
+            font-size: .88rem; padding: .4rem .75rem !important;
+        }
+        .app-navbar .nav-link:hover,
+        .app-navbar .nav-link.active { color: #fff !important; }
+        .app-navbar .dropdown-menu {
+            background: #fff; border: none;
+            box-shadow: 0 8px 24px rgba(0,0,0,.15);
+            border-radius: 8px; min-width: 220px; padding: .5rem 0;
+        }
+        .app-navbar .dropdown-item {
+            font-size: .875rem; padding: .45rem 1.1rem;
+            color: #495057; display: flex; align-items: center; gap: .55rem;
+        }
+        .app-navbar .dropdown-item:hover { background: #fff3ef; color: var(--ci-red); }
+        .app-navbar .dropdown-item.active { background: #fff3ef; color: var(--ci-red); font-weight: 600; }
+        .app-navbar .dropdown-item .bi { font-size: .9rem; opacity: .7; }
+        .app-navbar .navbar-toggler { border-color: rgba(255,255,255,.3); }
+        .app-navbar .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.85%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
-        /* Sidebar */
-        .app-sidebar {
-            width: var(--sidebar-width);
-            position: fixed; top: var(--header-height); left: 0; bottom: 0;
-            background: #fff; overflow-y: auto; border-right: 1px solid #e9ecef;
-            padding: 1rem 0;
-        }
-        .nav-section-title {
-            font-size: .7rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: .08em; color: #adb5bd;
-            padding: .5rem 1.25rem .25rem;
-        }
-        .app-sidebar .nav-link {
-            color: #495057; padding: .45rem 1.25rem;
-            font-size: .9rem; border-radius: 0;
-            display: flex; align-items: center; gap: .6rem;
-        }
-        .app-sidebar .nav-link:hover { background: #f8f9fa; color: var(--ci-red); }
-        .app-sidebar .nav-link.active {
-            background: #fff3ef; color: var(--ci-red); font-weight: 600;
-            border-right: 3px solid var(--ci-red);
-        }
-        .app-sidebar .nav-link .bi { font-size: 1rem; opacity: .7; }
+        /* ── Main content ── */
+        .app-main { padding: 2rem; min-height: calc(100vh - var(--header-height) - 48px); }
 
-        /* Main content */
-        .app-main {
-            margin-left: var(--sidebar-width);
-            margin-top: var(--header-height);
-            padding: 2rem;
-            min-height: calc(100vh - var(--header-height));
-        }
-
-        /* Page header */
+        /* ── Page header ── */
         .page-header {
             background: linear-gradient(135deg, var(--ci-dark) 0%, #16213e 100%);
-            color: #fff; border-radius: 12px; padding: 2rem 2.5rem;
-            margin-bottom: 2rem;
+            color: #fff; border-radius: 12px; padding: 2rem 2.5rem; margin-bottom: 2rem;
         }
         .page-header h1 { font-size: 1.8rem; font-weight: 700; margin: 0 0 .5rem; }
         .page-header p { margin: 0; opacity: .8; font-size: .95rem; }
 
-        /* Example cards */
+        /* ── Example cards ── */
         .example-card {
-            background: #fff; border-radius: 10px;
-            border: 1px solid #e9ecef;
-            box-shadow: 0 1px 4px rgba(0,0,0,.05);
-            margin-bottom: 1.5rem; overflow: hidden;
+            background: #fff; border-radius: 10px; border: 1px solid #e9ecef;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05); margin-bottom: 1.5rem; overflow: hidden;
         }
         .example-card-header {
-            background: #f8f9fa; padding: .75rem 1.25rem;
-            border-bottom: 1px solid #e9ecef;
+            background: #f8f9fa; padding: .75rem 1.25rem; border-bottom: 1px solid #e9ecef;
             display: flex; align-items: center; gap: .75rem;
         }
         .example-card-header h5 { margin: 0; font-size: 1rem; font-weight: 600; }
         .example-card-body { padding: 1.25rem; }
 
-        /* Code blocks */
+        /* ── Code blocks ── */
         pre { margin: 0; border-radius: 8px; }
         pre code { font-size: .84rem; line-height: 1.6; }
         .code-label {
@@ -96,16 +179,14 @@
             letter-spacing: .06em; color: #6c757d; margin-bottom: .4rem;
         }
 
-        /* Result box */
+        /* ── Result / Demo boxes ── */
         .result-box {
-            background: #f0fdf4; border: 1px solid #bbf7d0;
-            border-radius: 8px; padding: 1rem 1.25rem;
+            background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem 1.25rem;
         }
-        .result-box.info { background: #eff6ff; border-color: #bfdbfe; }
+        .result-box.info    { background: #eff6ff; border-color: #bfdbfe; }
         .result-box.warning { background: #fffbeb; border-color: #fde68a; }
-        .result-box.danger { background: #fef2f2; border-color: #fecaca; }
+        .result-box.danger  { background: #fef2f2; border-color: #fecaca; }
 
-        /* Demo link buttons */
         .demo-btn {
             display: inline-flex; align-items: center; gap: .4rem;
             background: var(--ci-red); color: #fff;
@@ -118,195 +199,145 @@
         }
         .demo-btn.outline:hover { background: var(--ci-red); color: #fff; }
 
-        /* Breadcrumb */
+        /* ── Breadcrumb ── */
         .breadcrumb { font-size: .85rem; }
         .breadcrumb-item a { color: var(--ci-red); text-decoration: none; }
 
-        /* Footer */
+        /* ── Prev / Next navigation ── */
+        .page-nav {
+            display: flex; justify-content: space-between; align-items: stretch;
+            gap: 1rem; margin-top: 2.5rem; padding-top: 1.5rem;
+            border-top: 1px solid #e9ecef;
+        }
+        .page-nav-btn {
+            flex: 1; display: flex; align-items: center; gap: .75rem;
+            padding: .9rem 1.25rem; border-radius: 10px;
+            border: 1px solid #e9ecef; background: #fff;
+            text-decoration: none; color: #495057;
+            transition: all .15s; min-width: 0;
+        }
+        .page-nav-btn:hover { border-color: var(--ci-red); color: var(--ci-red); background: #fff3ef; }
+        .page-nav-btn.next { justify-content: flex-end; text-align: right; }
+        .page-nav-btn .nav-dir { font-size: .72rem; color: #adb5bd; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: .1rem; }
+        .page-nav-btn .nav-label { font-size: .9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .page-nav-btn .nav-icon { font-size: 1.4rem; flex-shrink: 0; opacity: .5; }
+        .page-nav-spacer { flex: 1; }
+
+        /* ── Footer ── */
         .app-footer {
-            margin-left: var(--sidebar-width); padding: 1rem 2rem;
-            border-top: 1px solid #e9ecef; font-size: .8rem; color: #adb5bd;
-            background: #fff;
+            padding: .75rem 2rem; border-top: 1px solid #e9ecef;
+            font-size: .8rem; color: #adb5bd; background: #fff;
         }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            .app-sidebar { display: none; }
-            .app-main, .app-footer { margin-left: 0; }
+        /* ── Mobile ── */
+        @media (max-width: 991px) {
+            .app-navbar .dropdown-menu { box-shadow: none; border-top: 1px solid #e9ecef; border-radius: 0; }
         }
     </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="app-header">
-    <a href="<?= base_url() ?>" class="brand">
-        <span>CI4</span> Playground
+<!-- ── Top Navbar ── -->
+<nav class="app-navbar navbar navbar-expand-lg">
+  <div class="container-fluid px-3">
+
+    <a class="navbar-brand" href="<?= base_url() ?>">
+      <span>CI4</span> Playground
+      <span class="version-badge">v4.7.3</span>
     </a>
-    <span class="version-badge">v4.7.3</span>
-    <div class="ms-auto d-flex align-items-center gap-3">
-        <a href="https://www.cikorea.net" target="_blank" class="text-white-50 text-decoration-none" style="font-size:.85rem;">
-            <i class="bi bi-book"></i> 한국어문서
-        </a>
+
+    <button class="navbar-toggler ms-auto" type="button"
+            data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto ms-3">
+
+        <!-- 홈 -->
+        <li class="nav-item">
+          <a class="nav-link <?= $currentUri === '' ? 'active fw-semibold' : '' ?>"
+             href="<?= base_url() ?>">
+            <i class="bi bi-house-door me-1"></i>홈
+          </a>
+        </li>
+
+        <?php foreach ($navGroups as $groupName => $groupUrls): ?>
+        <?php
+            $groupActive = false;
+            foreach ($groupUrls as $gUrl) {
+                if (str_starts_with($currentUri, $gUrl)) { $groupActive = true; break; }
+            }
+        ?>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <?= $groupActive ? 'active fw-semibold' : '' ?>"
+             href="#" role="button" data-bs-toggle="dropdown">
+            <?= esc($groupName) ?>
+          </a>
+          <ul class="dropdown-menu">
+            <?php foreach ($groupUrls as $gUrl): ?>
+            <?php $ex = $exMap[$gUrl] ?? null; if (!$ex) continue; ?>
+            <li>
+              <a class="dropdown-item <?= str_starts_with($currentUri, $gUrl) ? 'active' : '' ?>"
+                 href="<?= base_url($gUrl) ?>">
+                <i class="bi bi-<?= $ex['icon'] ?>"></i>
+                <?= esc($ex['label']) ?>
+              </a>
+            </li>
+            <?php endforeach ?>
+          </ul>
+        </li>
+        <?php endforeach ?>
+
+      </ul>
+
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a href="https://www.cikorea.net" target="_blank"
+             class="nav-link" style="font-size:.82rem;">
+            <i class="bi bi-book me-1"></i>한국어 문서
+          </a>
+        </li>
+      </ul>
     </div>
-</header>
-
-<!-- Sidebar -->
-<nav class="app-sidebar">
-    <div class="nav-section-title">시작하기</div>
-    <a href="<?= base_url() ?>" class="nav-link <?= uri_string() === '' ? 'active' : '' ?>">
-        <i class="bi bi-house-door"></i> 홈 / 목차
-    </a>
-
-    <div class="nav-section-title mt-2">핵심 기능</div>
-    <a href="<?= base_url('examples/routing') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/routing') ? 'active' : '' ?>">
-        <i class="bi bi-sign-turn-right"></i> 라우팅
-    </a>
-    <a href="<?= base_url('examples/controllers') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/controllers') ? 'active' : '' ?>">
-        <i class="bi bi-cpu"></i> 컨트롤러
-    </a>
-    <a href="<?= base_url('examples/views') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/views') ? 'active' : '' ?>">
-        <i class="bi bi-window"></i> 뷰
-    </a>
-    <a href="<?= base_url('examples/models') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/models') ? 'active' : '' ?>">
-        <i class="bi bi-database"></i> 모델 & 데이터베이스
-    </a>
-
-    <a href="<?= base_url('examples/entityadvanced') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/entityadvanced') ? 'active' : '' ?>">
-        <i class="bi bi-box"></i> Entity 심화
-    </a>
-
-    <div class="nav-section-title mt-2">고급 기능</div>
-    <a href="<?= base_url('examples/filters') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/filters') ? 'active' : '' ?>">
-        <i class="bi bi-funnel"></i> 필터
-    </a>
-    <a href="<?= base_url('examples/api') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/api') ? 'active' : '' ?>">
-        <i class="bi bi-braces"></i> RESTful API
-    </a>
-    <a href="<?= base_url('examples/apiv2') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/apiv2') ? 'active' : '' ?>">
-        <i class="bi bi-braces-asterisk"></i> RESTful API v2 (JWT)
-    </a>
-
-    <div class="nav-section-title mt-2">입출력 처리</div>
-    <a href="<?= base_url('examples/fileupload') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/fileupload') ? 'active' : '' ?>">
-        <i class="bi bi-cloud-upload"></i> 파일 업로드
-    </a>
-    <a href="<?= base_url('examples/session') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/session') ? 'active' : '' ?>">
-        <i class="bi bi-archive"></i> 세션 & 쿠키
-    </a>
-    <a href="<?= base_url('examples/validation') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/validation') ? 'active' : '' ?>">
-        <i class="bi bi-shield-check"></i> 유효성 검사
-    </a>
-    <a href="<?= base_url('examples/httpclient') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/httpclient') ? 'active' : '' ?>">
-        <i class="bi bi-globe"></i> HTTP 클라이언트
-    </a>
-    <a href="<?= base_url('examples/email') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/email') ? 'active' : '' ?>">
-        <i class="bi bi-envelope"></i> 이메일 발송
-    </a>
-
-    <div class="nav-section-title mt-2">아키텍처 패턴</div>
-    <a href="<?= base_url('examples/servicelayer') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/servicelayer') ? 'active' : '' ?>">
-        <i class="bi bi-layers"></i> 서비스 레이어
-    </a>
-    <a href="<?= base_url('examples/repository') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/repository') ? 'active' : '' ?>">
-        <i class="bi bi-diagram-3"></i> Repository 패턴
-    </a>
-    <a href="<?= base_url('examples/helper') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/helper') ? 'active' : '' ?>">
-        <i class="bi bi-tools"></i> 커스텀 헬퍼
-    </a>
-    <a href="<?= base_url('examples/cache') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/cache') ? 'active' : '' ?>">
-        <i class="bi bi-lightning-charge"></i> 캐싱
-    </a>
-    <a href="<?= base_url('examples/lang') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/lang') ? 'active' : '' ?>">
-        <i class="bi bi-translate"></i> 다국어 (i18n)
-    </a>
-    <a href="<?= base_url('examples/events') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/events') ? 'active' : '' ?>">
-        <i class="bi bi-bell"></i> 이벤트 시스템
-    </a>
-    <a href="<?= base_url('examples/cli') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/cli') ? 'active' : '' ?>">
-        <i class="bi bi-terminal"></i> CLI 커맨드
-    </a>
-    <a href="<?= base_url('examples/testing') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/testing') ? 'active' : '' ?>">
-        <i class="bi bi-check2-circle"></i> 테스팅
-    </a>
-
-    <div class="nav-section-title mt-2">실무 패턴</div>
-    <a href="<?= base_url('examples/transaction') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/transaction') ? 'active' : '' ?>">
-        <i class="bi bi-arrow-left-right"></i> DB 트랜잭션
-    </a>
-    <a href="<?= base_url('examples/logging') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/logging') ? 'active' : '' ?>">
-        <i class="bi bi-journal-text"></i> 로깅
-    </a>
-    <a href="<?= base_url('examples/exception') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/exception') ? 'active' : '' ?>">
-        <i class="bi bi-shield-exclamation"></i> 예외 처리
-    </a>
-    <a href="<?= base_url('examples/throttler') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/throttler') ? 'active' : '' ?>">
-        <i class="bi bi-speedometer2"></i> Throttler
-    </a>
-    <a href="<?= base_url('examples/modelcallback') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/modelcallback') ? 'active' : '' ?>">
-        <i class="bi bi-arrow-repeat"></i> Model 콜백
-    </a>
-    <a href="<?= base_url('examples/configenv') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/configenv') ? 'active' : '' ?>">
-        <i class="bi bi-sliders"></i> Config 환경 분리
-    </a>
-    <a href="<?= base_url('examples/advancedvalidation') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/advancedvalidation') ? 'active' : '' ?>">
-        <i class="bi bi-shield-check"></i> 유효성 검사 고급
-    </a>
-    <a href="<?= base_url('examples/apiauth') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/apiauth') ? 'active' : '' ?>">
-        <i class="bi bi-key"></i> API 인증
-    </a>
-    <a href="<?= base_url('examples/securitydemo') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/securitydemo') ? 'active' : '' ?>">
-        <i class="bi bi-shield-lock"></i> Security
-    </a>
-    <a href="<?= base_url('examples/querybuilderadvanced') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/querybuilderadvanced') ? 'active' : '' ?>">
-        <i class="bi bi-database-gear"></i> Query Builder 고급
-    </a>
-    <a href="<?= base_url('examples/paginationadvanced') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/paginationadvanced') ? 'active' : '' ?>">
-        <i class="bi bi-collection"></i> Pagination 심화
-    </a>
-    <a href="<?= base_url('examples/multidb') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/multidb') ? 'active' : '' ?>">
-        <i class="bi bi-database-add"></i> 다중 DB 연결
-    </a>
-    <a href="<?= base_url('examples/imageprocess') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/imageprocess') ? 'active' : '' ?>">
-        <i class="bi bi-image"></i> 이미지 처리
-    </a>
-    <a href="<?= base_url('examples/encryption') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/encryption') ? 'active' : '' ?>">
-        <i class="bi bi-lock"></i> 암호화 & 해싱
-    </a>
-
-    <div class="nav-section-title mt-2">실전 예제</div>
-    <a href="<?= base_url('examples/board') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/board') ? 'active' : '' ?>">
-        <i class="bi bi-card-list"></i> 게시판 CRUD
-    </a>
-    <a href="<?= base_url('examples/auth') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/auth') ? 'active' : '' ?>">
-        <i class="bi bi-person-lock"></i> 회원 인증
-    </a>
-    <a href="<?= base_url('examples/queue') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/queue') ? 'active' : '' ?>">
-        <i class="bi bi-collection-play"></i> 큐(Queue) 시스템
-    </a>
-    <a href="<?= base_url('examples/csv-excel') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/csv-excel') ? 'active' : '' ?>">
-        <i class="bi bi-file-earmark-spreadsheet"></i> CSV/Excel
-    </a>
-    <a href="<?= base_url('examples/official-queue') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/official-queue') ? 'active' : '' ?>">
-        <i class="bi bi-collection-play-fill"></i> CI4 공식 Queue
-    </a>
-    <a href="<?= base_url('examples/taskscheduler') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/taskscheduler') ? 'active' : '' ?>">
-        <i class="bi bi-clock-history"></i> Task Scheduler
-    </a>
-    <a href="<?= base_url('examples/pdfgeneration') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/pdfgeneration') ? 'active' : '' ?>">
-        <i class="bi bi-file-earmark-pdf-fill"></i> PDF 생성
-    </a>
-    <a href="<?= base_url('examples/sse') ?>" class="nav-link <?= str_starts_with(uri_string(), 'examples/sse') ? 'active' : '' ?>">
-        <i class="bi bi-broadcast"></i> SSE 실시간
-    </a>
+  </div>
 </nav>
 
-<!-- Main -->
+<!-- ── Main content ── -->
 <main class="app-main">
     <?= $this->renderSection('content') ?>
+
+    <?php if ($currentIdx >= 0): ?>
+    <!-- 이전 / 다음 네비게이션 -->
+    <div class="page-nav">
+      <?php if ($prevEx): ?>
+      <a href="<?= base_url($prevEx['url']) ?>" class="page-nav-btn prev">
+        <i class="bi bi-chevron-left nav-icon"></i>
+        <div>
+          <span class="nav-dir">이전</span>
+          <span class="nav-label"><?= esc($prevEx['label']) ?></span>
+        </div>
+      </a>
+      <?php else: ?>
+      <div class="page-nav-spacer"></div>
+      <?php endif ?>
+
+      <?php if ($nextEx): ?>
+      <a href="<?= base_url($nextEx['url']) ?>" class="page-nav-btn next">
+        <div>
+          <span class="nav-dir">다음</span>
+          <span class="nav-label"><?= esc($nextEx['label']) ?></span>
+        </div>
+        <i class="bi bi-chevron-right nav-icon"></i>
+      </a>
+      <?php else: ?>
+      <div class="page-nav-spacer"></div>
+      <?php endif ?>
+    </div>
+    <?php endif ?>
 </main>
 
-<!-- Footer -->
+<!-- ── Footer ── -->
 <footer class="app-footer">
     <div class="d-flex justify-content-between align-items-center">
         <span>CI4 Playground &mdash; CodeIgniter <?= \CodeIgniter\CodeIgniter::CI_VERSION ?> 예제 모음</span>
