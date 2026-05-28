@@ -12,10 +12,20 @@ class Testing extends BaseController
         $exitCode = null;
 
         if ($this->request->is('post')) {
-            $suite = $this->request->getPost('suite') ?? 'all';
-            $cmd   = $this->buildCommand($suite);
-            exec($cmd, $lines, $exitCode);
-            $output = implode("\n", $lines);
+            $phpunit = ROOTPATH . 'vendor/bin/phpunit';
+
+            if (!file_exists($phpunit)) {
+                $output   = "[오류] vendor/bin/phpunit 을 찾을 수 없습니다.\n"
+                          . "PHPUnit은 개발 의존성(require-dev)으로 배포 서버에는 설치되지 않습니다.\n\n"
+                          . "로컬 또는 개발 환경에서 실행하거나,\n"
+                          . "배포 서버에서 'composer install' (--no-dev 없이) 실행 후 다시 시도하세요.";
+                $exitCode = 127;
+            } else {
+                $suite = $this->request->getPost('suite') ?? 'all';
+                $cmd   = $this->buildCommand($suite);
+                exec($cmd, $lines, $exitCode);
+                $output = implode("\n", $lines);
+            }
         }
 
         return view('examples/testing/index', [
