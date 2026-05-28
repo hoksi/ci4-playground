@@ -243,6 +243,8 @@ $routes->group('examples', function ($routes) {
     $routes->get('pdfgeneration/products',     'Examples\PdfGeneration::products');
     $routes->get('pdfgeneration/posts',        'Examples\PdfGeneration::posts');
     $routes->get('pdfgeneration/invoice',      'Examples\PdfGeneration::invoice');
+    $routes->get('pdfgeneration/font-status',  'Examples\PdfGeneration::fontStatus');
+    $routes->post('pdfgeneration/install-font','Examples\PdfGeneration::installFont');
 
     // 45. Server-Sent Events
     $routes->get('sse',                        'Examples\Sse::index');
