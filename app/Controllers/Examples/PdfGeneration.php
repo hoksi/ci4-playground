@@ -66,15 +66,10 @@ class PdfGeneration extends BaseController
             file_put_contents($this->fontFile, $data);
         }
 
-        // ② DOMPDF에 폰트 메트릭스 등록
+        // ② DOMPDF에 폰트 메트릭스 등록 (UFM 캐시 파일 생성)
+        // buildDompdf() 내부에서 isFontInstalled() → registerFont() 자동 호출
         try {
-            $options = $this->buildOptions(true);
-            $dompdf  = new Dompdf($options);
-            $metrics = $dompdf->getFontMetrics();
-            $metrics->registerFont(
-                ['family' => 'NotoSansKR', 'style' => 'normal', 'weight' => 'normal'],
-                $this->fontFile
-            );
+            $this->buildDompdf();
         } catch (\Throwable $e) {
             return $this->response->setJSON(['ok' => false, 'error' => $e->getMessage()]);
         }
@@ -146,20 +141,33 @@ class PdfGeneration extends BaseController
         return file_exists($this->fontFile) && filesize($this->fontFile) > 10000;
     }
 
-    private function buildOptions(bool $forInstall = false): Options
+    private function buildDompdf(): Dompdf
     {
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', false);
         $options->setChroot([FCPATH, APPPATH . 'Views/']);
 
+        $fontInstalled = $this->isFontInstalled();
+
         if (is_dir($this->fontDir)) {
             $options->setFontDir($this->fontDir);
             $options->setFontCache($this->fontDir);
         }
 
-        $options->set('defaultFont', $this->isFontInstalled() ? 'NotoSansKR' : 'DejaVu Sans');
-        return $options;
+        $options->set('defaultFont', $fontInstalled ? 'NotoSansKR' : 'DejaVu Sans');
+
+        $dompdf = new Dompdf($options);
+
+        // 커스텀 폰트가 설치돼 있으면 매 요청마다 등록 (UFM 캐시 재사용)
+        if ($fontInstalled) {
+            $dompdf->getFontMetrics()->registerFont(
+                ['family' => 'NotoSansKR', 'style' => 'normal', 'weight' => 'normal'],
+                $this->fontFile
+            );
+        }
+
+        return $dompdf;
     }
 
     private function renderHtml(string $view, array $data = []): string
@@ -171,7 +179,7 @@ class PdfGeneration extends BaseController
     {
         $download = $this->request->getGet('download') === '1';
 
-        $dompdf = new Dompdf($this->buildOptions());
+        $dompdf = $this->buildDompdf();
         $dompdf->loadHtml($html, 'UTF-8');
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
