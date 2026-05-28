@@ -135,7 +135,7 @@ app/
 │   └── Routes.php                    ← 전체 라우트 정의
 ├── Controllers/
 │   ├── Home.php                      ← 메인 목차
-│   └── Examples/                     ← 43개 예제 컨트롤러
+│   └── Examples/                     ← 44개 예제 컨트롤러
 ├── Database/
 │   ├── Migrations/                   ← 테이블 마이그레이션
 │   └── Seeds/                        ← 샘플 데이터 시더
@@ -167,7 +167,7 @@ app/
 └── Views/
     ├── layouts/main.php              ← 공통 레이아웃 (Bootstrap 5)
     ├── home/index.php                ← 목차 페이지
-    └── examples/                     ← 43개 예제 뷰
+    └── examples/                     ← 44개 예제 뷰
 writable/
 ├── uploads/                          ← 업로드 파일 저장소
 └── uploads_seed/                     ← 리셋 시 복원할 초기 샘플 파일
@@ -269,6 +269,9 @@ cd /var/www/playground && /usr/bin/php spark playground:reset
 | CSS | Bootstrap 5.3 + Bootstrap Icons |
 | Syntax Highlight | Highlight.js 11 (github-dark 테마) |
 | Excel | PhpSpreadsheet 5.x |
+| Queue | codeigniter4/queue 1.x |
+| Task Scheduler | codeigniter4/tasks 1.x |
+| PDF | dompdf/dompdf 2.x |
 | PHP | 8.2+ |
 
 ## 라이선스
