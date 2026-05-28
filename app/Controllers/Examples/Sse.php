@@ -17,18 +17,23 @@ class Sse extends BaseController
      */
     public function stream(): void
     {
-        @set_time_limit(120);
-        @ini_set('output_buffering', 'off');
+        // CI4/PHP 중첩 출력 버퍼 전체 제거
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
+        @set_time_limit(0);
+        ob_implicit_flush(true);
 
         header('Content-Type: text/event-stream; charset=UTF-8');
         header('Cache-Control: no-cache');
-        header('X-Accel-Buffering: no');   // nginx 버퍼링 비활성화
+        header('X-Accel-Buffering: no');
+        header('Connection: keep-alive');
         header('Access-Control-Allow-Origin: *');
 
-        // 헤더 즉시 전송
-        if (ob_get_level()) {
-            ob_end_flush();
-        }
+        // 연결 즉시 ping 전송 (브라우저 연결 확인)
+        echo ": ping\n\n";
+        flush();
 
         $lastId   = (int) ($_SERVER['HTTP_LAST_EVENT_ID'] ?? 0);
         $maxTicks = 30;   // 최대 30회 전송 후 재연결 유도
