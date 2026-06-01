@@ -50,7 +50,7 @@ class EntityAdvanced extends BaseController
             'tags'       => ['value' => $user->tags,       'type' => get_debug_type($user->tags)],
             'metadata'   => ['value' => $user->metadata,   'type' => get_debug_type($user->metadata)],
             'created_at' => [
-                'value' => $user->created_at ? $user->created_at->format('Y-m-d H:i:s') : null,
+                'value' => ($user->created_at instanceof \CodeIgniter\I18n\Time) ? $user->created_at->format('Y-m-d H:i:s') : null,
                 'type'  => get_debug_type($user->created_at),
             ],
         ];

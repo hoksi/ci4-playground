@@ -20,7 +20,7 @@ class Post extends Entity
 
     public function getFormattedDate(): string
     {
-        return $this->created_at
+        return ($this->created_at instanceof \CodeIgniter\I18n\Time)
             ? $this->created_at->format('Y-m-d H:i')
             : '';
     }

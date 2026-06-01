@@ -1,0 +1,11 @@
+includes:
+    - vendor/codeigniter/phpstan-codeigniter/extension.neon
+
+parameters:
+    level: 3
+    paths:
+        - app
+    excludePaths:
+        - app/Views
+    bootstrapFiles:
+        - phpstan-bootstrap.php

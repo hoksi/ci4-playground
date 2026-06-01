@@ -23,7 +23,7 @@ class Notification extends BaseController
         ]);
     }
 
-    public function create(): \CodeIgniter\HTTP\Response
+    public function create(): \CodeIgniter\HTTP\ResponseInterface
     {
         $samples = [
             ['type' => 'info',    'title' => '새 게시글',        'message' => '김철수님이 새 게시글 "CI4 팁 모음"을 등록했습니다.'],
@@ -44,7 +44,7 @@ class Notification extends BaseController
         ]);
     }
 
-    public function read(int $id): \CodeIgniter\HTTP\Response
+    public function read(int $id): \CodeIgniter\HTTP\ResponseInterface
     {
         $this->model->markRead($id);
 
@@ -54,7 +54,7 @@ class Notification extends BaseController
         ]);
     }
 
-    public function readAll(): \CodeIgniter\HTTP\Response
+    public function readAll(): \CodeIgniter\HTTP\ResponseInterface
     {
         $this->model->markAllRead();
 
@@ -64,9 +64,9 @@ class Notification extends BaseController
         ]);
     }
 
-    public function clear(): \CodeIgniter\HTTP\Response
+    public function clear(): \CodeIgniter\HTTP\ResponseInterface
     {
-        $this->model->truncate();
+        db_connect()->table('notifications')->truncate();
 
         return $this->response->setJSON([
             'success'    => true,
@@ -74,7 +74,7 @@ class Notification extends BaseController
         ]);
     }
 
-    public function count(): \CodeIgniter\HTTP\Response
+    public function count(): \CodeIgniter\HTTP\ResponseInterface
     {
         return $this->response->setJSON(['unread' => $this->model->countUnread()]);
     }

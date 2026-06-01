@@ -16,7 +16,7 @@ class FileUploadAdvanced extends BaseController
         ]);
     }
 
-    public function upload(): \CodeIgniter\HTTP\Response
+    public function upload(): \CodeIgniter\HTTP\ResponseInterface
     {
         if (! is_dir($this->uploadPath)) {
             mkdir($this->uploadPath, 0755, true);
@@ -82,12 +82,12 @@ class FileUploadAdvanced extends BaseController
         exit;
     }
 
-    public function list(): \CodeIgniter\HTTP\Response
+    public function list(): \CodeIgniter\HTTP\ResponseInterface
     {
         return $this->response->setJSON($this->getFiles());
     }
 
-    public function delete(string $filename): \CodeIgniter\HTTP\Response
+    public function delete(string $filename): \CodeIgniter\HTTP\ResponseInterface
     {
         $path = $this->uploadPath . basename($filename);
 

@@ -30,7 +30,7 @@ class PostService
      */
     public function getSummary(): array
     {
-        $total    = $this->model->countAll();
+        $total    = $this->model->countAllResults();
         $totalViews = $this->model->selectSum('views')->first();
 
         return [

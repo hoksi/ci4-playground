@@ -8,7 +8,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class ApiKeyFilter implements FilterInterface
 {
-    public function before(RequestInterface $request, $arguments = null)
+    public function before(RequestInterface $request, $arguments = null): ResponseInterface|null
     {
         $authHeader = $request->getHeaderLine('Authorization');
 
@@ -52,9 +52,12 @@ class ApiKeyFilter implements FilterInterface
         $db->table('api_keys')
             ->where('id', $row['id'])
             ->update(['last_used_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
+
+        return null;
     }
 
-    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
+    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null): ?ResponseInterface
     {
+        return null;
     }
 }

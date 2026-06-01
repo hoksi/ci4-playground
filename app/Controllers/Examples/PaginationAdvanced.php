@@ -3,6 +3,7 @@
 namespace App\Controllers\Examples;
 
 use App\Controllers\BaseController;
+use App\Entities\Post;
 use App\Models\PostModel;
 
 class PaginationAdvanced extends BaseController
@@ -29,14 +30,14 @@ class PaginationAdvanced extends BaseController
         $data  = $model->orderBy('id', 'DESC')->paginate($perPage, 'default', $page);
         $pager = $model->pager;
 
-        $rows = array_map(static function ($p) {
+        $rows = array_map(static function (Post $p) {
             return [
                 'id'      => $p->id,
                 'title'   => $p->title,
                 'author'  => $p->author,
                 'views'   => $p->views,
-                'excerpt' => method_exists($p, 'getExcerpt') ? $p->getExcerpt(60) : mb_substr($p->content ?? '', 0, 60),
-                'created' => $p->created_at ? $p->created_at->format('Y-m-d H:i') : '',
+                'excerpt' => $p->getExcerpt(60),
+                'created' => $p->getFormattedDate(),
             ];
         }, $data);
 

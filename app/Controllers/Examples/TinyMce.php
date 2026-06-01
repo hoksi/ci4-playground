@@ -27,7 +27,7 @@ class TinyMce extends BaseController
         return redirect()->to(base_url('examples/tinymce'));
     }
 
-    public function upload(): \CodeIgniter\HTTP\Response
+    public function upload(): \CodeIgniter\HTTP\ResponseInterface
     {
         if (! is_dir($this->uploadPath)) {
             mkdir($this->uploadPath, 0755, true);

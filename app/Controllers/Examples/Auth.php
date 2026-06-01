@@ -150,7 +150,7 @@ class Auth extends BaseController
         $confirm = (string) $this->request->getPost('confirm_password');
 
         $user = $this->users->find($auth['id']);
-        if (! $user || ! password_verify($current, $user->password)) {
+        if (! is_object($user) || ! password_verify($current, $user->password)) {
             return redirect()->back()->with('error', '현재 비밀번호가 올바르지 않습니다.');
         }
         if (strlen($new) < 6) {

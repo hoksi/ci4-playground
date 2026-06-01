@@ -58,7 +58,7 @@ class Board extends BaseController
             return $deny;
         }
 
-        if (! $this->validate($this->model->validationRules)) {
+        if (! $this->validate($this->model->getValidationRules())) {
             return redirect()->back()
                 ->withInput()
                 ->with('errors', $this->validator->getErrors());
@@ -118,7 +118,7 @@ class Board extends BaseController
             return $deny;
         }
 
-        if (! $this->validate($this->model->validationRules)) {
+        if (! $this->validate($this->model->getValidationRules())) {
             return redirect()->back()
                 ->withInput()
                 ->with('errors', $this->validator->getErrors());
