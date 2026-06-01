@@ -248,6 +248,11 @@ $routes->group('examples', function ($routes) {
     $routes->get('sse',                        'Examples\Sse::index');
     $routes->get('sse/stream',                 'Examples\Sse::stream');
 
+    // 49. AG Grid
+    $routes->get('aggrid',             'Examples\AgGrid::index');
+    $routes->get('aggrid/data',        'Examples\AgGrid::data');
+    $routes->get('aggrid/server-data', 'Examples\AgGrid::serverData');
+
     // 48. TinyMCE 에디터
     $routes->get('tinymce',                        'Examples\TinyMce::index');
     $routes->post('tinymce/save',                  'Examples\TinyMce::save');
