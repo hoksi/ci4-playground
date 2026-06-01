@@ -32,9 +32,8 @@
 
     <div class="result-box info mb-3">
         <i class="bi bi-info-circle me-2"></i>
-        TinyMCE CDN을 사용합니다. API 키 없이도 동작하지만 알림이 표시될 수 있습니다.
-        <a href="https://www.tiny.cloud/auth/signup/" target="_blank" class="ms-1">무료 API 키 발급</a> 후
-        <code>.env</code>에 <code>TINYMCE_API_KEY=your_key</code>를 설정하세요.
+        <strong>jsDelivr CDN</strong>에서 TinyMCE를 로드합니다. <code>license_key: 'gpl'</code> 선언으로
+        API 키 없이 완전 무료로 사용 가능합니다 (오픈소스 GPL 라이선스).
     </div>
 
     <!-- 에디터 카드 -->
@@ -83,12 +82,13 @@
     <div class="example-card">
         <div class="example-card-header"><span class="badge bg-dark">1</span><h5>TinyMCE 초기화 (기본 설정)</h5></div>
         <div class="example-card-body">
-            <pre><code class="language-javascript">// CDN 로드 (API 키 있으면 no-api-key → 발급받은 키로 교체)
-// &lt;script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js"&gt;&lt;/script&gt;
-
-tinymce.init({
-    selector: '#content',        // textarea id
-    language: 'ko_KR',           // 한국어 UI (langpack 필요)
+            <pre><code class="language-html">&lt;!-- jsDelivr CDN — API 키 불필요, 오픈소스 GPL 라이선스 --&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"&gt;&lt;/script&gt;</code></pre>
+            <pre><code class="language-javascript">tinymce.init({
+    selector: '#content',
+    base_url: 'https://cdn.jsdelivr.net/npm/tinymce@7',
+    suffix: '.min',
+    license_key: 'gpl',          // self-hosted 오픈소스 선언 — 알림 제거
     height: 450,
     menubar: false,
     plugins: [
@@ -174,21 +174,30 @@ echo $clean;  // esc() 없이 출력 (이미 정제됨)</code></pre>
     </div>
 
     <div class="example-card">
-        <div class="example-card-header"><span class="badge bg-dark">5</span><h5>API 키 설정 (.env)</h5></div>
+        <div class="example-card-header"><span class="badge bg-dark">5</span><h5>라이선스 방식 비교</h5></div>
         <div class="example-card-body">
-            <pre><code class="language-ini"># .env
-TINYMCE_API_KEY = your_api_key_here</code></pre>
-            <pre><code class="language-php">// Controller 또는 View에서 읽기
-$apiKey = env('TINYMCE_API_KEY', 'no-api-key');</code></pre>
-            <pre><code class="language-html">&lt;!-- 뷰에서 사용 --&gt;
-&lt;script src="https://cdn.tiny.cloud/1/&lt;?= env('TINYMCE_API_KEY','no-api-key') ?&gt;/tinymce/7/tinymce.min.js"&gt;&lt;/script&gt;</code></pre>
+            <div class="result-box info mb-3">
+                <strong>오픈소스 (GPL) — API 키 불필요</strong> ← 이 예제에서 사용
+            </div>
+            <pre><code class="language-html">&lt;script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"&gt;&lt;/script&gt;</code></pre>
+            <pre><code class="language-javascript">tinymce.init({
+    base_url: 'https://cdn.jsdelivr.net/npm/tinymce@7',
+    suffix: '.min',
+    license_key: 'gpl',   // GPL 선언 — 알림 없음
+    ...
+});</code></pre>
+            <div class="result-box warning mt-3 mb-3">
+                <strong>상용 (Tiny Cloud) — API 키 필요</strong>
+            </div>
+            <pre><code class="language-html">&lt;!-- tiny.cloud CDN (상용/무료 플랜 모두 API 키 필요) --&gt;
+&lt;script src="https://cdn.tiny.cloud/1/YOUR_API_KEY/tinymce/7/tinymce.min.js"&gt;&lt;/script&gt;</code></pre>
         </div>
     </div>
 </div>
 
 <?= $this->endSection() ?>
 <?= $this->section('scripts') ?>
-<script src="https://cdn.tiny.cloud/1/<?= env('TINYMCE_API_KEY', 'no-api-key') ?>/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"></script>
 <script>
 function showTab(name) {
     document.querySelectorAll('.tab-content-pane').forEach(el => el.style.display = 'none');
@@ -204,6 +213,9 @@ const DEFAULT_HTML = <?= json_encode($content) ?>;
 
 tinymce.init({
     selector: '#content',
+    base_url: 'https://cdn.jsdelivr.net/npm/tinymce@7',
+    suffix: '.min',
+    license_key: 'gpl',   // self-hosted 오픈소스 라이선스 — API 키 불필요
     height: 450,
     menubar: false,
     plugins: ['anchor', 'autolink', 'image', 'link', 'lists',
