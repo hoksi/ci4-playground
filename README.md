@@ -116,6 +116,16 @@ php spark serve
 
 > SQLite를 사용하므로 별도 DB 설치 없이 바로 실행됩니다.
 
+## 정적 분석 (PHPStan)
+
+PHPStan 레벨 3으로 코드 품질을 검사합니다.
+
+```bash
+./vendor/bin/phpstan analyse --memory-limit=512M
+```
+
+> 오류 0개 기준을 유지합니다. 새 컨트롤러 추가 시 반드시 실행하세요.
+
 ## 요구 사항
 
 - **PHP 8.2** 이상
@@ -286,6 +296,7 @@ cd /var/www/playground && /usr/bin/php spark playground:reset
 | PDF | dompdf/dompdf 2.x |
 | 리치 텍스트 | TinyMCE 7 (jsDelivr, GPL 라이선스) |
 | 데이터 그리드 | AG Grid Community 33 (jsDelivr) |
+| 정적 분석 | PHPStan 2.x (레벨 3) |
 | PHP | 8.2+ |
 
 ## 라이선스
