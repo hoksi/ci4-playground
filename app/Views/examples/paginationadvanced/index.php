@@ -206,13 +206,36 @@ async function loadAjaxPage(page) {
     });
     html += '</tbody></table>';
 
-    html += '<nav><ul class="pagination pagination-sm justify-content-center">';
-    for (let i = 1; i <= data.last_page; i++) {
-        html += `<li class="page-item ${i === data.page ? 'active' : ''}"><a class="page-link" href="#" onclick="loadAjaxPage(${i});return false;">${i}</a></li>`;
+    // 스마트 페이지 번호: 현재 ±2 + 양끝, 사이 공백은 …
+    const p = data.page, last = data.last_page;
+    const visible = new Set([1, last]);
+    for (let i = p - 2; i <= p + 2; i++) { if (i >= 1 && i <= last) visible.add(i); }
+    const sorted = [...visible].sort((a, b) => a - b);
+
+    html += '<nav aria-label="페이지 탐색"><ul class="pagination pagination-sm justify-content-center mb-1">';
+    html += `<li class="page-item ${p <= 1 ? 'disabled' : ''}"><a class="page-link" data-page="1"><i class="bi bi-chevron-double-left"></i></a></li>`;
+    html += `<li class="page-item ${p <= 1 ? 'disabled' : ''}"><a class="page-link" data-page="${p - 1}"><i class="bi bi-chevron-left"></i></a></li>`;
+    let prev = 0;
+    for (const n of sorted) {
+        if (n - prev > 1) html += `<li class="page-item disabled"><span class="page-link">…</span></li>`;
+        html += `<li class="page-item ${n === p ? 'active' : ''}"><a class="page-link" data-page="${n}">${n}</a></li>`;
+        prev = n;
     }
+    html += `<li class="page-item ${p >= last ? 'disabled' : ''}"><a class="page-link" data-page="${p + 1}"><i class="bi bi-chevron-right"></i></a></li>`;
+    html += `<li class="page-item ${p >= last ? 'disabled' : ''}"><a class="page-link" data-page="${last}"><i class="bi bi-chevron-double-right"></i></a></li>`;
     html += '</ul></nav>';
-    html += `<p class="text-center text-muted small">총 ${data.total}건 · ${data.page} / ${data.last_page}</p>`;
+    html += `<p class="text-center text-muted small">총 ${data.total}건 · ${p} / ${last} 페이지</p>`;
+
     area.innerHTML = html;
+
+    // 이벤트 위임으로 페이지 버튼 처리
+    area.querySelectorAll('[data-page]').forEach(el => {
+        el.addEventListener('click', e => {
+            e.preventDefault();
+            const target = parseInt(el.dataset.page);
+            if (target >= 1 && target <= last) loadAjaxPage(target);
+        });
+    });
 }
 window.loadAjaxPage = loadAjaxPage;
 
