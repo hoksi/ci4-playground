@@ -371,7 +371,7 @@ php spark migrate --all</code></pre>
                             </tr>
                             <tr>
                                 <td class="fw-bold">테이블</td>
-                                <td><code>queue_jobs</code>, <code>queue_failed_jobs</code></td>
+                                <td><code>custom_queue_jobs</code>, <code>queue_failed_jobs</code></td>
                                 <td><code>queue_jobs</code>, <code>queue_jobs_failed</code></td>
                             </tr>
                             <tr>
