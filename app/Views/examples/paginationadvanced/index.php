@@ -254,7 +254,7 @@ async function loadInfiniteNext() {
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => { if (entry.isIntersecting) loadInfiniteNext(); });
-}, { rootMargin: '100px' });
+}, { rootMargin: '300px' });
 observer.observe(document.getElementById('infinite-sentinel'));
 
 document.getElementById('infinite-reset').addEventListener('click', () => {

@@ -48,6 +48,7 @@ $allExamples = [
     ['url' => 'examples/fileupload-advanced', 'label' => '파일 업로드 심화', 'icon' => 'cloud-upload-fill'],
     ['url' => 'examples/tinymce',             'label' => 'TinyMCE 에디터',  'icon' => 'pencil-square'],
     ['url' => 'examples/aggrid',              'label' => 'AG Grid',          'icon' => 'table'],
+    ['url' => 'examples/ajax-pagination',     'label' => 'AJAX 페이지네이션', 'icon' => 'ui-checks-grid'],
 ];
 
 $navGroups = [
@@ -78,7 +79,7 @@ $navGroups = [
         'examples/board', 'examples/auth', 'examples/queue',
         'examples/csv-excel', 'examples/official-queue', 'examples/taskscheduler',
         'examples/pdfgeneration', 'examples/sse', 'examples/notification',
-        'examples/aggrid',
+        'examples/aggrid', 'examples/ajax-pagination',
     ],
 ];
 
