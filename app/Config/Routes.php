@@ -257,6 +257,12 @@ $routes->group('examples', function ($routes) {
     $routes->get('ajax-pagination',      'Examples\AjaxPagination::index');
     $routes->get('ajax-pagination/data', 'Examples\AjaxPagination::data');
 
+    // 51. 동기화 에디터
+    $routes->get('sync-editor',          'Examples\SyncEditor::index');
+    $routes->get('sync-editor/doc',      'Examples\SyncEditor::doc');
+    $routes->post('sync-editor/save',    'Examples\SyncEditor::save');
+    $routes->get('sync-editor/stream',   'Examples\SyncEditor::stream');
+
     // 48. TinyMCE 에디터
     $routes->get('tinymce',                        'Examples\TinyMce::index');
     $routes->post('tinymce/save',                  'Examples\TinyMce::save');
