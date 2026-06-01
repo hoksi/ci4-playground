@@ -23,12 +23,8 @@ class Notification extends BaseController
         ]);
     }
 
-    public function create(): \CodeIgniter\HTTP\RedirectResponse
+    public function create(): \CodeIgniter\HTTP\Response
     {
-        if (! $this->request->is('post')) {
-            return redirect()->to(base_url('examples/notification'));
-        }
-
         $samples = [
             ['type' => 'info',    'title' => '새 게시글',        'message' => '김철수님이 새 게시글 "CI4 팁 모음"을 등록했습니다.'],
             ['type' => 'success', 'title' => '회원 가입',        'message' => '새 회원(user@example.com)이 가입했습니다.'],
@@ -38,27 +34,44 @@ class Notification extends BaseController
             ['type' => 'info',    'title' => '캐시 갱신',        'message' => '상품 목록 캐시가 자동으로 갱신되었습니다.'],
         ];
 
-        $this->model->insert($samples[array_rand($samples)]);
+        $data = $samples[array_rand($samples)];
+        $id   = $this->model->insert($data);
 
-        return redirect()->to(base_url('examples/notification'));
+        return $this->response->setJSON([
+            'success'      => true,
+            'notification' => $this->model->find($id),
+            'unreadCount'  => $this->model->countUnread(),
+        ]);
     }
 
-    public function read(int $id): \CodeIgniter\HTTP\RedirectResponse
+    public function read(int $id): \CodeIgniter\HTTP\Response
     {
         $this->model->markRead($id);
-        return redirect()->to(base_url('examples/notification'));
+
+        return $this->response->setJSON([
+            'success'    => true,
+            'unreadCount' => $this->model->countUnread(),
+        ]);
     }
 
-    public function readAll(): \CodeIgniter\HTTP\RedirectResponse
+    public function readAll(): \CodeIgniter\HTTP\Response
     {
         $this->model->markAllRead();
-        return redirect()->to(base_url('examples/notification'));
+
+        return $this->response->setJSON([
+            'success'    => true,
+            'unreadCount' => $this->model->countUnread(),
+        ]);
     }
 
-    public function clear(): \CodeIgniter\HTTP\RedirectResponse
+    public function clear(): \CodeIgniter\HTTP\Response
     {
         $this->model->truncate();
-        return redirect()->to(base_url('examples/notification'));
+
+        return $this->response->setJSON([
+            'success'    => true,
+            'unreadCount' => 0,
+        ]);
     }
 
     public function count(): \CodeIgniter\HTTP\Response
