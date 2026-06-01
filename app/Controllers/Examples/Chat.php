@@ -105,6 +105,11 @@ class Chat extends BaseController
     {
         $apiKey = trim((string) ($this->request->getPost('api_key') ?? ''));
 
+        // 클라이언트 키가 없으면 서버 환경변수 사용
+        if ($apiKey === '') {
+            $apiKey = trim((string) (env('GROQ_API_KEY') ?? ''));
+        }
+
         if ($apiKey === '') {
             return $this->response->setStatusCode(400)
                 ->setJSON(['error' => 'Groq API 키가 필요합니다.']);

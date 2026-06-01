@@ -54,12 +54,18 @@
                         <i class="bi bi-robot me-1"></i>AI 봇 자동응답
                     </label>
                 </div>
-                <div id="apiKeyArea" class="d-flex align-items-center gap-2" style="display:none!important;">
+                <?php if (env('GROQ_API_KEY')): ?>
+                <span class="badge bg-success small">
+                    <i class="bi bi-check-circle me-1"></i>서버 API 키 설정됨
+                </span>
+                <?php else: ?>
+                <div id="apiKeyArea" class="d-flex align-items-center gap-2" style="display:none;">
                     <input type="password" id="apiKeyInput" class="form-control form-control-sm"
                            style="max-width:260px;" placeholder="Groq API 키 (gsk_...)">
                     <button class="btn btn-sm btn-outline-success" id="saveApiKeyBtn">저장</button>
                     <span id="apiKeyStatus" class="small"></span>
                 </div>
+                <?php endif ?>
             </div>
 
             <!-- 메시지 목록 -->
