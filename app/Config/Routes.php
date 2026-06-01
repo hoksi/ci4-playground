@@ -248,6 +248,12 @@ $routes->group('examples', function ($routes) {
     $routes->get('sse',                        'Examples\Sse::index');
     $routes->get('sse/stream',                 'Examples\Sse::stream');
 
+    // 48. TinyMCE 에디터
+    $routes->get('tinymce',                        'Examples\TinyMce::index');
+    $routes->post('tinymce/save',                  'Examples\TinyMce::save');
+    $routes->post('tinymce/upload',                'Examples\TinyMce::upload');
+    $routes->get('tinymce/image/(:segment)',        'Examples\TinyMce::image/$1');
+
     // 47. 파일 업로드 심화
     $routes->get('fileupload-advanced',                    'Examples\FileUploadAdvanced::index');
     $routes->post('fileupload-advanced/upload',            'Examples\FileUploadAdvanced::upload');

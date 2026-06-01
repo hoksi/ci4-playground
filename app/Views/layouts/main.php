@@ -46,6 +46,7 @@ $allExamples = [
     ['url' => 'examples/sse',                 'label' => 'SSE 실시간',       'icon' => 'broadcast'],
     ['url' => 'examples/notification',        'label' => '알림 시스템',      'icon' => 'bell'],
     ['url' => 'examples/fileupload-advanced', 'label' => '파일 업로드 심화', 'icon' => 'cloud-upload-fill'],
+    ['url' => 'examples/tinymce',             'label' => 'TinyMCE 에디터',  'icon' => 'pencil-square'],
 ];
 
 $navGroups = [
@@ -57,8 +58,8 @@ $navGroups = [
         'examples/filters', 'examples/api', 'examples/apiv2',
     ],
     '입출력 처리' => [
-        'examples/fileupload', 'examples/fileupload-advanced', 'examples/session',
-        'examples/validation', 'examples/httpclient', 'examples/email',
+        'examples/fileupload', 'examples/fileupload-advanced', 'examples/tinymce',
+        'examples/session', 'examples/validation', 'examples/httpclient', 'examples/email',
     ],
     '아키텍처 패턴' => [
         'examples/servicelayer', 'examples/repository', 'examples/helper',
