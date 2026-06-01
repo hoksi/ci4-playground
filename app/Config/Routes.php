@@ -253,6 +253,10 @@ $routes->group('examples', function ($routes) {
     $routes->get('aggrid/data',        'Examples\AgGrid::data');
     $routes->get('aggrid/server-data', 'Examples\AgGrid::serverData');
 
+    // 50. AJAX 페이지네이션
+    $routes->get('ajax-pagination',      'Examples\AjaxPagination::index');
+    $routes->get('ajax-pagination/data', 'Examples\AjaxPagination::data');
+
     // 48. TinyMCE 에디터
     $routes->get('tinymce',                        'Examples\TinyMce::index');
     $routes->post('tinymce/save',                  'Examples\TinyMce::save');
