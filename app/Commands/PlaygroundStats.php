@@ -27,7 +27,7 @@ class PlaygroundStats extends BaseCommand
         CLI::write(str_repeat('─', 50));
 
         $model   = new PostModel();
-        $total   = $model->countAll();
+        $total   = $model->countAllResults();
         $posts   = $model->orderBy('views', 'DESC')->limit($limit)->findAll();
 
         if ($asJson) {

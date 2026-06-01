@@ -31,7 +31,7 @@ class CsvExcel extends BaseController
 
     // ─── CSV 내보내기 ────────────────────────────────────────────────────────────
 
-    public function exportCsv(): \CodeIgniter\HTTP\Response
+    public function exportCsv(): \CodeIgniter\HTTP\ResponseInterface
     {
         $db       = \Config\Database::connect();
         $products = $db->table($this->table)->orderBy('id')->get()->getResultArray();
@@ -96,7 +96,7 @@ class CsvExcel extends BaseController
 
     // ─── Excel 내보내기 ──────────────────────────────────────────────────────────
 
-    public function exportExcel(): \CodeIgniter\HTTP\Response
+    public function exportExcel(): \CodeIgniter\HTTP\ResponseInterface
     {
         $db       = \Config\Database::connect();
         $products = $db->table($this->table)->orderBy('id')->get()->getResultArray();

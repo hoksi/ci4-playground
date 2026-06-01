@@ -12,7 +12,7 @@ class AgGrid extends BaseController
     }
 
     /** 클라이언트 사이드 — 전체 데이터 JSON 반환 */
-    public function data(): \CodeIgniter\HTTP\Response
+    public function data(): \CodeIgniter\HTTP\ResponseInterface
     {
         $rows = db_connect()
             ->table('posts')
@@ -26,7 +26,7 @@ class AgGrid extends BaseController
     }
 
     /** 서버 사이드 — 페이지네이션·정렬·검색 처리 후 JSON 반환 */
-    public function serverData(): \CodeIgniter\HTTP\Response
+    public function serverData(): \CodeIgniter\HTTP\ResponseInterface
     {
         $startRow  = (int) ($this->request->getGet('startRow') ?? 0);
         $endRow    = (int) ($this->request->getGet('endRow') ?? 20);

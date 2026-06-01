@@ -41,10 +41,10 @@ class OfficialQueue extends BaseController
             return $this->response->setJSON(['ok' => false, 'message' => '잘못된 잡 유형입니다.']);
         }
 
-        $queue  = service('queue');
+        $queue  = service('queue'); // @phpstan-ignore-line
         $result = $delay > 0
-            ? $queue->setDelay($delay)->push($this->queueName, $jobKey, $dataMap[$jobKey])
-            : $queue->push($this->queueName, $jobKey, $dataMap[$jobKey]);
+            ? $queue->setDelay($delay)->push($this->queueName, $jobKey, $dataMap[$jobKey]) // @phpstan-ignore-line
+            : $queue->push($this->queueName, $jobKey, $dataMap[$jobKey]); // @phpstan-ignore-line
 
         if ($result->getStatus()) {
             return $this->response->setJSON([
@@ -62,9 +62,9 @@ class OfficialQueue extends BaseController
     public function processNext(): ResponseInterface
     {
         $config = config('Queue');
-        $queue  = service('queue');
+        $queue  = service('queue'); // @phpstan-ignore-line
 
-        $work = $queue->pop($this->queueName, ['default']);
+        $work = $queue->pop($this->queueName, ['default']); // @phpstan-ignore-line
 
         if ($work === null) {
             return $this->response->setJSON([
@@ -83,7 +83,7 @@ class OfficialQueue extends BaseController
             $job   = new $class($payload['data']);
             $job->process();
 
-            $queue->done($work);
+            $queue->done($work); // @phpstan-ignore-line
             $elapsed = round(microtime(true) - $start, 3);
 
             return $this->response->setJSON([
@@ -100,11 +100,11 @@ class OfficialQueue extends BaseController
             $after    = isset($job) ? $job->getRetryAfter() : 60;
 
             if (++$work->attempts < $tries) {
-                $queue->later($work, $after);
+                $queue->later($work, $after); // @phpstan-ignore-line
                 $status  = 'retry';
                 $message = "잡 [{$payload['job']}] 재시도 예약 (시도 {$work->attempts}/{$tries})";
             } else {
-                $queue->failed($work, $e, $config->keepFailedJobs);
+                $queue->failed($work, $e, $config->keepFailedJobs); // @phpstan-ignore-line
                 $status  = 'failed';
                 $message = "잡 [{$payload['job']}] 실패: " . $e->getMessage();
             }
@@ -130,7 +130,7 @@ class OfficialQueue extends BaseController
     public function retryFailed(): ResponseInterface
     {
         $id    = (int) $this->request->getPost('id');
-        $count = service('queue')->retry($id ?: null, $this->queueName);
+        $count = service('queue')->retry($id ?: null, $this->queueName); // @phpstan-ignore-line
 
         return $this->response->setJSON([
             'ok'      => true,
@@ -143,7 +143,7 @@ class OfficialQueue extends BaseController
 
     public function clear(): ResponseInterface
     {
-        service('queue')->clear($this->queueName);
+        service('queue')->clear($this->queueName); // @phpstan-ignore-line
 
         return $this->response->setJSON([
             'ok'      => true,

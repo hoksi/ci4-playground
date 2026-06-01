@@ -35,9 +35,10 @@ class Sse extends BaseController
         echo ": ping\n\n";
         flush();
 
-        $lastId   = (int) ($_SERVER['HTTP_LAST_EVENT_ID'] ?? 0);
+        $lastId   = (int) ($this->request->getServer('HTTP_LAST_EVENT_ID') ?? 0);
         $maxTicks = 30;   // 최대 30회 전송 후 재연결 유도
         $db       = \Config\Database::connect();
+        $eventId  = 0;
 
         for ($tick = 0; $tick < $maxTicks; $tick++) {
             if (connection_aborted()) {
