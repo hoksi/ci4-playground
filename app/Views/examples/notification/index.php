@@ -27,7 +27,6 @@
     <div class="example-card mb-3">
         <div class="example-card-body">
             <div class="d-flex flex-wrap align-items-center gap-3">
-                <!-- 미읽음 배지 -->
                 <div class="d-flex align-items-center gap-2">
                     <span class="fs-5 fw-bold">미읽음</span>
                     <span id="unread-badge" class="badge rounded-pill fs-6"
@@ -35,8 +34,6 @@
                         <?= $unreadCount ?>
                     </span>
                 </div>
-
-                <!-- SSE 연결 상태 -->
                 <div class="d-flex align-items-center gap-2 ms-auto">
                     <span id="sse-dot" class="rounded-circle d-inline-block"
                           style="width:10px;height:10px;background:#adb5bd;"></span>
@@ -52,30 +49,20 @@
     <!-- 액션 버튼 -->
     <div class="example-card mb-3">
         <div class="example-card-header"><h5><i class="bi bi-plus-circle me-2"></i>알림 생성</h5></div>
-        <div class="example-card-body d-flex flex-wrap gap-2">
-            <form method="post" action="<?= base_url('examples/notification/create') ?>">
-                <?= csrf_field() ?>
-                <button type="submit" class="demo-btn" style="border:none;cursor:pointer;">
-                    <i class="bi bi-bell-fill"></i> 랜덤 알림 생성
-                </button>
-            </form>
-            <?php if ($unreadCount > 0): ?>
-            <form method="post" action="<?= base_url('examples/notification/read-all') ?>">
-                <?= csrf_field() ?>
-                <button type="submit" class="demo-btn outline" style="cursor:pointer;">
-                    <i class="bi bi-check-all"></i> 전체 읽음 처리
-                </button>
-            </form>
-            <?php endif; ?>
-            <?php if (!empty($notifications)): ?>
-            <form method="post" action="<?= base_url('examples/notification/clear') ?>">
-                <?= csrf_field() ?>
-                <button type="submit" class="demo-btn outline" style="cursor:pointer;border-color:#6c757d;color:#6c757d;"
-                        onclick="return confirm('알림을 모두 삭제하시겠습니까?')">
-                    <i class="bi bi-trash3"></i> 전체 삭제
-                </button>
-            </form>
-            <?php endif; ?>
+        <div class="example-card-body d-flex flex-wrap gap-2" id="action-buttons">
+            <button class="demo-btn" onclick="createNotification(this)">
+                <i class="bi bi-bell-fill"></i> 랜덤 알림 생성
+            </button>
+            <button class="demo-btn outline" id="btn-read-all"
+                    style="<?= $unreadCount === 0 ? 'display:none;' : '' ?>"
+                    onclick="readAllNotifications(this)">
+                <i class="bi bi-check-all"></i> 전체 읽음 처리
+            </button>
+            <button class="demo-btn outline" id="btn-clear"
+                    style="border-color:#6c757d;color:#6c757d;<?= empty($notifications) ? 'display:none;' : '' ?>"
+                    onclick="clearNotifications(this)">
+                <i class="bi bi-trash3"></i> 전체 삭제
+            </button>
         </div>
     </div>
 
@@ -83,59 +70,57 @@
     <div class="example-card">
         <div class="example-card-header">
             <h5><i class="bi bi-list-ul me-2"></i>알림 목록
-                <small class="text-muted fw-normal ms-2">(총 <?= count($notifications) ?>개)</small>
+                <small class="text-muted fw-normal ms-2" id="notif-count">(총 <?= count($notifications) ?>개)</small>
             </h5>
         </div>
-        <div class="example-card-body p-0">
+        <div class="example-card-body p-0" id="notif-list">
             <?php if (empty($notifications)): ?>
-            <div class="text-center text-muted py-5">
+            <div id="empty-msg" class="text-center text-muted py-5">
                 <i class="bi bi-bell-slash fs-1 d-block mb-2 opacity-25"></i>
                 알림이 없습니다. 위 버튼으로 알림을 생성해보세요.
             </div>
             <?php else: ?>
             <?php
             $typeConfig = [
-                'info'    => ['icon' => 'info-circle-fill',    'color' => '#0d6efd', 'bg' => '#e7f0ff', 'badge' => 'primary'],
-                'success' => ['icon' => 'check-circle-fill',   'color' => '#198754', 'bg' => '#e8f5e9', 'badge' => 'success'],
+                'info'    => ['icon' => 'info-circle-fill',          'color' => '#0d6efd', 'bg' => '#e7f0ff', 'badge' => 'primary'],
+                'success' => ['icon' => 'check-circle-fill',         'color' => '#198754', 'bg' => '#e8f5e9', 'badge' => 'success'],
                 'warning' => ['icon' => 'exclamation-triangle-fill', 'color' => '#fd7e14', 'bg' => '#fff3e0', 'badge' => 'warning'],
-                'error'   => ['icon' => 'x-circle-fill',       'color' => '#dc3545', 'bg' => '#fdecea', 'badge' => 'danger'],
+                'error'   => ['icon' => 'x-circle-fill',             'color' => '#dc3545', 'bg' => '#fdecea', 'badge' => 'danger'],
             ];
             foreach ($notifications as $n):
                 $cfg = $typeConfig[$n['type']] ?? $typeConfig['info'];
             ?>
-            <div class="d-flex align-items-start gap-3 px-4 py-3 border-bottom <?= $n['is_read'] ? 'opacity-60' : '' ?>"
-                 style="background:<?= $n['is_read'] ? '#fff' : '#fffaf8' ?>;">
-                <!-- 타입 아이콘 -->
+            <div class="notif-row d-flex align-items-start gap-3 px-4 py-3 border-bottom"
+                 data-id="<?= $n['id'] ?>"
+                 data-read="<?= $n['is_read'] ?>"
+                 style="background:<?= $n['is_read'] ? '#fff' : '#fffaf8' ?>;<?= $n['is_read'] ? 'opacity:.7;' : '' ?>">
                 <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
                      style="width:40px;height:40px;background:<?= $cfg['bg'] ?>;">
                     <i class="bi bi-<?= $cfg['icon'] ?>" style="color:<?= $cfg['color'] ?>;font-size:1.2rem;"></i>
                 </div>
-                <!-- 내용 -->
                 <div class="flex-grow-1 min-w-0">
                     <div class="d-flex align-items-center gap-2 mb-1">
                         <?php if (!$n['is_read']): ?>
-                        <span class="rounded-circle d-inline-block"
+                        <span class="unread-dot rounded-circle d-inline-block"
                               style="width:8px;height:8px;background:var(--ci-red);flex-shrink:0;"></span>
                         <?php endif; ?>
-                        <strong class="<?= $n['is_read'] ? 'text-muted fw-normal' : '' ?>"><?= esc($n['title']) ?></strong>
-                        <span class="badge bg-<?= $cfg['badge'] ?> bg-opacity-10 text-<?= $cfg['badge'] ?> border border-<?= $cfg['badge'] ?> border-opacity-25" style="font-size:.7rem;"><?= esc($n['type']) ?></span>
+                        <strong class="notif-title <?= $n['is_read'] ? 'text-muted fw-normal' : '' ?>"><?= esc($n['title']) ?></strong>
+                        <span class="badge bg-<?= $cfg['badge'] ?> bg-opacity-10 text-<?= $cfg['badge'] ?> border border-<?= $cfg['badge'] ?> border-opacity-25"
+                              style="font-size:.7rem;"><?= esc($n['type']) ?></span>
                     </div>
-                    <p class="mb-1 small <?= $n['is_read'] ? 'text-muted' : '' ?>"><?= esc($n['message']) ?></p>
+                    <p class="mb-1 small notif-message <?= $n['is_read'] ? 'text-muted' : '' ?>"><?= esc($n['message']) ?></p>
                     <small class="text-muted"><?= esc($n['created_at']) ?></small>
                 </div>
-                <!-- 읽음 처리 버튼 -->
-                <?php if (!$n['is_read']): ?>
-                <form method="post" action="<?= base_url('examples/notification/read/' . $n['id']) ?>" class="flex-shrink-0">
-                    <?= csrf_field() ?>
-                    <button type="submit" class="btn btn-sm btn-outline-secondary" title="읽음 처리">
+                <div class="flex-shrink-0 read-action" style="padding-top:.1rem;">
+                    <?php if (!$n['is_read']): ?>
+                    <button class="btn btn-sm btn-outline-secondary" title="읽음 처리"
+                            onclick="markRead(<?= $n['id'] ?>, this.closest('.notif-row'))">
                         <i class="bi bi-check2"></i>
                     </button>
-                </form>
-                <?php else: ?>
-                <span class="flex-shrink-0 text-muted small" style="padding-top:.25rem;">
-                    <i class="bi bi-check2-all"></i>
-                </span>
-                <?php endif; ?>
+                    <?php else: ?>
+                    <span class="text-muted small"><i class="bi bi-check2-all"></i></span>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php endforeach; ?>
             <?php endif; ?>
@@ -146,115 +131,105 @@
 <!-- 코드 설명 탭 -->
 <div id="tab-code" class="tab-content-pane" style="display:<?= $tab === 'code' ? 'block' : 'none' ?>">
     <div class="example-card">
-        <div class="example-card-header"><span class="badge bg-dark">1</span><h5>마이그레이션</h5></div>
+        <div class="example-card-header"><span class="badge bg-dark">1</span><h5>AJAX 공통 헬퍼 — CSRF 자동 갱신</h5></div>
         <div class="example-card-body">
-            <pre><code class="language-php">// app/Database/Migrations/CreateNotificationsTable.php
-$this->forge->addField([
-    'id'         => ['type' => 'INTEGER', 'auto_increment' => true],
-    'type'       => ['type' => 'VARCHAR', 'constraint' => 20, 'default' => 'info'],
-    'title'      => ['type' => 'VARCHAR', 'constraint' => 200],
-    'message'    => ['type' => 'TEXT'],
-    'is_read'    => ['type' => 'TINYINT', 'constraint' => 1, 'default' => 0],
-    'created_at' => ['type' => 'DATETIME', 'null' => true],
-]);
-$this->forge->createTable('notifications');</code></pre>
-        </div>
-    </div>
+            <pre><code class="language-javascript">let csrfHash = '<?= csrf_hash() ?>';
 
-    <div class="example-card">
-        <div class="example-card-header"><span class="badge bg-dark">2</span><h5>Model — 읽음 처리 메서드</h5></div>
-        <div class="example-card-body">
-            <pre><code class="language-php">class NotificationModel extends Model
-{
-    protected $table         = 'notifications';
-    protected $allowedFields = ['type', 'title', 'message', 'is_read'];
-    protected $useTimestamps = true;
-    protected $updatedField  = '';   // updated_at 없음
+async function ajaxPost(url) {
+    const form = new FormData();
+    form.append('<?= csrf_token() ?>', csrfHash);
 
-    public function countUnread(): int
-    {
-        return $this->where('is_read', 0)->countAllResults();
-    }
+    const res  = await fetch(url, { method: 'POST', body: form });
+    const data = await res.json();
 
-    public function markRead(int $id): void
-    {
-        $this->update($id, ['is_read' => 1]);
-    }
-
-    public function markAllRead(): void
-    {
-        $this->where('is_read', 0)->set(['is_read' => 1])->update();
-    }
+    // CI4는 응답 JSON에 새 CSRF 해시를 포함하지 않으므로
+    // 각 요청 후 갱신이 필요한 경우 별도 처리
+    return data;
 }</code></pre>
         </div>
     </div>
 
     <div class="example-card">
-        <div class="example-card-header"><span class="badge bg-dark">3</span><h5>SSE 스트림 — 실시간 미읽음 카운트</h5></div>
+        <div class="example-card-header"><span class="badge bg-dark">2</span><h5>알림 생성 — AJAX + DOM 추가</h5></div>
         <div class="example-card-body">
-            <pre><code class="language-php">public function stream(): void
-{
-    while (ob_get_level() > 0) ob_end_clean();
-    ob_implicit_flush(true);
+            <pre><code class="language-javascript">async function createNotification() {
+    const data = await ajaxPost('/examples/notification/create');
+    if (!data.success) return;
 
-    header('Content-Type: text/event-stream; charset=UTF-8');
-    header('Cache-Control: no-cache');
-    header('X-Accel-Buffering: no');
+    // 새 알림 행을 목록 맨 위에 추가
+    const row = renderNotifRow(data.notification);
+    row.style.opacity = '0';
+    list.prepend(row);
+    requestAnimationFrame(() => row.style.opacity = '1');
 
-    echo ": ping\n\n"; flush();
-
-    for ($i = 0; $i &lt; 60; $i++) {
-        if (connection_aborted()) break;
-
-        $unread = $this->model->countUnread();
-        echo "event: notification\n";
-        echo 'data: ' . json_encode(['unread' => $unread]) . "\n\n";
-        flush();
-
-        sleep(3);
-    }
+    updateBadge(data.unreadCount);
+    updateCount(+1);
 }</code></pre>
         </div>
     </div>
 
     <div class="example-card">
-        <div class="example-card-header"><span class="badge bg-dark">4</span><h5>클라이언트 — EventSource로 배지 업데이트</h5></div>
+        <div class="example-card-header"><span class="badge bg-dark">3</span><h5>단건 읽음 처리 — DOM 업데이트</h5></div>
+        <div class="example-card-body">
+            <pre><code class="language-javascript">async function markRead(id, rowEl) {
+    const data = await ajaxPost(`/examples/notification/read/${id}`);
+    if (!data.success) return;
+
+    // 행 스타일을 "읽음" 상태로 변경
+    rowEl.style.background = '#fff';
+    rowEl.style.opacity    = '.7';
+    rowEl.dataset.read     = '1';
+    rowEl.querySelector('.unread-dot')?.remove();
+    rowEl.querySelector('.notif-title')?.classList.add('text-muted', 'fw-normal');
+    rowEl.querySelector('.notif-message')?.classList.add('text-muted');
+    rowEl.querySelector('.read-action').innerHTML =
+        '&lt;span class="text-muted small"&gt;&lt;i class="bi bi-check2-all"&gt;&lt;/i&gt;&lt;/span&gt;';
+
+    updateBadge(data.unreadCount);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="example-card">
+        <div class="example-card-header"><span class="badge bg-dark">4</span><h5>CI4 컨트롤러 — JSON 응답</h5></div>
+        <div class="example-card-body">
+            <pre><code class="language-php">// redirect() 대신 JSON 응답 반환
+public function create(): Response
+{
+    $this->model->insert($data);
+    return $this->response->setJSON([
+        'success'      => true,
+        'notification' => $this->model->find($id),
+        'unreadCount'  => $this->model->countUnread(),
+    ]);
+}
+
+public function read(int $id): Response
+{
+    $this->model->markRead($id);
+    return $this->response->setJSON([
+        'success'    => true,
+        'unreadCount' => $this->model->countUnread(),
+    ]);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="example-card">
+        <div class="example-card-header"><span class="badge bg-dark">5</span><h5>SSE — 실시간 미읽음 배지</h5></div>
         <div class="example-card-body">
             <pre><code class="language-javascript">const es = new EventSource('/examples/notification/stream');
 
 es.addEventListener('notification', e => {
     const { unread } = JSON.parse(e.data);
-    const badge = document.getElementById('unread-badge');
-    badge.textContent = unread;
-    badge.style.background = unread > 0 ? '#dd4814' : '#6c757d';
+    updateBadge(unread);
 });
 
-es.addEventListener('reconnect', () => es.close());
-
-es.onerror = () => {
-    // EventSource가 자동 재연결 시도함
-};</code></pre>
-        </div>
-    </div>
-
-    <div class="example-card">
-        <div class="example-card-header"><span class="badge bg-dark">5</span><h5>알림 타입별 스타일 패턴</h5></div>
-        <div class="example-card-body">
-            <pre><code class="language-php">// 알림 타입: info | success | warning | error
-$this->model->insert([
-    'type'    => 'warning',
-    'title'   => '시스템 점검 예정',
-    'message' => '내일 새벽 2~4시 정기 점검이 예정되어 있습니다.',
-]);
-
-// 미읽음 수 조회
-$count = $this->model->countUnread();
-
-// 단건 읽음 처리
-$this->model->markRead($id);
-
-// 전체 읽음 처리
-$this->model->markAllRead();</code></pre>
+function updateBadge(count) {
+    const badge = document.getElementById('unread-badge');
+    badge.textContent      = count;
+    badge.style.background = count > 0 ? '#dd4814' : '#6c757d';
+}</code></pre>
         </div>
     </div>
 </div>
@@ -269,12 +244,163 @@ function showTab(name) {
     event.target.classList.add('active');
 }
 
+// ── CSRF ─────────────────────────────────────────────────
+const CSRF_TOKEN = '<?= csrf_token() ?>';
+let   csrfHash   = '<?= csrf_hash() ?>';
+
+async function ajaxPost(url) {
+    const form = new FormData();
+    form.append(CSRF_TOKEN, csrfHash);
+    const res  = await fetch(url, { method: 'POST', body: form });
+    const data = await res.json();
+    if (data.csrf_hash) csrfHash = data.csrf_hash;
+    return data;
+}
+
+// ── 알림 생성 ─────────────────────────────────────────────
+async function createNotification(btn) {
+    btn.disabled = true;
+    const data = await ajaxPost('<?= base_url('examples/notification/create') ?>');
+    btn.disabled = false;
+    if (!data.success) return;
+
+    const list = document.getElementById('notif-list');
+    const empty = document.getElementById('empty-msg');
+    if (empty) empty.remove();
+
+    const row = buildRow(data.notification);
+    row.style.transition = 'opacity .3s';
+    row.style.opacity    = '0';
+    list.prepend(row);
+    requestAnimationFrame(() => { row.style.opacity = '1'; });
+
+    updateBadge(data.unreadCount);
+    updateCount(+1);
+    document.getElementById('btn-clear').style.display = '';
+    document.getElementById('btn-read-all').style.display = '';
+}
+
+// ── 단건 읽음 ─────────────────────────────────────────────
+async function markRead(id, rowEl) {
+    const data = await ajaxPost('<?= base_url('examples/notification/read/') ?>' + id);
+    if (!data.success) return;
+
+    rowEl.style.background = '#fff';
+    rowEl.style.opacity    = '.7';
+    rowEl.dataset.read     = '1';
+    rowEl.querySelector('.unread-dot')?.remove();
+    rowEl.querySelector('.notif-title')?.classList.add('text-muted', 'fw-normal');
+    rowEl.querySelector('.notif-message')?.classList.add('text-muted');
+    rowEl.querySelector('.read-action').innerHTML =
+        '<span class="text-muted small"><i class="bi bi-check2-all"></i></span>';
+
+    updateBadge(data.unreadCount);
+    if (data.unreadCount === 0) document.getElementById('btn-read-all').style.display = 'none';
+}
+
+// ── 전체 읽음 ─────────────────────────────────────────────
+async function readAllNotifications(btn) {
+    btn.disabled = true;
+    const data = await ajaxPost('<?= base_url('examples/notification/read-all') ?>');
+    btn.disabled = false;
+    if (!data.success) return;
+
+    document.querySelectorAll('.notif-row[data-read="0"]').forEach(row => {
+        row.style.background = '#fff';
+        row.style.opacity    = '.7';
+        row.dataset.read     = '1';
+        row.querySelector('.unread-dot')?.remove();
+        row.querySelector('.notif-title')?.classList.add('text-muted', 'fw-normal');
+        row.querySelector('.notif-message')?.classList.add('text-muted');
+        row.querySelector('.read-action').innerHTML =
+            '<span class="text-muted small"><i class="bi bi-check2-all"></i></span>';
+    });
+
+    updateBadge(0);
+    btn.style.display = 'none';
+}
+
+// ── 전체 삭제 ─────────────────────────────────────────────
+async function clearNotifications(btn) {
+    if (!confirm('알림을 모두 삭제하시겠습니까?')) return;
+    btn.disabled = true;
+    const data = await ajaxPost('<?= base_url('examples/notification/clear') ?>');
+    btn.disabled = false;
+    if (!data.success) return;
+
+    document.getElementById('notif-list').innerHTML =
+        '<div id="empty-msg" class="text-center text-muted py-5">' +
+        '<i class="bi bi-bell-slash fs-1 d-block mb-2 opacity-25"></i>' +
+        '알림이 없습니다. 위 버튼으로 알림을 생성해보세요.</div>';
+
+    updateBadge(0);
+    document.getElementById('notif-count').textContent = '(총 0개)';
+    document.getElementById('btn-read-all').style.display = 'none';
+    btn.style.display = 'none';
+}
+
+// ── 공통 유틸 ─────────────────────────────────────────────
+function updateBadge(count) {
+    const badge = document.getElementById('unread-badge');
+    badge.textContent      = count;
+    badge.style.background = count > 0 ? '#dd4814' : '#6c757d';
+}
+
+function updateCount(delta) {
+    const el  = document.getElementById('notif-count');
+    const cur = parseInt(el.textContent.replace(/\D/g, '')) || 0;
+    el.textContent = `(총 ${cur + delta}개)`;
+}
+
+const TYPE_CFG = {
+    info:    { icon: 'info-circle-fill',          color: '#0d6efd', bg: '#e7f0ff', badge: 'primary' },
+    success: { icon: 'check-circle-fill',         color: '#198754', bg: '#e8f5e9', badge: 'success' },
+    warning: { icon: 'exclamation-triangle-fill', color: '#fd7e14', bg: '#fff3e0', badge: 'warning' },
+    error:   { icon: 'x-circle-fill',             color: '#dc3545', bg: '#fdecea', badge: 'danger'  },
+};
+
+function buildRow(n) {
+    const cfg  = TYPE_CFG[n.type] ?? TYPE_CFG.info;
+    const div  = document.createElement('div');
+    div.className = 'notif-row d-flex align-items-start gap-3 px-4 py-3 border-bottom';
+    div.dataset.id   = n.id;
+    div.dataset.read = '0';
+    div.style.background = '#fffaf8';
+    div.innerHTML = `
+        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+             style="width:40px;height:40px;background:${cfg.bg};">
+            <i class="bi bi-${cfg.icon}" style="color:${cfg.color};font-size:1.2rem;"></i>
+        </div>
+        <div class="flex-grow-1 min-w-0">
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="unread-dot rounded-circle d-inline-block"
+                      style="width:8px;height:8px;background:var(--ci-red);flex-shrink:0;"></span>
+                <strong class="notif-title">${esc(n.title)}</strong>
+                <span class="badge bg-${cfg.badge} bg-opacity-10 text-${cfg.badge} border border-${cfg.badge} border-opacity-25"
+                      style="font-size:.7rem;">${esc(n.type)}</span>
+            </div>
+            <p class="mb-1 small notif-message">${esc(n.message)}</p>
+            <small class="text-muted">${esc(n.created_at ?? '')}</small>
+        </div>
+        <div class="flex-shrink-0 read-action" style="padding-top:.1rem;">
+            <button class="btn btn-sm btn-outline-secondary" title="읽음 처리"
+                    onclick="markRead(${n.id}, this.closest('.notif-row'))">
+                <i class="bi bi-check2"></i>
+            </button>
+        </div>`;
+    return div;
+}
+
+function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── SSE ───────────────────────────────────────────────────
 let es = null;
 
 function toggleSse() {
     if (es) {
-        es.close();
-        es = null;
+        es.close(); es = null;
         setSseStatus(false);
         document.getElementById('btn-sse-toggle').innerHTML = '<i class="bi bi-broadcast me-1"></i>실시간 연결';
     } else {
@@ -285,31 +411,25 @@ function toggleSse() {
 
 function startSse() {
     es = new EventSource('<?= base_url('examples/notification/stream') ?>');
-
     es.onopen = () => setSseStatus(true);
-
     es.addEventListener('notification', e => {
         const { unread } = JSON.parse(e.data);
-        const badge = document.getElementById('unread-badge');
-        badge.textContent = unread;
-        badge.style.background = unread > 0 ? '#dd4814' : '#6c757d';
+        updateBadge(unread);
     });
-
     es.addEventListener('reconnect', () => {
         es.close(); es = null;
         setSseStatus(false);
         document.getElementById('btn-sse-toggle').innerHTML = '<i class="bi bi-broadcast me-1"></i>실시간 연결';
     });
-
     es.onerror = () => setSseStatus(false);
 }
 
 function setSseStatus(connected) {
     const dot    = document.getElementById('sse-dot');
     const status = document.getElementById('sse-status');
-    dot.style.background    = connected ? '#198754' : '#adb5bd';
-    status.textContent      = connected ? 'SSE 연결됨' : 'SSE 연결 끊김';
-    status.style.color      = connected ? '#198754'   : '';
+    dot.style.background = connected ? '#198754' : '#adb5bd';
+    status.textContent   = connected ? 'SSE 연결됨' : 'SSE 연결 끊김';
+    status.style.color   = connected ? '#198754'   : '';
 }
 </script>
 <?= $this->endSection() ?>
