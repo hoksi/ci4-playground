@@ -54,6 +54,13 @@
                         <i class="bi bi-robot me-1"></i>AI 봇 자동응답
                     </label>
                 </div>
+                <select id="modelSelect" class="form-select form-select-sm" style="max-width:220px;">
+                    <option value="llama-3.3-70b-versatile">Llama 3.3 70B (권장)</option>
+                    <option value="llama-3.1-8b-instant">Llama 3.1 8B (빠름)</option>
+                    <option value="llama3-70b-8192">Llama 3 70B</option>
+                    <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                    <option value="gemma2-9b-it">Gemma2 9B</option>
+                </select>
                 <?php if (env('GROQ_API_KEY')): ?>
                 <span class="badge bg-success small">
                     <i class="bi bi-check-circle me-1"></i>서버 API 키 설정됨
@@ -454,7 +461,8 @@ async function requestBotReply() {
     scrollToBottom();
 
     try {
-        const form = new URLSearchParams({ api_key: groqApiKey });
+        const model = document.getElementById('modelSelect').value;
+        const form  = new URLSearchParams({ api_key: groqApiKey, model });
         form.append(CSRF_TOKEN, csrfHash);
 
         const res  = await fetch('<?= base_url('examples/chat/bot-reply') ?>', {

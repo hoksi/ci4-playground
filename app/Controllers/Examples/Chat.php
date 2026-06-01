@@ -105,6 +105,12 @@ class Chat extends BaseController
     {
         $apiKey = trim((string) ($this->request->getPost('api_key') ?? ''));
 
+        $allowed = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'llama3-70b-8192', 'mixtral-8x7b-32768', 'gemma2-9b-it'];
+        $model   = $this->request->getPost('model') ?? 'llama-3.3-70b-versatile';
+        if (! in_array($model, $allowed, true)) {
+            $model = 'llama-3.3-70b-versatile';
+        }
+
         // 클라이언트 키가 없으면 서버 환경변수 사용
         if ($apiKey === '') {
             $apiKey = trim((string) (env('GROQ_API_KEY') ?? ''));
@@ -141,7 +147,7 @@ class Chat extends BaseController
                         'Content-Type'  => 'application/json',
                     ],
                     'body'    => json_encode([
-                        'model'       => 'llama-3.3-70b-versatile',
+                        'model'       => $model,
                         'messages'    => $groqMessages,
                         'max_tokens'  => 300,
                         'temperature' => 0.8,
