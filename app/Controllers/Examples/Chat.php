@@ -101,6 +101,78 @@ class Chat extends BaseController
         flush();
     }
 
+    public function botReply(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $apiKey = trim((string) ($this->request->getPost('api_key') ?? ''));
+
+        if ($apiKey === '') {
+            return $this->response->setStatusCode(400)
+                ->setJSON(['error' => 'Groq API 키가 필요합니다.']);
+        }
+
+        // 최근 20개 메시지를 대화 컨텍스트로 사용
+        $rows = db_connect()
+            ->table('chat_messages')
+            ->orderBy('id', 'DESC')
+            ->limit(20)
+            ->get()
+            ->getResultArray();
+
+        $groqMessages = [
+            ['role' => 'system', 'content' => '당신은 친근하고 유쾌한 채팅 친구입니다. 한국어로 짧고 자연스럽게 대화하세요. 2~3문장 이내로 답변하세요.'],
+        ];
+
+        foreach (array_reverse($rows) as $msg) {
+            $role           = $msg['nickname'] === 'AI봇' ? 'assistant' : 'user';
+            $groqMessages[] = ['role' => $role, 'content' => $msg['content']];
+        }
+
+        try {
+            $response = \Config\Services::curlrequest()->post(
+                'https://api.groq.com/openai/v1/chat/completions',
+                [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $apiKey,
+                        'Content-Type'  => 'application/json',
+                    ],
+                    'body'    => json_encode([
+                        'model'       => 'llama-3.3-70b-versatile',
+                        'messages'    => $groqMessages,
+                        'max_tokens'  => 300,
+                        'temperature' => 0.8,
+                    ]),
+                    'timeout' => 15,
+                ]
+            );
+
+            $body    = json_decode($response->getBody(), true);
+            $content = trim($body['choices'][0]['message']['content'] ?? '');
+
+            if ($content === '') {
+                return $this->response->setStatusCode(500)
+                    ->setJSON(['error' => 'AI 응답이 비어 있습니다.']);
+            }
+
+            $now = date('Y-m-d H:i:s');
+            $id  = db_connect()->table('chat_messages')->insert([
+                'nickname'   => 'AI봇',
+                'content'    => $content,
+                'created_at' => $now,
+            ], true);
+
+            return $this->response->setJSON([
+                'success'    => true,
+                'id'         => $id,
+                'nickname'   => 'AI봇',
+                'content'    => $content,
+                'created_at' => $now,
+            ]);
+        } catch (\Throwable $e) {
+            return $this->response->setStatusCode(500)
+                ->setJSON(['error' => 'Groq API 오류: ' . $e->getMessage()]);
+        }
+    }
+
     public function clear(): \CodeIgniter\HTTP\ResponseInterface
     {
         db_connect()->table('chat_messages')->truncate();

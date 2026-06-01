@@ -46,6 +46,22 @@
                 <span id="myNickBadge" class="badge bg-primary ms-1"></span>
             </div>
 
+            <!-- 봇 설정 -->
+            <div class="p-3 border-bottom bg-light d-flex flex-wrap align-items-center gap-2">
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" id="botToggle">
+                    <label class="form-check-label text-muted small fw-semibold" for="botToggle">
+                        <i class="bi bi-robot me-1"></i>AI 봇 자동응답
+                    </label>
+                </div>
+                <div id="apiKeyArea" class="d-flex align-items-center gap-2" style="display:none!important;">
+                    <input type="password" id="apiKeyInput" class="form-control form-control-sm"
+                           style="max-width:260px;" placeholder="Groq API 키 (gsk_...)">
+                    <button class="btn btn-sm btn-outline-success" id="saveApiKeyBtn">저장</button>
+                    <span id="apiKeyStatus" class="small"></span>
+                </div>
+            </div>
+
             <!-- 메시지 목록 -->
             <div id="chatMessages"
                  style="height:420px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;">
@@ -334,6 +350,8 @@ async function sendMessage() {
             const tempEl = document.querySelector(`[data-id="${tempId}"]`);
             if (tempEl) tempEl.dataset.id = json.id;
             lastId = Math.max(lastId, json.id);
+            // 봇 자동응답
+            requestBotReply();
         } else {
             sendError.textContent = json.error ?? '전송 실패';
             document.querySelector(`[data-id="${tempId}"]`)?.remove();
@@ -383,6 +401,78 @@ document.getElementById('clearBtn').addEventListener('click', async () => {
         lastId = 0;
     }
 });
+
+// ─── 봇 설정 ────────────────────────────────────────────
+const botToggle    = document.getElementById('botToggle');
+const apiKeyArea   = document.getElementById('apiKeyArea');
+const apiKeyInput  = document.getElementById('apiKeyInput');
+const apiKeyStatus = document.getElementById('apiKeyStatus');
+
+let groqApiKey = localStorage.getItem('groqApiKey') ?? '';
+if (groqApiKey) {
+    apiKeyInput.value  = groqApiKey;
+    apiKeyStatus.innerHTML = '<i class="bi bi-check-circle text-success"></i> 저장됨';
+    apiKeyStatus.className = 'small text-success';
+}
+
+botToggle.addEventListener('change', () => {
+    apiKeyArea.style.display = botToggle.checked ? 'flex' : 'none';
+});
+
+document.getElementById('saveApiKeyBtn').addEventListener('click', () => {
+    const key = apiKeyInput.value.trim();
+    if (! key.startsWith('gsk_')) {
+        apiKeyStatus.textContent = 'gsk_ 로 시작하는 키를 입력하세요.';
+        apiKeyStatus.className   = 'small text-danger';
+        return;
+    }
+    groqApiKey = key;
+    localStorage.setItem('groqApiKey', groqApiKey);
+    apiKeyStatus.innerHTML = '<i class="bi bi-check-circle text-success"></i> 저장됨';
+    apiKeyStatus.className = 'small text-success';
+});
+
+async function requestBotReply() {
+    if (! botToggle.checked || ! groqApiKey) return;
+
+    const indicator = document.createElement('div');
+    indicator.id        = 'botTyping';
+    indicator.className = 'chat-msg d-flex flex-column align-items-start';
+    indicator.innerHTML = `<div class="msg-nick text-muted small mb-1">AI봇</div>
+        <div class="d-flex align-items-end gap-1">
+            <div class="msg-bubble bg-light border rounded-3 px-3 py-2 text-muted fst-italic">
+                <span class="spinner-grow spinner-grow-sm me-1"></span>입력 중...
+            </div>
+        </div>`;
+    chatMessages.appendChild(indicator);
+    scrollToBottom();
+
+    try {
+        const form = new URLSearchParams({ api_key: groqApiKey });
+        form.append(CSRF_TOKEN, csrfHash);
+
+        const res  = await fetch('<?= base_url('examples/chat/bot-reply') ?>', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+            body:    form,
+        });
+        const json = await res.json();
+        if (json.csrf_hash) csrfHash = json.csrf_hash;
+
+        indicator.remove();
+
+        if (json.success) {
+            appendMessage(json, false);
+            scrollToBottom();
+            lastId = Math.max(lastId, json.id);
+        } else {
+            sendError.textContent = json.error ?? '봇 응답 실패';
+        }
+    } catch {
+        indicator.remove();
+        sendError.textContent = '봇 API 호출 중 오류가 발생했습니다.';
+    }
+}
 
 // ─── 새 탭 ───────────────────────────────────────────────
 document.getElementById('openNewTab').addEventListener('click', () => {

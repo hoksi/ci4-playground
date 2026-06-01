@@ -267,6 +267,7 @@ $routes->group('examples', function ($routes) {
     $routes->get('chat',                 'Examples\Chat::index');
     $routes->post('chat/send',           'Examples\Chat::send');
     $routes->get('chat/stream',          'Examples\Chat::stream');
+    $routes->post('chat/bot-reply',      'Examples\Chat::botReply');
     $routes->post('chat/clear',          'Examples\Chat::clear');
 
     // 48. TinyMCE 에디터
