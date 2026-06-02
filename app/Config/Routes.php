@@ -7,6 +7,9 @@ use CodeIgniter\Router\RouteCollection;
 // ─── 홈 ───────────────────────────────────────────────
 $routes->get('/', 'Home::index');
 
+// ─── SEO ──────────────────────────────────────────────
+$routes->get('sitemap.xml', 'Sitemap::index');
+
 // ─── 예제 섹션 ─────────────────────────────────────────
 $routes->group('examples', function ($routes) {
 

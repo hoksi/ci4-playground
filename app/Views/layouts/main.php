@@ -108,6 +108,21 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title ?? 'CI4 Playground') ?> — CodeIgniter 4</title>
+    <?php
+        $metaDesc = esc($description ?? ($title !== 'CI4 Playground'
+            ? "CodeIgniter 4 {$title} 예제 — 코드와 실행 결과로 배우는 CI4 플레이그라운드"
+            : 'CodeIgniter 4의 주요 기능을 코드와 실행 결과로 함께 배우는 53개 예제 모음입니다.'));
+        $canonicalUrl = base_url(uri_string());
+        $ogTitle = esc(($title ?? 'CI4 Playground') . ' — CI4 Playground');
+    ?>
+    <meta name="description" content="<?= $metaDesc ?>">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="<?= $canonicalUrl ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= $ogTitle ?>">
+    <meta property="og:description" content="<?= $metaDesc ?>">
+    <meta property="og:url" content="<?= $canonicalUrl ?>">
+    <meta property="og:site_name" content="CI4 Playground">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
