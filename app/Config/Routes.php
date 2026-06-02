@@ -278,6 +278,13 @@ $routes->group('examples', function ($routes) {
     $routes->post('cat-game/rename',     'Examples\CatGame::rename');
     $routes->post('cat-game/reset',      'Examples\CatGame::reset');
 
+    // 54. 차트
+    $routes->get('chart',                'Examples\Chart::index');
+    $routes->get('chart/line-data',      'Examples\Chart::lineData');
+    $routes->get('chart/bar-data',       'Examples\Chart::barData');
+    $routes->get('chart/pie-data',       'Examples\Chart::pieData');
+    $routes->get('chart/mixed-data',     'Examples\Chart::mixedData');
+
     // 48. TinyMCE 에디터
     $routes->get('tinymce',                        'Examples\TinyMce::index');
     $routes->post('tinymce/save',                  'Examples\TinyMce::save');

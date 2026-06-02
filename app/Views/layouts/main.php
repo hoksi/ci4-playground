@@ -52,6 +52,7 @@ $allExamples = [
     ['url' => 'examples/sync-editor',         'label' => '동기화 에디터',     'icon' => 'pencil-square'],
     ['url' => 'examples/chat',                'label' => '챗봇',              'icon' => 'robot'],
     ['url' => 'examples/cat-game',            'label' => '고양이 키우기',     'icon' => 'emoji-smile'],
+    ['url' => 'examples/chart',               'label' => '차트',              'icon' => 'bar-chart-line'],
 ];
 
 $navGroups = [
@@ -83,7 +84,7 @@ $navGroups = [
         'examples/csv-excel', 'examples/official-queue', 'examples/taskscheduler',
         'examples/pdfgeneration', 'examples/sse', 'examples/notification',
         'examples/aggrid', 'examples/ajax-pagination', 'examples/sync-editor',
-        'examples/chat', 'examples/cat-game',
+        'examples/chat', 'examples/cat-game', 'examples/chart',
     ],
 ];
 
