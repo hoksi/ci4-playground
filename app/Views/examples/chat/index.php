@@ -317,7 +317,6 @@ function connectSSE() {
         if (emptyMsg) emptyMsg.remove();
 
         rows.forEach(row => {
-            // 내가 방금 보낸 메시지는 이미 낙관적 렌더됨 → 중복 방지
             if (document.querySelector(`[data-id="${row.id}"]`)) return;
             appendMessage(row, row.nickname === myNickname);
         });
@@ -497,8 +496,11 @@ async function requestBotReply() {
         indicator.remove();
 
         if (json.success) {
-            appendMessage(json, false);
-            scrollToBottom();
+            // SSE가 먼저 렌더했을 수 있으므로 중복 방지
+            if (! document.querySelector(`[data-id="${json.id}"]`)) {
+                appendMessage(json, false);
+                scrollToBottom();
+            }
             lastId = Math.max(lastId, json.id);
         } else {
             sendError.textContent = json.error ?? '봇 응답 실패';
