@@ -21,11 +21,11 @@
 <!-- 꺾은선 -->
 <div id="tab-line" class="tab-content-pane">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-graph-up me-2"></i>월별 게시글 수 추이 (Line)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-graph-up me-2"></i>게시글 조회수 순위 (Line)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                막대 차트와 동일한 데이터를 꺾은선으로 시각화합니다. 추세(trend) 파악에 적합합니다.
+                게시글을 조회수 내림차순으로 정렬해 각 게시글의 조회수 분포를 꺾은선으로 표시합니다.
             </div>
             <canvas id="lineChart" style="max-height:320px;"></canvas>
         </div>
@@ -49,11 +49,11 @@
 <!-- 원형 -->
 <div id="tab-pie" class="tab-content-pane" style="display:none;">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-pie-chart me-2"></i>알림 타입별 분포 (Doughnut)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-pie-chart me-2"></i>조회수 구간별 분포 (Doughnut)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                <code>notifications</code> 테이블의 타입(정보·성공·경고·오류)별 건수 분포를 표시합니다.
+                게시글 조회수를 구간(1~100, 101~200, 201~300, 301~)으로 나눠 분포를 표시합니다.
             </div>
             <div style="max-width:380px;margin:0 auto;">
                 <canvas id="pieChart"></canvas>
@@ -65,11 +65,11 @@
 <!-- 복합 -->
 <div id="tab-mixed" class="tab-content-pane" style="display:none;">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-graph-up-arrow me-2"></i>월별 게시글 수(Bar) + 총 조회수(Line) (Mixed)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-graph-up-arrow me-2"></i>작성자별 게시글 수(Bar) + 총 조회수(Line) (Mixed)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                월별 게시글 수(막대)와 총 조회수(꺾은선)를 이중 Y축으로 한 차트에 표시합니다.
+                작성자별 게시글 수(막대)와 총 조회수(꺾은선)를 이중 Y축으로 한 차트에 표시합니다.
             </div>
             <canvas id="mixedChart" style="max-height:320px;"></canvas>
         </div>
