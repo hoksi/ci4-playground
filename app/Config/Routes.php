@@ -268,6 +268,13 @@ $routes->group('examples', function ($routes) {
     $routes->post('chat/send',           'Examples\Chat::send');
     $routes->post('chat/clear',          'Examples\Chat::clear');
 
+    // 53. 고양이 키우기
+    $routes->get('cat-game',             'Examples\CatGame::index');
+    $routes->get('cat-game/status',      'Examples\CatGame::status');
+    $routes->post('cat-game/action',     'Examples\CatGame::action');
+    $routes->post('cat-game/rename',     'Examples\CatGame::rename');
+    $routes->post('cat-game/reset',      'Examples\CatGame::reset');
+
     // 48. TinyMCE 에디터
     $routes->get('tinymce',                        'Examples\TinyMce::index');
     $routes->post('tinymce/save',                  'Examples\TinyMce::save');
