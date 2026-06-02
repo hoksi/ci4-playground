@@ -6,14 +6,8 @@ use App\Controllers\BaseController;
 
 class Chat extends BaseController
 {
-    private const BOT_NICK   = 'AI봇';
-    private const BOT_MODELS = [
-        'llama-3.3-70b-versatile',
-        'llama-3.1-8b-instant',
-        'llama3-70b-8192',
-        'mixtral-8x7b-32768',
-        'gemma2-9b-it',
-    ];
+    private const BOT_NICK  = 'AI봇';
+    private const BOT_MODEL = 'llama-3.1-8b-instant';
 
     public function index(): string
     {
@@ -35,7 +29,6 @@ class Chat extends BaseController
     {
         $content = trim((string) ($this->request->getPost('content') ?? ''));
         $apiKey  = trim((string) ($this->request->getPost('api_key') ?? ''));
-        $model   = (string) ($this->request->getPost('model') ?? self::BOT_MODELS[0]);
 
         if ($content === '') {
             return $this->response->setStatusCode(400)
@@ -45,10 +38,6 @@ class Chat extends BaseController
         if (mb_strlen($content) > 500) {
             return $this->response->setStatusCode(400)
                 ->setJSON(['error' => '메시지는 500자 이내로 입력해주세요.']);
-        }
-
-        if (! in_array($model, self::BOT_MODELS, true)) {
-            $model = self::BOT_MODELS[0];
         }
 
         if ($apiKey === '') {
@@ -98,7 +87,7 @@ class Chat extends BaseController
                         'Content-Type'  => 'application/json',
                     ],
                     'body'    => json_encode([
-                        'model'       => $model,
+                        'model'       => self::BOT_MODEL,
                         'messages'    => $groqMessages,
                         'max_tokens'  => 300,
                         'temperature' => 0.8,
