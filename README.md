@@ -120,6 +120,33 @@ php spark serve
 
 > SQLite를 사용하므로 별도 DB 설치 없이 바로 실행됩니다.
 
+## AI 기능 설정 (Groq)
+
+챗봇(#52)과 고양이 키우기(#53) 예제는 **Groq API**를 사용합니다.
+API 키 없이도 기본 동작하지만, 키를 설정하면 AI 반응이 활성화됩니다.
+
+### 1. API 키 발급
+
+1. [console.groq.com](https://console.groq.com) 접속 후 무료 가입
+2. **API Keys** 메뉴 → **Create API Key**
+3. 생성된 키 복사 (`gsk_` 로 시작)
+
+### 2. .env 설정
+
+```bash
+# .env 파일에 추가
+GROQ_API_KEY = gsk_여기에_키_입력
+```
+
+### 3. 사용 모델
+
+| 모델 | 용도 |
+|------|------|
+| `llama-3.1-8b-instant` | 챗봇, 고양이 키우기 (빠른 응답) |
+
+> Groq 무료 티어는 모델별로 RPM(분당 요청)·RPD(일 요청)·TPM(분당 토큰) 제한이 다릅니다.
+> 정확한 한도는 **console.groq.com → Settings → Limits** 에서 확인하세요.
+
 ## 정적 분석 (PHPStan)
 
 PHPStan 레벨 3으로 코드 품질을 검사합니다.
