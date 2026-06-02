@@ -50,7 +50,7 @@ $allExamples = [
     ['url' => 'examples/aggrid',              'label' => 'AG Grid',          'icon' => 'table'],
     ['url' => 'examples/ajax-pagination',     'label' => 'AJAX 페이지네이션', 'icon' => 'ui-checks-grid'],
     ['url' => 'examples/sync-editor',         'label' => '동기화 에디터',     'icon' => 'pencil-square'],
-    ['url' => 'examples/chat',                'label' => '실시간 채팅',       'icon' => 'chat-dots'],
+    ['url' => 'examples/chat',                'label' => '챗봇',              'icon' => 'robot'],
 ];
 
 $navGroups = [

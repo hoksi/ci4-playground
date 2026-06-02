@@ -263,11 +263,9 @@ $routes->group('examples', function ($routes) {
     $routes->post('sync-editor/save',    'Examples\SyncEditor::save');
     $routes->get('sync-editor/stream',   'Examples\SyncEditor::stream');
 
-    // 52. 실시간 채팅
+    // 52. 챗봇
     $routes->get('chat',                 'Examples\Chat::index');
     $routes->post('chat/send',           'Examples\Chat::send');
-    $routes->get('chat/stream',          'Examples\Chat::stream');
-    $routes->post('chat/bot-reply',      'Examples\Chat::botReply');
     $routes->post('chat/clear',          'Examples\Chat::clear');
 
     // 48. TinyMCE 에디터
