@@ -21,11 +21,11 @@
 <!-- 꺾은선 -->
 <div id="tab-line" class="tab-content-pane">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-graph-up me-2"></i>월별 총 조회수 합계 (Line)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-graph-up me-2"></i>월별 게시글 수 추이 (Line)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                <code>posts</code> 테이블의 <code>views</code> 를 월 단위로 합산해 조회수 추이를 표시합니다.
+                막대 차트와 동일한 데이터를 꺾은선으로 시각화합니다. 추세(trend) 파악에 적합합니다.
             </div>
             <canvas id="lineChart" style="max-height:320px;"></canvas>
         </div>
@@ -65,11 +65,11 @@
 <!-- 복합 -->
 <div id="tab-mixed" class="tab-content-pane" style="display:none;">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-graph-up-arrow me-2"></i>요일별 게시글 수 + 평균 조회수 (Mixed)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-graph-up-arrow me-2"></i>월별 게시글 수(Bar) + 총 조회수(Line) (Mixed)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                요일별(일~토) 게시글 수(막대)와 평균 조회수(꺾은선)를 이중 Y축으로 표시합니다.
+                월별 게시글 수(막대)와 총 조회수(꺾은선)를 이중 Y축으로 한 차트에 표시합니다.
             </div>
             <canvas id="mixedChart" style="max-height:320px;"></canvas>
         </div>
@@ -295,8 +295,8 @@ function buildMixed(json) {
                 },
                 {
                     type: 'line',
-                    label: '평균 조회수',
-                    data: json.avgViews,
+                    label: '총 조회수',
+                    data: json.totalViews,
                     borderColor: COLORS[1],
                     backgroundColor: 'transparent',
                     tension: 0.4,
@@ -310,7 +310,7 @@ function buildMixed(json) {
             plugins: { legend: { position: 'top' } },
             scales: {
                 y:  { beginAtZero: true, position: 'left',  title: { display: true, text: '게시글 수' } },
-                y1: { beginAtZero: true, position: 'right', title: { display: true, text: '평균 조회수' },
+                y1: { beginAtZero: true, position: 'right', title: { display: true, text: '총 조회수' },
                       grid: { drawOnChartArea: false } },
             }
         }
