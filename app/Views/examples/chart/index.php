@@ -21,11 +21,11 @@
 <!-- 꺾은선 -->
 <div id="tab-line" class="tab-content-pane">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-graph-up me-2"></i>월별 게시글 등록 수 (Line)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-graph-up me-2"></i>월별 총 조회수 합계 (Line)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                <code>posts</code> 테이블의 <code>created_at</code> 을 월 단위로 집계합니다.
+                <code>posts</code> 테이블의 <code>views</code> 를 월 단위로 합산해 조회수 추이를 표시합니다.
             </div>
             <canvas id="lineChart" style="max-height:320px;"></canvas>
         </div>
@@ -65,11 +65,11 @@
 <!-- 복합 -->
 <div id="tab-mixed" class="tab-content-pane" style="display:none;">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-graph-up-arrow me-2"></i>월별 게시글 수 + 평균 조회수 (Mixed)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-graph-up-arrow me-2"></i>요일별 게시글 수 + 평균 조회수 (Mixed)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                막대(게시글 수)와 꺾은선(평균 조회수)을 하나의 차트에 표시합니다.
+                요일별(일~토) 게시글 수(막대)와 평균 조회수(꺾은선)를 이중 Y축으로 표시합니다.
             </div>
             <canvas id="mixedChart" style="max-height:320px;"></canvas>
         </div>
