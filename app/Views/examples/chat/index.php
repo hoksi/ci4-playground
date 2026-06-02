@@ -61,6 +61,7 @@
                     <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
                     <option value="gemma2-9b-it">Gemma2 9B</option>
                 </select>
+                <span id="botStatusBadge" class="d-none"></span>
                 <?php if (env('GROQ_API_KEY')): ?>
                 <span class="badge bg-success small">
                     <i class="bi bi-check-circle me-1"></i>서버 API 키 설정됨
@@ -421,9 +422,11 @@ const apiKeyArea   = document.getElementById('apiKeyArea');
 const apiKeyInput  = document.getElementById('apiKeyInput');
 const apiKeyStatus = document.getElementById('apiKeyStatus');
 
-let groqApiKey = localStorage.getItem('groqApiKey') ?? '';
-if (groqApiKey) {
-    apiKeyInput.value  = groqApiKey;
+// 서버에 환경변수 키가 있으면 클라이언트 키 불필요
+const serverHasKey = <?= env('GROQ_API_KEY') ? 'true' : 'false' ?>;
+let groqApiKey = serverHasKey ? '__server__' : (localStorage.getItem('groqApiKey') ?? '');
+if (! serverHasKey && groqApiKey) {
+    apiKeyInput.value      = groqApiKey;
     apiKeyStatus.innerHTML = '<i class="bi bi-check-circle text-success"></i> 저장됨';
     apiKeyStatus.className = 'small text-success';
 }
@@ -445,8 +448,23 @@ document.getElementById('saveApiKeyBtn').addEventListener('click', () => {
     apiKeyStatus.className = 'small text-success';
 });
 
+const botStatusBadge = document.getElementById('botStatusBadge');
+
+function setBotStatus(active) {
+    if (active) {
+        botStatusBadge.className = 'badge bg-warning text-dark';
+        botStatusBadge.innerHTML = '<span class="spinner-grow spinner-grow-sm me-1" style="width:.6rem;height:.6rem;"></span>AI봇 응답 중...';
+        botStatusBadge.classList.remove('d-none');
+    } else {
+        botStatusBadge.classList.add('d-none');
+        botStatusBadge.innerHTML = '';
+    }
+}
+
 async function requestBotReply() {
     if (! botToggle.checked || ! groqApiKey) return;
+
+    setBotStatus(true);
 
     const indicator = document.createElement('div');
     indicator.id        = 'botTyping';
@@ -461,8 +479,9 @@ async function requestBotReply() {
     scrollToBottom();
 
     try {
-        const model = document.getElementById('modelSelect').value;
-        const form  = new URLSearchParams({ api_key: groqApiKey, model });
+        const model   = document.getElementById('modelSelect').value;
+        const keyParam = groqApiKey === '__server__' ? '' : groqApiKey;
+        const form    = new URLSearchParams({ api_key: keyParam, model });
         form.append(CSRF_TOKEN, csrfHash);
 
         const res  = await fetch('<?= base_url('examples/chat/bot-reply') ?>', {
@@ -485,6 +504,8 @@ async function requestBotReply() {
     } catch {
         indicator.remove();
         sendError.textContent = '봇 API 호출 중 오류가 발생했습니다.';
+    } finally {
+        setBotStatus(false);
     }
 }
 
