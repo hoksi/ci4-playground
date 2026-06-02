@@ -141,15 +141,20 @@
         </div>
     </div>
     <div class="example-card">
-        <div class="example-card-header"><span class="badge bg-dark">3</span><h5>지원 모델 (Groq 무료 티어)</h5></div>
+        <div class="example-card-header"><span class="badge bg-dark">3</span><h5>Groq 무료 티어 제한</h5></div>
         <div class="example-card-body">
+            <div class="result-box info mb-3">
+                <i class="bi bi-info-circle me-2"></i>
+                무료 제한은 <strong>모델마다 다르며</strong> RPM(분당 요청) · TPM(분당 토큰) · RPD(일 요청) 세 가지가 적용됩니다.
+                정확한 수치는 <strong>console.groq.com → Settings → Limits</strong> 에서 확인하세요.
+            </div>
             <table class="table table-bordered table-sm">
-                <thead class="table-dark"><tr><th>모델</th><th>특징</th><th>무료 한도</th></tr></thead>
+                <thead class="table-dark"><tr><th>모델</th><th>특징</th></tr></thead>
                 <tbody>
-                    <tr><td><code>llama-3.3-70b-versatile</code></td><td>최고 품질</td><td>14,400 req/day</td></tr>
-                    <tr><td><code>llama-3.1-8b-instant</code></td><td>가장 빠름</td><td>14,400 req/day</td></tr>
-                    <tr><td><code>mixtral-8x7b-32768</code></td><td>긴 컨텍스트</td><td>14,400 req/day</td></tr>
-                    <tr><td><code>gemma2-9b-it</code></td><td>Google 모델</td><td>14,400 req/day</td></tr>
+                    <tr><td><code>llama-3.3-70b-versatile</code></td><td>최고 품질, 70B 파라미터</td></tr>
+                    <tr><td><code>llama-3.1-8b-instant</code></td><td>가장 빠름, 경량</td></tr>
+                    <tr><td><code>mixtral-8x7b-32768</code></td><td>긴 컨텍스트(32K)</td></tr>
+                    <tr><td><code>gemma2-9b-it</code></td><td>Google Gemma 경량</td></tr>
                 </tbody>
             </table>
         </div>
