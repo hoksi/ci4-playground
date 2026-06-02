@@ -82,9 +82,14 @@ $navGroups = [
     '실전 예제' => [
         'examples/board', 'examples/auth', 'examples/queue',
         'examples/csv-excel', 'examples/official-queue', 'examples/taskscheduler',
-        'examples/pdfgeneration', 'examples/sse', 'examples/notification',
-        'examples/aggrid', 'examples/ajax-pagination', 'examples/sync-editor',
-        'examples/chat', 'examples/cat-game', 'examples/chart',
+        'examples/pdfgeneration',
+    ],
+    'AI & 실시간' => [
+        'examples/sse', 'examples/notification', 'examples/sync-editor',
+        'examples/chat', 'examples/cat-game',
+    ],
+    '데이터 & 시각화' => [
+        'examples/aggrid', 'examples/ajax-pagination', 'examples/chart',
     ],
 ];
 
