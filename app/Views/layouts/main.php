@@ -49,6 +49,8 @@ $allExamples = [
     ['url' => 'examples/tinymce',             'label' => 'TinyMCE 에디터',  'icon' => 'pencil-square'],
     ['url' => 'examples/aggrid',              'label' => 'AG Grid',          'icon' => 'table'],
     ['url' => 'examples/ajax-pagination',     'label' => 'AJAX 페이지네이션', 'icon' => 'ui-checks-grid'],
+    ['url' => 'examples/sync-editor',         'label' => '동기화 에디터',     'icon' => 'pencil-square'],
+    ['url' => 'examples/chat',                'label' => '챗봇',              'icon' => 'robot'],
 ];
 
 $navGroups = [
@@ -79,7 +81,8 @@ $navGroups = [
         'examples/board', 'examples/auth', 'examples/queue',
         'examples/csv-excel', 'examples/official-queue', 'examples/taskscheduler',
         'examples/pdfgeneration', 'examples/sse', 'examples/notification',
-        'examples/aggrid', 'examples/ajax-pagination',
+        'examples/aggrid', 'examples/ajax-pagination', 'examples/sync-editor',
+        'examples/chat',
     ],
 ];
 

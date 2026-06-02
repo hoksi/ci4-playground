@@ -257,6 +257,17 @@ $routes->group('examples', function ($routes) {
     $routes->get('ajax-pagination',      'Examples\AjaxPagination::index');
     $routes->get('ajax-pagination/data', 'Examples\AjaxPagination::data');
 
+    // 51. 동기화 에디터
+    $routes->get('sync-editor',          'Examples\SyncEditor::index');
+    $routes->get('sync-editor/doc',      'Examples\SyncEditor::doc');
+    $routes->post('sync-editor/save',    'Examples\SyncEditor::save');
+    $routes->get('sync-editor/stream',   'Examples\SyncEditor::stream');
+
+    // 52. 챗봇
+    $routes->get('chat',                 'Examples\Chat::index');
+    $routes->post('chat/send',           'Examples\Chat::send');
+    $routes->post('chat/clear',          'Examples\Chat::clear');
+
     // 48. TinyMCE 에디터
     $routes->get('tinymce',                        'Examples\TinyMce::index');
     $routes->post('tinymce/save',                  'Examples\TinyMce::save');
