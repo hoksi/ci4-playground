@@ -29,21 +29,23 @@ class Chart extends BaseController
         ]);
     }
 
-    /** 월별 게시글 등록 수 — 막대 차트 */
+    /** 작성자별 게시글 수 & 평균 조회수 — 막대 차트 */
     public function barData(): \CodeIgniter\HTTP\ResponseInterface
     {
         $rows = db_connect()
             ->table('posts')
-            ->select("strftime('%Y-%m', created_at) as month, COUNT(*) as count")
+            ->select('author, COUNT(*) as count, ROUND(AVG(views),0) as avg_views')
             ->where('deleted_at', null)
-            ->groupBy('month')
-            ->orderBy('month', 'ASC')
+            ->groupBy('author')
+            ->orderBy('count', 'DESC')
+            ->limit(10)
             ->get()
             ->getResultArray();
 
         return $this->response->setJSON([
-            'labels' => array_column($rows, 'month'),
-            'counts' => array_map('intval', array_column($rows, 'count')),
+            'labels'   => array_column($rows, 'author'),
+            'counts'   => array_map('intval', array_column($rows, 'count')),
+            'avgViews' => array_map('intval', array_column($rows, 'avg_views')),
         ]);
     }
 

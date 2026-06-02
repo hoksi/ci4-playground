@@ -35,11 +35,11 @@
 <!-- 막대 -->
 <div id="tab-bar" class="tab-content-pane" style="display:none;">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-bar-chart me-2"></i>월별 게시글 등록 수 (Bar)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-bar-chart me-2"></i>작성자별 게시글 수 & 평균 조회수 (Bar)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                <code>posts</code> 테이블의 <code>created_at</code> 을 월 단위로 집계해 막대로 표시합니다.
+                작성자별 게시글 수(파란색)와 평균 조회수(빨간색)를 나란히 비교합니다.
             </div>
             <canvas id="barChart" style="max-height:320px;"></canvas>
         </div>
@@ -241,17 +241,25 @@ function buildBar(json) {
         type: 'bar',
         data: {
             labels: json.labels,
-            datasets: [{
-                label: '게시글 수',
-                data: json.counts,
-                backgroundColor: json.labels.map((_, i) => COLORS[i % COLORS.length]),
-                borderRadius: 4,
-            }]
+            datasets: [
+                {
+                    label: '게시글 수',
+                    data: json.counts,
+                    backgroundColor: COLORS[0],
+                    borderRadius: 4,
+                },
+                {
+                    label: '평균 조회수',
+                    data: json.avgViews,
+                    backgroundColor: COLORS[1],
+                    borderRadius: 4,
+                }
+            ]
         },
         options: {
             responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+            plugins: { legend: { position: 'top' } },
+            scales: { y: { beginAtZero: true } },
         }
     });
 }
