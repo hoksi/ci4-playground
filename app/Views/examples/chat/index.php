@@ -266,12 +266,13 @@ document.getElementById('changeNickBtn').addEventListener('click', () => {
 });
 
 // ─── DOM 참조 ────────────────────────────────────────────
-const chatMessages = document.getElementById('chatMessages');
-const msgInput     = document.getElementById('msgInput');
-const sendBtn      = document.getElementById('sendBtn');
-const connStatus   = document.getElementById('connStatus');
-const sendError    = document.getElementById('sendError');
-const charCount    = document.getElementById('charCount');
+const chatMessages  = document.getElementById('chatMessages');
+const msgInput      = document.getElementById('msgInput');
+const sendBtn       = document.getElementById('sendBtn');
+const connStatus    = document.getElementById('connStatus');
+const sendError     = document.getElementById('sendError');
+const charCount     = document.getElementById('charCount');
+const botStatusBadge = document.getElementById('botStatusBadge');
 
 // ─── 기존 메시지 스타일 적용 ─────────────────────────────
 document.querySelectorAll('.chat-msg').forEach(el => {
@@ -425,30 +426,31 @@ const apiKeyStatus = document.getElementById('apiKeyStatus');
 // 서버에 환경변수 키가 있으면 클라이언트 키 불필요
 const serverHasKey = <?= env('GROQ_API_KEY') ? 'true' : 'false' ?>;
 let groqApiKey = serverHasKey ? '__server__' : (localStorage.getItem('groqApiKey') ?? '');
-if (! serverHasKey && groqApiKey) {
+if (! serverHasKey && groqApiKey && apiKeyInput) {
     apiKeyInput.value      = groqApiKey;
     apiKeyStatus.innerHTML = '<i class="bi bi-check-circle text-success"></i> 저장됨';
     apiKeyStatus.className = 'small text-success';
 }
 
 botToggle.addEventListener('change', () => {
-    apiKeyArea.style.display = botToggle.checked ? 'flex' : 'none';
+    if (apiKeyArea) apiKeyArea.style.display = botToggle.checked ? 'flex' : 'none';
 });
 
-document.getElementById('saveApiKeyBtn').addEventListener('click', () => {
-    const key = apiKeyInput.value.trim();
-    if (! key.startsWith('gsk_')) {
-        apiKeyStatus.textContent = 'gsk_ 로 시작하는 키를 입력하세요.';
-        apiKeyStatus.className   = 'small text-danger';
-        return;
-    }
-    groqApiKey = key;
-    localStorage.setItem('groqApiKey', groqApiKey);
-    apiKeyStatus.innerHTML = '<i class="bi bi-check-circle text-success"></i> 저장됨';
-    apiKeyStatus.className = 'small text-success';
-});
-
-const botStatusBadge = document.getElementById('botStatusBadge');
+const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
+if (saveApiKeyBtn) {
+    saveApiKeyBtn.addEventListener('click', () => {
+        const key = apiKeyInput.value.trim();
+        if (! key.startsWith('gsk_')) {
+            apiKeyStatus.textContent = 'gsk_ 로 시작하는 키를 입력하세요.';
+            apiKeyStatus.className   = 'small text-danger';
+            return;
+        }
+        groqApiKey = key;
+        localStorage.setItem('groqApiKey', groqApiKey);
+        apiKeyStatus.innerHTML = '<i class="bi bi-check-circle text-success"></i> 저장됨';
+        apiKeyStatus.className = 'small text-success';
+    });
+}
 
 function setBotStatus(active) {
     if (active) {
