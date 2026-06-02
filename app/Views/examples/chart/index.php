@@ -35,11 +35,11 @@
 <!-- 막대 -->
 <div id="tab-bar" class="tab-content-pane" style="display:none;">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-bar-chart me-2"></i>작성자별 게시글 수 & 평균 조회수 (Bar)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-bar-chart me-2"></i>월별 게시글 등록 수 (Bar)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                작성자별 게시글 수(막대)와 평균 조회수(막대)를 나란히 비교합니다.
+                <code>posts</code> 테이블의 <code>created_at</code> 을 월 단위로 집계해 막대로 표시합니다.
             </div>
             <canvas id="barChart" style="max-height:320px;"></canvas>
         </div>
@@ -49,11 +49,11 @@
 <!-- 원형 -->
 <div id="tab-pie" class="tab-content-pane" style="display:none;">
     <div class="example-card">
-        <div class="example-card-header"><h5><i class="bi bi-pie-chart me-2"></i>조회수 구간별 분포 (Doughnut)</h5></div>
+        <div class="example-card-header"><h5><i class="bi bi-pie-chart me-2"></i>알림 타입별 분포 (Doughnut)</h5></div>
         <div class="example-card-body">
             <div class="result-box info mb-3">
                 <i class="bi bi-info-circle me-2"></i>
-                게시글 조회수를 구간(0–100, 101–500, 501–1000, 1001+)으로 나눠 분포를 표시합니다.
+                <code>notifications</code> 테이블의 타입(정보·성공·경고·오류)별 건수 분포를 표시합니다.
             </div>
             <div style="max-width:380px;margin:0 auto;">
                 <canvas id="pieChart"></canvas>
@@ -241,23 +241,17 @@ function buildBar(json) {
         type: 'bar',
         data: {
             labels: json.labels,
-            datasets: [
-                {
-                    label: '게시글 수',
-                    data: json.counts,
-                    backgroundColor: COLORS[0],
-                },
-                {
-                    label: '평균 조회수',
-                    data: json.avgViews,
-                    backgroundColor: COLORS[1],
-                }
-            ]
+            datasets: [{
+                label: '게시글 수',
+                data: json.counts,
+                backgroundColor: json.labels.map((_, i) => COLORS[i % COLORS.length]),
+                borderRadius: 4,
+            }]
         },
         options: {
             responsive: true,
-            plugins: { legend: { position: 'top' } },
-            scales: { y: { beginAtZero: true } },
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
         }
     });
 }
