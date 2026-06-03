@@ -274,6 +274,7 @@ $routes->group('examples', function ($routes) {
     // 53. 고양이 키우기
     $routes->get('cat-game',             'Examples\CatGame::index');
     $routes->get('cat-game/status',      'Examples\CatGame::status');
+    $routes->get('cat-game/history',     'Examples\CatGame::history');
     $routes->post('cat-game/action',     'Examples\CatGame::action');
     $routes->post('cat-game/rename',     'Examples\CatGame::rename');
     $routes->post('cat-game/reset',      'Examples\CatGame::reset');
