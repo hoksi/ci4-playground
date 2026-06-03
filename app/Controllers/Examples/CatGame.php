@@ -20,6 +20,15 @@ class CatGame extends BaseController
     // 레벨 임계값: Lv1-5 아기, Lv6-15 성묘, Lv16+ 노령묘
     private const STAGE_THRESHOLDS = ['baby' => 5, 'adult' => 15];
 
+    // 성격: Lv.5 도달 시 행동 카운터 비율로 확정
+    private const PERSONALITIES = [
+        'feed'     => ['desc' => '음식을 무척 사랑하는', 'trait' => '배고프면 짜증을 잘 내고, 먹을 때 가장 행복해합니다.'],
+        'play'     => ['desc' => '에너지가 넘치는',      'trait' => '놀자고 조르는 편이며, 쉬는 걸 싫어합니다.'],
+        'sleep'    => ['desc' => '잠을 사랑하는',        'trait' => '느긋하고 무기력하며, 귀찮은 걸 싫어합니다.'],
+        'pet'      => ['desc' => '스킨십을 좋아하는',    'trait' => '관심을 원하고, 혼자 있으면 외로워합니다.'],
+        'balanced' => ['desc' => '균형 잡힌',            'trait' => '무엇이든 잘 적응하고 온화한 성격입니다.'],
+    ];
+
     public function index(): string
     {
         $cat = $this->loadCat();
@@ -77,9 +86,19 @@ class CatGame extends BaseController
         $energy    = max(0, min(100, $energy    + $fx['energy']));
 
         // 경험치 & 레벨 계산
-        $newExp     = (int) $row['exp'] + self::EXP_GAIN[$act];
-        $newLevel   = $this->calculateLevel($newExp);
-        $leveledUp  = $newLevel > (int) $row['level'];
+        $newExp    = (int) $row['exp'] + self::EXP_GAIN[$act];
+        $newLevel  = $this->calculateLevel($newExp);
+        $leveledUp = $newLevel > (int) $row['level'];
+
+        // 행동 카운터 증가
+        $actKey = 'act_' . $act;
+        $newActCount = (int) ($row[$actKey] ?? 0) + 1;
+
+        // Lv.5 도달 시 성격 확정 (아직 성격이 없을 때만)
+        $personality = $row['personality'] ?? null;
+        if ($leveledUp && $newLevel === 6 && $personality === null) {
+            $personality = $this->determinePersonality(array_merge($row, [$actKey => $newActCount]));
+        }
 
         $now = date('Y-m-d H:i:s');
         $db->table('cats')->where('id', $row['id'])->update([
@@ -88,6 +107,8 @@ class CatGame extends BaseController
             'energy'       => $energy,
             'level'        => $newLevel,
             'exp'          => $newExp,
+            $actKey        => $newActCount,
+            'personality'  => $personality,
             'last_updated' => $now,
         ]);
 
@@ -103,7 +124,7 @@ class CatGame extends BaseController
 
         $stage    = $this->getStage($newLevel);
         $mood     = $this->getMood($hunger, $happiness, $energy);
-        $reaction = $this->getGroqReaction($row['name'], $act, $hunger, $happiness, $energy, $stage, $leveledUp);
+        $reaction = $this->getGroqReaction($row['name'], $act, $hunger, $happiness, $energy, $stage, $leveledUp, $personality);
 
         return $this->response->setJSON([
             'success'     => true,
@@ -171,6 +192,11 @@ class CatGame extends BaseController
             'energy'       => 70,
             'level'        => 1,
             'exp'          => 0,
+            'personality'  => null,
+            'act_feed'     => 0,
+            'act_play'     => 0,
+            'act_sleep'    => 0,
+            'act_pet'      => 0,
             'last_updated' => $now,
         ]);
         db_connect()->table('cat_history')->truncate();
@@ -282,23 +308,45 @@ class CatGame extends BaseController
         return $map[$mood] ?? '냥~';
     }
 
+    private function determinePersonality(array $row): string
+    {
+        $counts = [
+            'feed'  => (int) ($row['act_feed']  ?? 0),
+            'play'  => (int) ($row['act_play']  ?? 0),
+            'sleep' => (int) ($row['act_sleep'] ?? 0),
+            'pet'   => (int) ($row['act_pet']   ?? 0),
+        ];
+
+        $max      = max($counts);
+        $dominant = array_keys(array_filter($counts, fn($v) => $v === $max));
+
+        return count($dominant) === 1 ? $dominant[0] : 'balanced';
+    }
+
     private function getGroqReaction(
         string $name, string $action, int $hunger, int $happiness, int $energy,
-        string $stage, bool $leveledUp
+        string $stage, bool $leveledUp, ?string $personality
     ): string {
         $apiKey = trim((string) (env('GROQ_API_KEY') ?? ''));
         if ($apiKey === '') {
             return $leveledUp ? '레벨 업! 냥~! ✨' : '냥~';
         }
 
-        $labels  = ['feed' => '먹이를 받았을 때', 'play' => '같이 놀아줬을 때', 'sleep' => '재워줬을 때', 'pet' => '쓰다듬어줬을 때'];
-        $stages  = ['baby' => '아기 고양이', 'adult' => '성묘', 'elder' => '노령묘'];
+        $labels   = ['feed' => '먹이를 받았을 때', 'play' => '같이 놀아줬을 때', 'sleep' => '재워줬을 때', 'pet' => '쓰다듬어줬을 때'];
+        $stages   = ['baby' => '아기 고양이', 'adult' => '성묘', 'elder' => '노령묘'];
         $levelMsg = $leveledUp ? "\n특별 상황: 방금 레벨업했습니다! 기뻐하세요." : '';
 
-        $prompt = "당신은 '{$name}'이라는 {$stages[$stage]}입니다.\n"
+        // 성격 정보 (확정된 경우만 프롬프트에 주입)
+        $personalityLine = '';
+        if ($personality !== null && isset(self::PERSONALITIES[$personality])) {
+            $p = self::PERSONALITIES[$personality];
+            $personalityLine = "\n성격: {$p['desc']} 고양이. {$p['trait']}";
+        }
+
+        $prompt = "당신은 '{$name}'이라는 {$stages[$stage]}입니다.{$personalityLine}\n"
             . "현재 상태: 배고픔 {$hunger}/100, 행복도 {$happiness}/100, 에너지 {$energy}/100\n"
             . "상황: {$labels[$action]}{$levelMsg}\n"
-            . "현재 상태와 성장 단계에 어울리는 반응을 고양이 말투로 1~2문장 짧게 표현하세요.";
+            . "현재 상태와 성격에 어울리는 반응을 고양이 말투로 1~2문장 짧게 표현하세요.";
 
         try {
             $res  = \Config\Services::curlrequest()->post(
