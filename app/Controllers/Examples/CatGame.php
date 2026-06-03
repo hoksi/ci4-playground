@@ -14,20 +14,25 @@ class CatGame extends BaseController
         'sleep' => ['hunger' =>  -5, 'happiness' =>  5, 'energy' =>  40],
         'pet'   => ['hunger' =>  -2, 'happiness' => 20, 'energy' =>  -5],
     ];
+    private const EXP_GAIN = ['feed' => 10, 'play' => 15, 'sleep' => 5, 'pet' => 12];
     private const DECAY_PER_MIN = ['hunger' => 0.5, 'happiness' => 0.3, 'energy' => 0.4];
+
+    // 레벨 임계값: Lv1-5 아기, Lv6-15 성묘, Lv16+ 노령묘
+    private const STAGE_THRESHOLDS = ['baby' => 5, 'adult' => 15];
 
     public function index(): string
     {
         $cat = $this->loadCat();
 
-        $mood = $this->getMood($cat['hunger'], $cat['happiness'], $cat['energy']);
-
         return view('examples/cat-game/index', [
-            'title'        => '고양이 키우기',
-            'cat'          => $cat,
-            'mood'         => $mood,
-            'moodEmoji'    => $this->getMoodEmoji($mood),
-            'defaultSpeech'=> $this->getDefaultSpeech($mood),
+            'title'         => '고양이 키우기',
+            'cat'           => $cat,
+            'mood'          => $this->getMood($cat['hunger'], $cat['happiness'], $cat['energy']),
+            'stage'         => $this->getStage($cat['level']),
+            'moodEmoji'     => $this->getMoodEmoji($this->getMood($cat['hunger'], $cat['happiness'], $cat['energy']), $this->getStage($cat['level'])),
+            'defaultSpeech' => $this->getDefaultSpeech($this->getMood($cat['hunger'], $cat['happiness'], $cat['energy'])),
+            'expToNext'     => $this->expToNextLevel($cat['exp']),
+            'expProgress'   => $this->expProgress($cat['exp']),
         ]);
     }
 
@@ -36,11 +41,16 @@ class CatGame extends BaseController
         $cat = $this->loadCat();
 
         return $this->response->setJSON([
-            'hunger'    => $cat['hunger'],
-            'happiness' => $cat['happiness'],
-            'energy'    => $cat['energy'],
-            'name'      => $cat['name'],
-            'mood'      => $this->getMood($cat['hunger'], $cat['happiness'], $cat['energy']),
+            'hunger'      => $cat['hunger'],
+            'happiness'   => $cat['happiness'],
+            'energy'      => $cat['energy'],
+            'name'        => $cat['name'],
+            'level'       => $cat['level'],
+            'exp'         => $cat['exp'],
+            'expProgress' => $this->expProgress($cat['exp']),
+            'expToNext'   => $this->expToNextLevel($cat['exp']),
+            'stage'       => $this->getStage($cat['level']),
+            'mood'        => $this->getMood($cat['hunger'], $cat['happiness'], $cat['energy']),
         ]);
     }
 
@@ -66,24 +76,76 @@ class CatGame extends BaseController
         $happiness = max(0, min(100, $happiness + $fx['happiness']));
         $energy    = max(0, min(100, $energy    + $fx['energy']));
 
+        // 경험치 & 레벨 계산
+        $newExp     = (int) $row['exp'] + self::EXP_GAIN[$act];
+        $newLevel   = $this->calculateLevel($newExp);
+        $leveledUp  = $newLevel > (int) $row['level'];
+
         $now = date('Y-m-d H:i:s');
         $db->table('cats')->where('id', $row['id'])->update([
             'hunger'       => $hunger,
             'happiness'    => $happiness,
             'energy'       => $energy,
+            'level'        => $newLevel,
+            'exp'          => $newExp,
             'last_updated' => $now,
         ]);
 
+        // 히스토리 기록
+        $db->table('cat_history')->insert([
+            'cat_id'      => $row['id'],
+            'hunger'      => $hunger,
+            'happiness'   => $happiness,
+            'energy'      => $energy,
+            'level'       => $newLevel,
+            'recorded_at' => $now,
+        ]);
+
+        $stage    = $this->getStage($newLevel);
         $mood     = $this->getMood($hunger, $happiness, $energy);
-        $reaction = $this->getGroqReaction($row['name'], $act, $hunger, $happiness, $energy);
+        $reaction = $this->getGroqReaction($row['name'], $act, $hunger, $happiness, $energy, $stage, $leveledUp);
 
         return $this->response->setJSON([
-            'success'   => true,
-            'hunger'    => $hunger,
-            'happiness' => $happiness,
-            'energy'    => $energy,
-            'mood'      => $mood,
-            'reaction'  => $reaction,
+            'success'     => true,
+            'hunger'      => $hunger,
+            'happiness'   => $happiness,
+            'energy'      => $energy,
+            'level'       => $newLevel,
+            'exp'         => $newExp,
+            'expProgress' => $this->expProgress($newExp),
+            'expToNext'   => $this->expToNextLevel($newExp),
+            'stage'       => $stage,
+            'mood'        => $mood,
+            'moodEmoji'   => $this->getMoodEmoji($mood, $stage),
+            'leveledUp'   => $leveledUp,
+            'reaction'    => $reaction,
+        ]);
+    }
+
+    /** 상태 히스토리 — 최근 20건 */
+    public function history(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $cat = db_connect()->table('cats')->limit(1)->get()->getRowArray();
+
+        if (! $cat) {
+            return $this->response->setJSON(['labels' => [], 'hunger' => [], 'happiness' => [], 'energy' => []]);
+        }
+
+        $rows = db_connect()
+            ->table('cat_history')
+            ->where('cat_id', $cat['id'])
+            ->orderBy('id', 'DESC')
+            ->limit(20)
+            ->get()
+            ->getResultArray();
+
+        $rows = array_reverse($rows);
+
+        return $this->response->setJSON([
+            'labels'    => array_map(fn($r) => date('H:i', strtotime($r['recorded_at'])), $rows),
+            'hunger'    => array_map('intval', array_column($rows, 'hunger')),
+            'happiness' => array_map('intval', array_column($rows, 'happiness')),
+            'energy'    => array_map('intval', array_column($rows, 'energy')),
         ]);
     }
 
@@ -107,8 +169,11 @@ class CatGame extends BaseController
             'hunger'       => 70,
             'happiness'    => 70,
             'energy'       => 70,
+            'level'        => 1,
+            'exp'          => 0,
             'last_updated' => $now,
         ]);
+        db_connect()->table('cat_history')->truncate();
 
         return $this->response->setJSON(['success' => true]);
     }
@@ -121,7 +186,7 @@ class CatGame extends BaseController
         $row = $db->table('cats')->limit(1)->get()->getRowArray();
 
         if (! $row) {
-            return ['name' => '냥이', 'hunger' => 70, 'happiness' => 70, 'energy' => 70];
+            return ['name' => '냥이', 'hunger' => 70, 'happiness' => 70, 'energy' => 70, 'level' => 1, 'exp' => 0];
         }
 
         [$hunger, $happiness, $energy] = $this->applyDecay($row);
@@ -136,7 +201,6 @@ class CatGame extends BaseController
         return array_merge($row, ['hunger' => $hunger, 'happiness' => $happiness, 'energy' => $energy]);
     }
 
-    /** 경과 시간 기반 상태 감소 */
     private function applyDecay(array $row): array
     {
         $elapsed   = max(0, (time() - strtotime((string) ($row['last_updated'] ?? 'now'))) / 60);
@@ -147,13 +211,61 @@ class CatGame extends BaseController
         return [$hunger, $happiness, $energy];
     }
 
-    private function getMoodEmoji(string $mood): string
+    private function calculateLevel(int $exp): int
+    {
+        return min(20, (int) ($exp / 50) + 1);
+    }
+
+    private function expProgress(int $exp): int
+    {
+        return ($exp % 50) * 2; // 0~100%
+    }
+
+    private function expToNextLevel(int $exp): int
+    {
+        if ($this->calculateLevel($exp) >= 20) return 0;
+        return 50 - ($exp % 50);
+    }
+
+    private function getStage(int $level): string
+    {
+        if ($level <= self::STAGE_THRESHOLDS['baby'])  return 'baby';
+        if ($level <= self::STAGE_THRESHOLDS['adult']) return 'adult';
+        return 'elder';
+    }
+
+    private function getMood(int $hunger, int $happiness, int $energy): string
+    {
+        $min = min($hunger, $happiness, $energy);
+        $avg = (int) (($hunger + $happiness + $energy) / 3);
+
+        if ($min <= 10)       return 'critical';
+        if ($hunger <= 25)    return 'hungry';
+        if ($energy <= 25)    return 'tired';
+        if ($happiness <= 25) return 'sad';
+        if ($avg >= 75)       return 'ecstatic';
+        if ($avg >= 50)       return 'happy';
+
+        return 'neutral';
+    }
+
+    private function getMoodEmoji(string $mood, string $stage): string
     {
         $map = [
-            'ecstatic' => '😻', 'happy'  => '😺', 'neutral' => '😼',
-            'hungry'   => '😿', 'tired'  => '😪', 'sad'     => '😾', 'critical' => '🙀',
+            'baby' => [
+                'ecstatic' => '🐱', 'happy' => '🐱', 'neutral' => '🐱',
+                'hungry' => '😿', 'tired' => '😪', 'sad' => '😾', 'critical' => '🙀',
+            ],
+            'adult' => [
+                'ecstatic' => '😻', 'happy' => '😺', 'neutral' => '😼',
+                'hungry' => '😿', 'tired' => '😪', 'sad' => '😾', 'critical' => '🙀',
+            ],
+            'elder' => [
+                'ecstatic' => '🐈', 'happy' => '🐈', 'neutral' => '🐈‍⬛',
+                'hungry' => '😿', 'tired' => '😪', 'sad' => '😾', 'critical' => '🙀',
+            ],
         ];
-        return $map[$mood] ?? '😺';
+        return $map[$stage][$mood] ?? '😺';
     }
 
     private function getDefaultSpeech(string $mood): string
@@ -170,34 +282,23 @@ class CatGame extends BaseController
         return $map[$mood] ?? '냥~';
     }
 
-    private function getMood(int $hunger, int $happiness, int $energy): string
-    {
-        $min = min($hunger, $happiness, $energy);
-        $avg = (int) (($hunger + $happiness + $energy) / 3);
-
-        if ($min <= 10)         return 'critical';
-        if ($hunger <= 25)      return 'hungry';
-        if ($energy <= 25)      return 'tired';
-        if ($happiness <= 25)   return 'sad';
-        if ($avg >= 75)         return 'ecstatic';
-        if ($avg >= 50)         return 'happy';
-
-        return 'neutral';
-    }
-
-    private function getGroqReaction(string $name, string $action, int $hunger, int $happiness, int $energy): string
-    {
+    private function getGroqReaction(
+        string $name, string $action, int $hunger, int $happiness, int $energy,
+        string $stage, bool $leveledUp
+    ): string {
         $apiKey = trim((string) (env('GROQ_API_KEY') ?? ''));
         if ($apiKey === '') {
-            return '냥~';
+            return $leveledUp ? '레벨 업! 냥~! ✨' : '냥~';
         }
 
-        $labels = ['feed' => '먹이를 받았을 때', 'play' => '같이 놀아줬을 때', 'sleep' => '재워줬을 때', 'pet' => '쓰다듬어줬을 때'];
+        $labels  = ['feed' => '먹이를 받았을 때', 'play' => '같이 놀아줬을 때', 'sleep' => '재워줬을 때', 'pet' => '쓰다듬어줬을 때'];
+        $stages  = ['baby' => '아기 고양이', 'adult' => '성묘', 'elder' => '노령묘'];
+        $levelMsg = $leveledUp ? "\n특별 상황: 방금 레벨업했습니다! 기뻐하세요." : '';
 
-        $prompt = "당신은 '{$name}'이라는 고양이입니다.\n"
+        $prompt = "당신은 '{$name}'이라는 {$stages[$stage]}입니다.\n"
             . "현재 상태: 배고픔 {$hunger}/100, 행복도 {$happiness}/100, 에너지 {$energy}/100\n"
-            . "상황: {$labels[$action]}\n"
-            . "현재 상태에 어울리는 반응을 고양이 말투로 1~2문장 짧게 표현하세요. 야옹, 냥, 그르릉 등을 자연스럽게 섞어주세요.";
+            . "상황: {$labels[$action]}{$levelMsg}\n"
+            . "현재 상태와 성장 단계에 어울리는 반응을 고양이 말투로 1~2문장 짧게 표현하세요.";
 
         try {
             $res  = \Config\Services::curlrequest()->post(
@@ -216,7 +317,7 @@ class CatGame extends BaseController
             $body = json_decode($res->getBody(), true);
             return trim($body['choices'][0]['message']['content'] ?? '냥~');
         } catch (\Throwable) {
-            return '냥~';
+            return $leveledUp ? '레벨 업! 냥~! ✨' : '냥~';
         }
     }
 }
