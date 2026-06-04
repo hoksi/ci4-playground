@@ -231,8 +231,9 @@ async function sendMessage() {
 
     // 유저 말풍선 즉시 렌더
     appendMessage({ nickname: '나', content, created_at: nowStr() }, true);
-    // 봇 "입력 중..." 인디케이터
-    const typingEl = appendTyping();
+    // 검색 여부 사전 감지 → 인디케이터 문구 변경
+    const searching = willSearch(content);
+    const typingEl  = appendTyping(searching ? '🔍 웹 검색 중...' : '입력 중...');
     scrollToBottom();
 
     try {
@@ -251,7 +252,18 @@ async function sendMessage() {
         typingEl.remove();
 
         if (json.success) {
-            appendMessage(json.bot, false);
+            const botEl = appendMessage(json.bot, false);
+            // 검색 출처 표시
+            if (json.searched && json.sources && json.sources.length) {
+                const sources = document.createElement('div');
+                sources.className = 'mt-1 ms-1';
+                sources.innerHTML = `<small class="text-muted"><i class="bi bi-search me-1"></i>검색 출처: </small>`
+                    + json.sources.map((url, i) =>
+                        `<a href="${escHtml(url)}" target="_blank" rel="noopener"
+                            class="badge bg-light text-dark border me-1">${i + 1}</a>`
+                    ).join('');
+                botEl.appendChild(sources);
+            }
             scrollToBottom();
             document.getElementById('emptyMsg')?.remove();
         } else {
@@ -316,13 +328,22 @@ function appendMessage(msg, isMine) {
     return wrap;
 }
 
-function appendTyping() {
+// 검색 키워드 (서버와 동일)
+const SEARCH_KEYWORDS = ['최신', '오늘', '현재', '지금', '어제', '이번 주', '이번 달',
+                         '뉴스', '날씨', '주가', '환율', '최근', '요즘'];
+
+function willSearch(content) {
+    if (SEARCH_KEYWORDS.some(kw => content.includes(kw))) return true;
+    return /20\d{2}년?/.test(content);
+}
+
+function appendTyping(label = '입력 중...') {
     const wrap = document.createElement('div');
     wrap.className = 'chat-msg d-flex flex-column align-items-start';
     wrap.innerHTML = `<div class="text-muted small mb-1"><i class="bi bi-robot me-1"></i>AI봇</div>
         <div class="d-flex align-items-end gap-1">
             <div class="rounded-3 px-3 py-2 bg-light border text-muted fst-italic">
-                <span class="spinner-grow spinner-grow-sm me-1"></span>입력 중...
+                <span class="spinner-grow spinner-grow-sm me-1"></span>${escHtml(label)}
             </div>
         </div>`;
     chatMessages.appendChild(wrap);
