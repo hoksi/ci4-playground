@@ -27,7 +27,7 @@
 <?php
 $total    = count($keywords);
 $active   = count(array_filter($keywords, fn($k) => $k['active']));
-$inactive = $total - $active;
+$builtin  = count(array_filter($keywords, fn($k) => $k['is_builtin']));
 ?>
 <div class="row g-3 mb-4">
     <div class="col-md-4">
@@ -44,7 +44,7 @@ $inactive = $total - $active;
     </div>
     <div class="col-md-4">
         <div class="example-card text-center p-3">
-            <div style="font-size:2rem;font-weight:700;color:#6c757d;"><?= count($builtinKeywords) ?></div>
+            <div style="font-size:2rem;font-weight:700;color:#6c757d;"><?= $builtin ?></div>
             <div class="text-muted">기본 키워드</div>
         </div>
     </div>
