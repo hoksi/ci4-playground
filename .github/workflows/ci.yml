@@ -37,3 +37,11 @@ jobs:
 
       - name: PHPStan
         run: ./vendor/bin/phpstan analyse --memory-limit=512M --no-progress
+
+      - name: Setup test database
+        run: |
+          php spark migrate --all
+          php spark db:seed AllSeeder
+
+      - name: PHPUnit Tests
+        run: ./vendor/bin/phpunit tests/app/Examples/ --no-coverage
