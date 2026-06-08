@@ -38,6 +38,18 @@ jobs:
       - name: PHPStan
         run: ./vendor/bin/phpstan analyse --memory-limit=512M --no-progress
 
+      - name: Setup .env for CI
+        run: |
+          cp .env.example .env
+          echo "" >> .env
+          echo "app.baseURL = http://localhost:8080/" >> .env
+          echo "database.default.DBDriver = SQLite3" >> .env
+          echo "database.default.database = database.db" >> .env
+          echo "database.default.DBPrefix =" >> .env
+          echo "database.tests.DBDriver = SQLite3" >> .env
+          echo "database.tests.database = database.db" >> .env
+          echo "database.tests.DBPrefix =" >> .env
+
       - name: Setup test database
         run: |
           php spark migrate --all
