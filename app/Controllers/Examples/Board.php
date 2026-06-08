@@ -16,6 +16,14 @@ class Board extends BaseController
      */
     private const READ_ONLY = false;
 
+    /**
+     * 스팸 감지 스위치
+     *
+     * true  → 게시글 등록 시 스팸 감지 활성화 (규칙→StopForumSpam→AI)
+     * false → 스팸 감지 비활성화
+     */
+    private const SPAM_CHECK = true;
+
     protected PostModel $model;
 
     public function __construct()
@@ -69,22 +77,27 @@ class Board extends BaseController
         $content = $this->request->getPost('content');
         $author  = $this->request->getPost('author');
 
-        $spam = (new SpamChecker())->check($title, $content, $this->request->getIPAddress());
+        $spamStatus = 'approved';
+        if (self::SPAM_CHECK) {
+            $spam = (new SpamChecker())->check($title, $content, $this->request->getIPAddress());
 
-        if ($spam['status'] === 'spam') {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', '스팸으로 감지된 게시글입니다. 내용을 확인해주세요.');
+            if ($spam['status'] === 'spam') {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', '스팸으로 감지된 게시글입니다. 내용을 확인해주세요.');
+            }
+
+            $spamStatus = $spam['status'];
         }
 
         $this->model->insert([
             'title'       => $title,
             'content'     => $content,
             'author'      => $author,
-            'spam_status' => $spam['status'],
+            'spam_status' => $spamStatus,
         ]);
 
-        $message = $spam['status'] === 'review'
+        $message = $spamStatus === 'review'
             ? '게시글이 등록되었습니다. (검토 후 노출될 수 있습니다.)'
             : '게시글이 작성되었습니다.';
 
