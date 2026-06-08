@@ -5,10 +5,11 @@ namespace App\Services;
 use App\Models\SpamKeywordModel;
 
 /**
- * 3단계 스팸 감지 서비스
+ * 4단계 스팸 감지 서비스
  *
- * 1단계: 규칙 기반 (무료, 즉시) — 하드코딩 + DB 학습 키워드
- * 2단계: Groq AI (점수 30~70 구간만) — 스팸 키워드 자동 추출 저장
+ * 1단계: 규칙 기반 (내장 키워드 + DB 학습 키워드)
+ * 2단계: StopForumSpam IP 평판 체크 (무료, 30분 캐시)
+ * 3단계: Groq AI (점수 31~69 불확실 구간만)
  * 결과: approved / review / spam
  */
 class SpamChecker
@@ -17,10 +18,11 @@ class SpamChecker
     private const SCORE_REVIEW = 30;
     private const GROQ_MODEL   = 'llama-3.1-8b-instant';
     private const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+    private const SFS_API_URL  = 'https://api.stopforumspam.org/api';
     private const IP_LIMIT     = 5;
     private const IP_WINDOW    = 600;
 
-    private const BUILTIN_KEYWORDS = [
+    public const BUILTIN_KEYWORDS = [
         '비아그라', '시알리스', '카지노', '도박', '복권', '대출', '빚탕감',
         'casino', 'viagra', 'cialis', 'porn', 'sex', 'loan', 'click here',
         'free money', 'winner', 'congratulations', '무료수익', '부업',
@@ -33,20 +35,29 @@ class SpamChecker
         return self::BUILTIN_KEYWORDS;
     }
 
+    /**
+     * @return array{status: string, score: int, reason: string, sfs?: array{appears: bool, confidence: float, frequency: int, torexit: bool, score: int}, keywords?: string[]}
+     */
     public function check(string $title, string $content, string $ip): array
     {
-        $text  = $title . ' ' . $content;
-        $score = $this->ruleScore($text, $ip);
+        $text      = $title . ' ' . $content;
+        $ruleScore = $this->ruleScore($text, $ip);
+        $sfs       = $this->checkStopForumSpam($ip);
+        $score     = min($ruleScore + $sfs['score'], 100);
 
         if ($score >= self::SCORE_SPAM) {
-            return ['status' => 'spam', 'score' => $score, 'reason' => '규칙 기반 스팸 감지'];
+            $reason = $sfs['appears'] && $sfs['score'] >= 20
+                ? "StopForumSpam 차단 IP (신뢰도 {$sfs['confidence']}%)"
+                : '규칙 기반 스팸 감지';
+
+            return ['status' => 'spam', 'score' => $score, 'reason' => $reason, 'sfs' => $sfs];
         }
 
         if ($score <= self::SCORE_REVIEW) {
-            return ['status' => 'approved', 'score' => $score, 'reason' => '정상'];
+            return ['status' => 'approved', 'score' => $score, 'reason' => '정상', 'sfs' => $sfs];
         }
 
-        return $this->aiCheck($title, $content, $score);
+        return $this->aiCheck($title, $content, $score, $sfs);
     }
 
     private function ruleScore(string $text, string $ip): int
@@ -54,7 +65,6 @@ class SpamChecker
         $score     = 0;
         $lowerText = mb_strtolower($text);
 
-        // 하드코딩 + DB 학습 키워드 통합 검사
         $allKeywords = array_merge(
             self::BUILTIN_KEYWORDS,
             (new SpamKeywordModel())->getActiveKeywords()
@@ -67,7 +77,6 @@ class SpamChecker
             }
         }
 
-        // URL 과다
         $urlCount = preg_match_all('/https?:\/\/\S+/i', $text);
         if ($urlCount >= 3) {
             $score += 40;
@@ -75,19 +84,16 @@ class SpamChecker
             $score += 20;
         }
 
-        // 반복 문자
         if (preg_match('/(.)\1{4,}/', $text)) {
             $score += 20;
         }
 
-        // 특수문자 비율 30% 이상
         $specialCount = preg_match_all('/[!@#$%^&*(){}\[\]<>\/\\\\|~`]/', $text);
         $totalLen      = mb_strlen($text) ?: 1;
         if ($specialCount / $totalLen > 0.3) {
             $score += 25;
         }
 
-        // IP 빈도 제한
         if ($this->isIpOverLimit($ip)) {
             $score += 35;
         }
@@ -105,11 +111,83 @@ class SpamChecker
         return $count >= self::IP_LIMIT;
     }
 
-    private function aiCheck(string $title, string $content, int $ruleScore): array
+    /**
+     * @return array{appears: bool, confidence: float, frequency: int, torexit: bool, score: int}
+     */
+    private function checkStopForumSpam(string $ip): array
+    {
+        $cacheKey = 'sfs_ip_' . md5($ip);
+        $cached   = cache($cacheKey);
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        $default = ['appears' => false, 'confidence' => 0.0, 'frequency' => 0, 'torexit' => false, 'score' => 0];
+
+        $url = self::SFS_API_URL . '?ip=' . urlencode($ip) . '&json';
+        $ch  = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 3,
+            CURLOPT_USERAGENT      => 'CI4-Playground/1.0',
+        ]);
+        $raw      = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode !== 200 || $raw === false) {
+            cache()->save($cacheKey, $default, 1800);
+
+            return $default;
+        }
+
+        try {
+            $data       = json_decode((string) $raw, true, 512, JSON_THROW_ON_ERROR);
+            $ipData     = $data['ip'] ?? [];
+            $appears    = (bool) ($ipData['appears'] ?? false);
+            $confidence = (float) ($ipData['confidence'] ?? 0.0);
+            $frequency  = (int) ($ipData['frequency'] ?? 0);
+            $torexit    = (bool) ($ipData['torexit'] ?? false);
+
+            $sfsScore = 0;
+            if ($appears) {
+                if ($confidence >= 90) {
+                    $sfsScore = 40;
+                } elseif ($confidence >= 60) {
+                    $sfsScore = 20;
+                } else {
+                    $sfsScore = 10;
+                }
+            }
+            if ($torexit) {
+                $sfsScore = max($sfsScore, 15);
+            }
+
+            $result = [
+                'appears'    => $appears,
+                'confidence' => $confidence,
+                'frequency'  => $frequency,
+                'torexit'    => $torexit,
+                'score'      => $sfsScore,
+            ];
+        } catch (\JsonException $e) {
+            $result = $default;
+        }
+
+        cache()->save($cacheKey, $result, 1800);
+
+        return $result;
+    }
+
+    /**
+     * @param array{appears: bool, confidence: float, frequency: int, torexit: bool, score: int} $sfs
+     * @return array{status: string, score: int, reason: string, sfs: array{appears: bool, confidence: float, frequency: int, torexit: bool, score: int}, keywords?: string[]}
+     */
+    private function aiCheck(string $title, string $content, int $ruleScore, array $sfs): array
     {
         $apiKey = env('GROQ_API_KEY');
         if (empty($apiKey)) {
-            return ['status' => 'approved', 'score' => $ruleScore, 'reason' => 'AI 키 미설정'];
+            return ['status' => 'approved', 'score' => $ruleScore, 'reason' => 'AI 키 미설정', 'sfs' => $sfs];
         }
 
         $prompt = <<<PROMPT
@@ -146,11 +224,11 @@ PROMPT;
         curl_close($ch);
 
         if ($httpCode !== 200 || $raw === false) {
-            return ['status' => 'review', 'score' => $ruleScore, 'reason' => 'AI 판정 실패'];
+            return ['status' => 'review', 'score' => $ruleScore, 'reason' => 'AI 판정 실패', 'sfs' => $sfs];
         }
 
         try {
-            $response = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+            $response = json_decode((string) $raw, true, 512, JSON_THROW_ON_ERROR);
             $aiText   = $response['choices'][0]['message']['content'] ?? '{}';
 
             if (preg_match('/\{.*\}/s', $aiText, $m)) {
@@ -159,7 +237,7 @@ PROMPT;
 
             $aiResult = json_decode($aiText, true, 512, JSON_THROW_ON_ERROR);
             $isSpam   = (bool) ($aiResult['is_spam'] ?? false);
-            $reason   = $aiResult['reason'] ?? 'AI 판정';
+            $reason   = (string) ($aiResult['reason'] ?? 'AI 판정');
             $keywords = $aiResult['keywords'] ?? [];
 
             if ($isSpam && is_array($keywords)) {
@@ -175,10 +253,11 @@ PROMPT;
                 'status'   => $isSpam ? 'spam' : 'approved',
                 'score'    => $ruleScore,
                 'reason'   => $reason,
-                'keywords' => $keywords,
+                'sfs'      => $sfs,
+                'keywords' => is_array($keywords) ? $keywords : [],
             ];
         } catch (\JsonException $e) {
-            return ['status' => 'review', 'score' => $ruleScore, 'reason' => 'AI 응답 파싱 실패'];
+            return ['status' => 'review', 'score' => $ruleScore, 'reason' => 'AI 응답 파싱 실패', 'sfs' => $sfs];
         }
     }
 }

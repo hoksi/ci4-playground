@@ -235,12 +235,27 @@ document.getElementById('testBtn').addEventListener('click', async () => {
                 '</div>';
         }
 
+        let sfsHtml = '';
+        if (json.sfs) {
+            const sfs = json.sfs;
+            const sfsColor = sfs.appears ? (sfs.confidence >= 80 ? 'danger' : 'warning') : 'success';
+            const sfsIcon  = sfs.appears ? 'exclamation-triangle' : 'check-circle';
+            sfsHtml = `<div class="mt-2 p-2 rounded" style="background:rgba(0,0,0,.05);font-size:.8rem;">
+                <i class="bi bi-shield-${sfs.appears ? 'x' : 'check'} text-${sfsColor} me-1"></i>
+                <strong>StopForumSpam:</strong>
+                ${sfs.appears
+                    ? `차단 IP (신뢰도 <strong>${sfs.confidence.toFixed(1)}%</strong>, ${sfs.frequency}회 신고${sfs.torexit ? ' · Tor Exit' : ''})`
+                    : '정상 IP'}
+            </div>`;
+        }
+
         result.innerHTML = `
             <div class="text-center w-100">
                 <div class="text-${s.cls}" style="font-size:2rem;"><i class="bi bi-${s.icon}"></i></div>
                 <div class="fw-bold text-${s.cls}">${s.text}</div>
                 <div class="text-muted small mt-1">점수: ${json.score ?? '-'} / 100</div>
                 <div class="text-muted small">${json.reason ?? ''}</div>
+                ${sfsHtml}
                 ${kwHtml}
             </div>`;
     } catch (e) {
