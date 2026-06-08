@@ -94,6 +94,63 @@ $navGroups = [
     ],
 ];
 
+// 예제별 SEO 설명 (검색엔진/AI 최적화)
+$exampleDescs = [
+    'examples/routing'              => 'CodeIgniter 4 라우팅 완전 가이드 — 기본/파라미터/Named Route/HTTP 메서드 제한/그룹/리다이렉트 PHP 코드 예제',
+    'examples/controllers'          => 'CodeIgniter 4 컨트롤러 — Request 객체, 폼 처리, 유효성 검사, Response 타입별 응답 방법 실전 예제',
+    'examples/views'                => 'CodeIgniter 4 뷰 시스템 — 기본 렌더링, 레이아웃(extend/section), 파셜, View Cell 활용 예제',
+    'examples/models'               => 'CodeIgniter 4 모델 & 데이터베이스 — CRUD, Query Builder, 페이지네이션, Entity 클래스 완전 가이드',
+    'examples/entityadvanced'       => 'CodeIgniter 4 Entity 심화 — $casts, $datamap, virtual property getter/setter 패턴 예제',
+    'examples/filters'              => 'CodeIgniter 4 필터 — Before/After 필터, 인증 필터 패턴, 로그인/로그아웃 데모',
+    'examples/api'                  => 'CodeIgniter 4 RESTful API — JSON 응답, HTTP 상태 코드, POST API 라이브 테스트 구현',
+    'examples/apiv2'                => 'CodeIgniter 4 JWT 인증 API — 라이브러리 없이 HS256 JWT 발급·검증, Bearer 인증 구현',
+    'examples/fileupload'           => 'CodeIgniter 4 파일 업로드 — 단일/다중 업로드, 유효성 검사, 파일 관리 예제',
+    'examples/fileupload-advanced'  => 'CodeIgniter 4 파일 업로드 심화 — Drag & Drop, FileReader 미리보기, XHR 진행률, AJAX 업로드·삭제',
+    'examples/tinymce'              => 'CodeIgniter 4 TinyMCE 에디터 — 리치 텍스트 편집, 이미지 업로드, HTML 저장·출력 연동',
+    'examples/session'              => 'CodeIgniter 4 세션 & 쿠키 — 세션 CRUD, 플래시 데이터, 쿠키 설정/삭제 PHP 예제',
+    'examples/validation'           => 'CodeIgniter 4 유효성 검사 — 기본 규칙, 커스텀 메시지, 인라인 규칙 실전 예제',
+    'examples/httpclient'           => 'CodeIgniter 4 HTTP 클라이언트 — CURLRequest로 외부 API 호출, GET/POST/헤더 설정',
+    'examples/email'                => 'CodeIgniter 4 이메일 발송 — SMTP 설정, HTML 메일, 첨부파일 전송 예제',
+    'examples/servicelayer'         => 'CodeIgniter 4 서비스 레이어 패턴 — Controller/Service/Model 레이어 분리 아키텍처',
+    'examples/repository'           => 'CodeIgniter 4 Repository 패턴 — Interface/Repository/Controller 레이어 분리 구현',
+    'examples/helper'               => 'CodeIgniter 4 커스텀 헬퍼 — 헬퍼 함수 정의, 자동 로드 설정 방법',
+    'examples/cache'                => 'CodeIgniter 4 캐싱 — 파일/더미 캐시, TTL 설정, 태그 기반 캐시 활용',
+    'examples/lang'                 => 'CodeIgniter 4 다국어 i18n — 언어 파일, lang() 함수, 런타임 언어 전환 구현',
+    'examples/events'               => 'CodeIgniter 4 이벤트 시스템 — Events::on(), trigger(), 우선순위 설정 예제',
+    'examples/cli'                  => 'CodeIgniter 4 CLI 커맨드 — BaseCommand 상속, spark 명령어 등록 방법',
+    'examples/testing'              => 'CodeIgniter 4 테스팅 — PHPUnit, Feature 테스트, Mock, CI4 테스트 헬퍼 활용',
+    'examples/transaction'          => 'CodeIgniter 4 DB 트랜잭션 — transStart/Complete/Rollback, 중첩 트랜잭션 예제',
+    'examples/logging'              => 'CodeIgniter 4 로깅 — log_message(), PSR-3 레벨, 로그 파일 뷰어 구현',
+    'examples/exception'            => 'CodeIgniter 4 예외 처리 — PageNotFoundException, 전역 핸들러, try/catch 패턴',
+    'examples/throttler'            => 'CodeIgniter 4 Throttler — 토큰 버킷 속도 제한, 요청 횟수 제한 데모',
+    'examples/modelcallback'        => 'CodeIgniter 4 Model 콜백 — beforeInsert, afterFind, 비밀번호 자동 해싱 구현',
+    'examples/configenv'            => 'CodeIgniter 4 Config 환경 분리 — BaseConfig 서브클래스, .env 오버라이드 방법',
+    'examples/advancedvalidation'   => 'CodeIgniter 4 고급 유효성 검사 — 커스텀 규칙 클래스, 규칙 그룹, 조건부 검사',
+    'examples/apiauth'              => 'CodeIgniter 4 API 인증 — API Key 발급/검증/취소, Bearer 토큰 필터 구현',
+    'examples/securitydemo'         => 'CodeIgniter 4 Security — esc() 컨텍스트별 이스케이프, sanitizeFilename(), CSRF 방어',
+    'examples/querybuilderadvanced' => 'CodeIgniter 4 Query Builder 고급 — JOIN, 서브쿼리, GROUP BY/HAVING, RawSql 활용',
+    'examples/paginationadvanced'   => 'CodeIgniter 4 Pagination 심화 — 기본 pager, AJAX 페이지 전환, 무한 스크롤',
+    'examples/multidb'              => 'CodeIgniter 4 다중 DB 연결 — 런타임 DB 그룹 설정, 두 SQLite 연결 시연',
+    'examples/imageprocess'         => 'CodeIgniter 4 이미지 처리 — Image 클래스 resize/fit/rotate, 썸네일 자동 생성',
+    'examples/encryption'           => 'CodeIgniter 4 암호화 & 해싱 — password_hash bcrypt, password_verify, 해싱 vs 암호화',
+    'examples/board'                => 'CodeIgniter 4 게시판 CRUD — 완성형 게시판 + AI 3단계 스팸 감지 (규칙·StopForumSpam·Groq AI)',
+    'examples/spam-admin'           => 'CodeIgniter 4 스팸 관리 — AI 학습 키워드 DB 관리, StopForumSpam IP 평판 체크, 실시간 테스트',
+    'examples/auth'                 => 'CodeIgniter 4 회원 인증 — 회원가입/로그인/로그아웃/비밀번호 변경 완성형 구현',
+    'examples/queue'                => 'CodeIgniter 4 큐 시스템 — DB 기반 커스텀 큐 push/process/retry/failed 전체 흐름',
+    'examples/csv-excel'            => 'CodeIgniter 4 CSV/Excel — fputcsv/fgetcsv + PhpSpreadsheet XLSX, UTF-8 BOM 처리',
+    'examples/official-queue'       => 'CodeIgniter 4 공식 Queue — codeigniter4/queue Database 핸들러, 우선순위, 재시도',
+    'examples/taskscheduler'        => 'CodeIgniter 4 Task Scheduler — codeigniter4/tasks closure/command/shell 스케줄, cron 연동',
+    'examples/pdfgeneration'        => 'CodeIgniter 4 PDF 생성 — dompdf HTML→PDF, 보고서·인보이스·한글(NotoSansCJK KR) 폰트 내장',
+    'examples/sse'                  => 'CodeIgniter 4 SSE 실시간 — Server-Sent Events, EventSource, 커스텀 이벤트, 실시간 큐 모니터링',
+    'examples/notification'         => 'CodeIgniter 4 알림 시스템 — DB 기반 알림 생성·읽음·전체 읽음, SSE 실시간 미읽음 배지',
+    'examples/aggrid'               => 'CodeIgniter 4 AG Grid — Community + JSON API 클라이언트/서버 사이드 정렬·필터·페이지네이션·CSV',
+    'examples/ajax-pagination'      => 'CodeIgniter 4 AJAX 페이지네이션 — 검색·정렬·페이지당 건수 + pushState/popstate URL 상태 유지',
+    'examples/sync-editor'          => 'CodeIgniter 4 동기화 에디터 — SSE + AJAX 실시간 공유 에디터, 다중 클라이언트 동기화',
+    'examples/chat'                 => 'CodeIgniter 4 챗봇 — Groq AI(LLaMA 3.1 8B) + Serper 웹 검색, 대화 컨텍스트 유지, 출처 링크',
+    'examples/cat-game'             => 'CodeIgniter 4 고양이 키우기 — 다마고찌 AI 게임, 레벨/경험치, 성장 단계(아기→성묘→노령묘), Groq AI 반응',
+    'examples/chart'                => 'CodeIgniter 4 Chart.js — JSON API 꺾은선·막대·도넛·복합 차트, 지연 로드 구현',
+];
+
 // 현재 예제 인덱스 파악 (이전/다음)
 $exampleByUrl = [];
 foreach ($allExamples as $i => $ex) { $exampleByUrl[$ex['url']] = $i; }
@@ -116,15 +173,55 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title ?? 'CI4 Playground') ?> — CodeIgniter 4</title>
     <?php
-        $metaDesc = esc($description ?? ($title !== 'CI4 Playground'
+        $currentPath = uri_string();
+        $specificDesc = null;
+        foreach ($exampleDescs as $path => $desc) {
+            if (str_starts_with($currentPath, $path)) {
+                $specificDesc = $desc;
+                break;
+            }
+        }
+        $metaDesc = esc($description ?? $specificDesc ?? ($title !== 'CI4 Playground'
             ? "CodeIgniter 4 {$title} 예제 — 코드와 실행 결과로 배우는 CI4 플레이그라운드"
-            : 'CodeIgniter 4의 주요 기능을 코드와 실행 결과로 함께 배우는 53개 예제 모음입니다.'));
+            : 'CodeIgniter 4의 주요 기능을 코드와 실행 결과로 함께 배우는 55개 예제 모음입니다.'));
         $canonicalUrl = base_url(uri_string());
         $ogTitle = esc(($title ?? 'CI4 Playground') . ' — CI4 Playground');
     ?>
     <meta name="description" content="<?= $metaDesc ?>">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="<?= $canonicalUrl ?>">
+    <?php
+    // JSON-LD 구조화 데이터
+    $isExamplePage = str_starts_with(uri_string(), 'examples/');
+    if ($isExamplePage): ?>
+    <script type="application/ld+json"><?= json_encode([
+        '@context'            => 'https://schema.org',
+        '@type'               => 'TechArticle',
+        'name'                => ($title ?? '') . ' — CI4 Playground',
+        'description'         => strip_tags($metaDesc),
+        'url'                 => $canonicalUrl,
+        'inLanguage'          => 'ko',
+        'programmingLanguage' => 'PHP',
+        'isPartOf'            => [
+            '@type' => 'WebSite',
+            'name'  => 'CI4 Playground',
+            'url'   => base_url(),
+        ],
+        'author' => [
+            '@type' => 'Organization',
+            'name'  => 'CI4 Playground',
+        ],
+    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?></script>
+    <?php else: ?>
+    <script type="application/ld+json"><?= json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => 'WebSite',
+        'name'        => 'CI4 Playground',
+        'description' => 'CodeIgniter 4의 주요 기능을 코드와 실행 결과로 함께 배우는 55개 예제 모음',
+        'url'         => base_url(),
+        'inLanguage'  => 'ko',
+    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?></script>
+    <?php endif; ?>
     <meta property="og:type" content="website">
     <meta property="og:title" content="<?= $ogTitle ?>">
     <meta property="og:description" content="<?= $metaDesc ?>">
