@@ -4,6 +4,7 @@ namespace Config;
 
 use App\Filters\ApiKeyFilter;
 use App\Filters\AuthFilter;
+use App\Filters\WriteThrottleFilter;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -36,8 +37,9 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
-        'auth-example'  => AuthFilter::class,
-        'api-key'       => ApiKeyFilter::class,
+        'auth-example'    => AuthFilter::class,
+        'api-key'         => ApiKeyFilter::class,
+        'write-throttle'  => WriteThrottleFilter::class,
     ];
 
     /**
