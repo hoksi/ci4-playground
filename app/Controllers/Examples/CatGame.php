@@ -20,6 +20,9 @@ class CatGame extends BaseController
     // 레벨 임계값: Lv1-5 아기, Lv6-15 성묘, Lv16+ 노령묘
     private const STAGE_THRESHOLDS = ['baby' => 5, 'adult' => 15];
 
+    // 세 가지 상태 모두 0인 채로 이 시간(초) 경과 시 무지개 다리
+    private const DEATH_SECONDS = 24 * 3600;
+
     // 성격: Lv.5 도달 시 행동 카운터 비율로 확정
     private const PERSONALITIES = [
         'feed'     => ['desc' => '음식을 무척 사랑하는', 'trait' => '배고프면 짜증을 잘 내고, 먹을 때 가장 행복해합니다.'],
@@ -33,15 +36,19 @@ class CatGame extends BaseController
     {
         $cat = $this->loadCat();
 
+        $mood  = $this->getMood($cat['hunger'], $cat['happiness'], $cat['energy']);
+        $stage = $this->getStage($cat['level']);
+
         return view('examples/cat-game/index', [
             'title'         => '고양이 키우기',
             'cat'           => $cat,
-            'mood'          => $this->getMood($cat['hunger'], $cat['happiness'], $cat['energy']),
-            'stage'         => $this->getStage($cat['level']),
-            'moodEmoji'     => $this->getMoodEmoji($this->getMood($cat['hunger'], $cat['happiness'], $cat['energy']), $this->getStage($cat['level'])),
-            'defaultSpeech' => $this->getDefaultSpeech($this->getMood($cat['hunger'], $cat['happiness'], $cat['energy'])),
+            'mood'          => $mood,
+            'stage'         => $stage,
+            'moodEmoji'     => $this->getMoodEmoji($mood, $stage),
+            'defaultSpeech' => $this->getDefaultSpeech($mood),
             'expToNext'     => $this->expToNextLevel($cat['exp']),
             'expProgress'   => $this->expProgress($cat['exp']),
+            'isDead'        => (bool) ($cat['is_dead'] ?? false),
         ]);
     }
 
@@ -60,6 +67,7 @@ class CatGame extends BaseController
             'expToNext'   => $this->expToNextLevel($cat['exp']),
             'stage'       => $this->getStage($cat['level']),
             'mood'        => $this->getMood($cat['hunger'], $cat['happiness'], $cat['energy']),
+            'isDead'      => (bool) ($cat['is_dead'] ?? false),
         ]);
     }
 
@@ -76,6 +84,11 @@ class CatGame extends BaseController
 
         if (! $row) {
             return $this->response->setStatusCode(404)->setJSON(['error' => '고양이를 찾을 수 없습니다.']);
+        }
+
+        // 이미 무지개 다리를 건넌 경우 행동 불가
+        if (! empty($row['is_dead'])) {
+            return $this->response->setStatusCode(400)->setJSON(['error' => '고양이가 무지개 다리를 건넜습니다.', 'isDead' => true]);
         }
 
         [$hunger, $happiness, $energy] = $this->applyDecay($row);
@@ -187,17 +200,19 @@ class CatGame extends BaseController
     {
         $now = date('Y-m-d H:i:s');
         db_connect()->table('cats')->where('id >', 0)->update([
-            'hunger'       => 70,
-            'happiness'    => 70,
-            'energy'       => 70,
-            'level'        => 1,
-            'exp'          => 0,
-            'personality'  => null,
-            'act_feed'     => 0,
-            'act_play'     => 0,
-            'act_sleep'    => 0,
-            'act_pet'      => 0,
-            'last_updated' => $now,
+            'hunger'         => 70,
+            'happiness'      => 70,
+            'energy'         => 70,
+            'level'          => 1,
+            'exp'            => 0,
+            'personality'    => null,
+            'act_feed'       => 0,
+            'act_play'       => 0,
+            'act_sleep'      => 0,
+            'act_pet'        => 0,
+            'critical_since' => null,
+            'is_dead'        => 0,
+            'last_updated'   => $now,
         ]);
         db_connect()->table('cat_history')->truncate();
 
@@ -212,19 +227,36 @@ class CatGame extends BaseController
         $row = $db->table('cats')->limit(1)->get()->getRowArray();
 
         if (! $row) {
-            return ['name' => '냥이', 'hunger' => 70, 'happiness' => 70, 'energy' => 70, 'level' => 1, 'exp' => 0];
+            return ['name' => '냥이', 'hunger' => 70, 'happiness' => 70, 'energy' => 70, 'level' => 1, 'exp' => 0, 'is_dead' => 0];
+        }
+
+        // 이미 사망한 경우 decay 계산 없이 반환
+        if (! empty($row['is_dead'])) {
+            return $row;
         }
 
         [$hunger, $happiness, $energy] = $this->applyDecay($row);
 
-        $db->table('cats')->where('id', $row['id'])->update([
-            'hunger'       => $hunger,
-            'happiness'    => $happiness,
-            'energy'       => $energy,
-            'last_updated' => date('Y-m-d H:i:s'),
-        ]);
+        $now          = date('Y-m-d H:i:s');
+        $update       = ['hunger' => $hunger, 'happiness' => $happiness, 'energy' => $energy, 'last_updated' => $now];
 
-        return array_merge($row, ['hunger' => $hunger, 'happiness' => $happiness, 'energy' => $energy]);
+        // 세 가지 모두 0 → critical_since 기록
+        if ($hunger === 0 && $happiness === 0 && $energy === 0) {
+            if (empty($row['critical_since'])) {
+                $update['critical_since'] = $now;
+            } elseif (time() - strtotime((string) $row['critical_since']) >= self::DEATH_SECONDS) {
+                $update['is_dead'] = 1; // 무지개 다리
+            }
+        } else {
+            // 하나라도 회복되면 critical_since 초기화
+            if (! empty($row['critical_since'])) {
+                $update['critical_since'] = null;
+            }
+        }
+
+        $db->table('cats')->where('id', $row['id'])->update($update);
+
+        return array_merge($row, $update);
     }
 
     private function applyDecay(array $row): array
