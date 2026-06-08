@@ -16,6 +16,12 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 <?php endif; ?>
+<?php if (session()->getFlashdata('error')): ?>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-shield-exclamation me-2"></i><?= esc(session()->getFlashdata('error')) ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<?php endif; ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <span class="text-muted">총 <strong><?= $pager->getTotal() ?></strong>개의 게시글</span>
@@ -54,6 +60,9 @@
                             <td class="text-muted"><?= esc($post->id) ?></td>
                             <td>
                                 <span class="fw-semibold"><?= esc($post->title) ?></span>
+                                <?php if ($post->needsReview()): ?>
+                                    <span class="badge bg-warning text-dark ms-1" title="검토 대기">검토중</span>
+                                <?php endif; ?>
                                 <div class="text-muted small"><?= esc($post->getExcerpt(60)) ?></div>
                             </td>
                             <td><?= esc($post->author) ?></td>

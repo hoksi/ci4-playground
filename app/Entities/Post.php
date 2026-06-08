@@ -11,6 +11,16 @@ class Post extends Entity
         'views' => 'integer',
     ];
 
+    public function isSpam(): bool
+    {
+        return $this->spam_status === 'spam';
+    }
+
+    public function needsReview(): bool
+    {
+        return $this->spam_status === 'review';
+    }
+
     public function getExcerpt(int $length = 100): string
     {
         return mb_strlen($this->content) > $length

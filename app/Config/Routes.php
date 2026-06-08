@@ -172,6 +172,15 @@ $routes->group('examples', function ($routes) {
     $routes->post('board/(:num)/update',       'Examples\Board::update/$1');
     $routes->get('board/(:num)/delete',        'Examples\Board::delete/$1');
 
+    // 스팸 키워드 관리
+    $routes->get('spam-admin',                        'Examples\SpamAdmin::index');
+    $routes->post('spam-admin/store',                 'Examples\SpamAdmin::store');
+    $routes->post('spam-admin/test',                  'Examples\SpamAdmin::test');
+    $routes->get('spam-admin/(:num)/toggle',          'Examples\SpamAdmin::toggle/$1');
+    $routes->get('spam-admin/(:num)/delete',          'Examples\SpamAdmin::delete/$1');
+    $routes->get('spam-admin/post/(:num)/approve',    'Examples\SpamAdmin::approvePost/$1');
+    $routes->get('spam-admin/post/(:num)/spam',       'Examples\SpamAdmin::spamPost/$1');
+
     // 32. 이미지 처리
     $routes->get('imageprocess',               'Examples\ImageProcess::index');
     $routes->post('imageprocess/upload',       'Examples\ImageProcess::upload');

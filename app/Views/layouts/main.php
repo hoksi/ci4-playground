@@ -37,6 +37,7 @@ $allExamples = [
     ['url' => 'examples/imageprocess',        'label' => '이미지 처리',      'icon' => 'image'],
     ['url' => 'examples/encryption',          'label' => '암호화 & 해싱',    'icon' => 'lock'],
     ['url' => 'examples/board',               'label' => '게시판 CRUD',      'icon' => 'card-list'],
+    ['url' => 'examples/spam-admin',          'label' => '스팸 관리',         'icon' => 'shield-exclamation'],
     ['url' => 'examples/auth',                'label' => '회원 인증',        'icon' => 'person-lock'],
     ['url' => 'examples/queue',               'label' => '큐 시스템',        'icon' => 'collection-play'],
     ['url' => 'examples/csv-excel',           'label' => 'CSV/Excel',        'icon' => 'file-earmark-spreadsheet'],
@@ -80,7 +81,7 @@ $navGroups = [
         'examples/multidb', 'examples/imageprocess', 'examples/encryption',
     ],
     '실전 예제' => [
-        'examples/board', 'examples/auth', 'examples/queue',
+        'examples/board', 'examples/spam-admin', 'examples/auth', 'examples/queue',
         'examples/csv-excel', 'examples/official-queue', 'examples/taskscheduler',
         'examples/pdfgeneration',
     ],

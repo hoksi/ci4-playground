@@ -4,6 +4,7 @@ namespace App\Controllers\Examples;
 
 use App\Controllers\BaseController;
 use App\Models\PostModel;
+use App\Services\SpamChecker;
 
 class Board extends BaseController
 {
@@ -13,7 +14,15 @@ class Board extends BaseController
      * true  → 쓰기/수정/삭제 비활성화 (데모 공개 환경)
      * false → 모든 기능 활성화 (직접 실습할 때 false 로 변경)
      */
-    private const READ_ONLY = true;
+    private const READ_ONLY = false;
+
+    /**
+     * 스팸 감지 스위치
+     *
+     * true  → 게시글 등록 시 스팸 감지 활성화 (규칙→StopForumSpam→AI)
+     * false → 스팸 감지 비활성화
+     */
+    private const SPAM_CHECK = true;
 
     protected PostModel $model;
 
@@ -64,14 +73,36 @@ class Board extends BaseController
                 ->with('errors', $this->validator->getErrors());
         }
 
+        $title   = $this->request->getPost('title');
+        $content = $this->request->getPost('content');
+        $author  = $this->request->getPost('author');
+
+        $spamStatus = 'approved';
+        if (self::SPAM_CHECK) {
+            $spam = (new SpamChecker())->check($title, $content, $this->request->getIPAddress());
+
+            if ($spam['status'] === 'spam') {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', '스팸으로 감지된 게시글입니다. 내용을 확인해주세요.');
+            }
+
+            $spamStatus = $spam['status'];
+        }
+
         $this->model->insert([
-            'title'   => $this->request->getPost('title'),
-            'content' => $this->request->getPost('content'),
-            'author'  => $this->request->getPost('author'),
+            'title'       => $title,
+            'content'     => $content,
+            'author'      => $author,
+            'spam_status' => $spamStatus,
         ]);
 
+        $message = $spamStatus === 'review'
+            ? '게시글이 등록되었습니다. (검토 후 노출될 수 있습니다.)'
+            : '게시글이 작성되었습니다.';
+
         return redirect()->to(base_url('examples/board'))
-            ->with('success', '게시글이 작성되었습니다.');
+            ->with('success', $message);
     }
 
     public function show(int $id): string

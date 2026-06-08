@@ -11,6 +11,12 @@
 </div>
 
 <?php $errors = session()->getFlashdata('errors') ?? []; ?>
+<?php if (session()->getFlashdata('error')): ?>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-shield-exclamation me-2"></i><?= esc(session()->getFlashdata('error')) ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<?php endif; ?>
 <?php if ($errors): ?>
 <div class="alert alert-danger">
     <ul class="mb-0"><?php foreach ($errors as $e): ?><li><?= esc($e) ?></li><?php endforeach; ?></ul>
