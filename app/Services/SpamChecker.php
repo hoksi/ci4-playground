@@ -2,28 +2,36 @@
 
 namespace App\Services;
 
+use App\Models\SpamKeywordModel;
+
 /**
  * 3단계 스팸 감지 서비스
  *
- * 1단계: 규칙 기반 (무료, 즉시)
- * 2단계: Groq AI (점수 30~70 구간만)
+ * 1단계: 규칙 기반 (무료, 즉시) — 하드코딩 + DB 학습 키워드
+ * 2단계: Groq AI (점수 30~70 구간만) — 스팸 키워드 자동 추출 저장
  * 결과: approved / review / spam
  */
 class SpamChecker
 {
-    private const SCORE_SPAM    = 70;
-    private const SCORE_REVIEW  = 30;
-    private const GROQ_MODEL    = 'llama-3.1-8b-instant';
-    private const GROQ_API_URL  = 'https://api.groq.com/openai/v1/chat/completions';
-    private const IP_LIMIT      = 5;   // 10분 내 최대 게시글 수
-    private const IP_WINDOW     = 600; // 초
+    private const SCORE_SPAM   = 70;
+    private const SCORE_REVIEW = 30;
+    private const GROQ_MODEL   = 'llama-3.1-8b-instant';
+    private const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+    private const IP_LIMIT     = 5;
+    private const IP_WINDOW    = 600;
 
-    private const SPAM_KEYWORDS = [
+    private const BUILTIN_KEYWORDS = [
         '비아그라', '시알리스', '카지노', '도박', '복권', '대출', '빚탕감',
         'casino', 'viagra', 'cialis', 'porn', 'sex', 'loan', 'click here',
         'free money', 'winner', 'congratulations', '무료수익', '부업',
         '당첨', '클릭', '지금바로', '100%보장',
     ];
+
+    /** @return string[] */
+    public static function builtinKeywords(): array
+    {
+        return self::BUILTIN_KEYWORDS;
+    }
 
     public function check(string $title, string $content, string $ip): array
     {
@@ -38,24 +46,28 @@ class SpamChecker
             return ['status' => 'approved', 'score' => $score, 'reason' => '정상'];
         }
 
-        // 불확실 구간(31~69)만 AI 호출
         return $this->aiCheck($title, $content, $score);
     }
 
     private function ruleScore(string $text, string $ip): int
     {
-        $score = 0;
-
-        // 금지 키워드
+        $score     = 0;
         $lowerText = mb_strtolower($text);
-        foreach (self::SPAM_KEYWORDS as $kw) {
+
+        // 하드코딩 + DB 학습 키워드 통합 검사
+        $allKeywords = array_merge(
+            self::BUILTIN_KEYWORDS,
+            (new SpamKeywordModel())->getActiveKeywords()
+        );
+
+        foreach ($allKeywords as $kw) {
             if (str_contains($lowerText, mb_strtolower($kw))) {
                 $score += 30;
                 break;
             }
         }
 
-        // URL 과다 (3개 이상)
+        // URL 과다
         $urlCount = preg_match_all('/https?:\/\/\S+/i', $text);
         if ($urlCount >= 3) {
             $score += 40;
@@ -63,12 +75,12 @@ class SpamChecker
             $score += 20;
         }
 
-        // 반복 문자 (같은 문자 5회 이상 연속)
+        // 반복 문자
         if (preg_match('/(.)\1{4,}/', $text)) {
             $score += 20;
         }
 
-        // 특수문자 비율 (30% 이상)
+        // 특수문자 비율 30% 이상
         $specialCount = preg_match_all('/[!@#$%^&*(){}\[\]<>\/\\\\|~`]/', $text);
         $totalLen      = mb_strlen($text) ?: 1;
         if ($specialCount / $totalLen > 0.3) {
@@ -106,14 +118,15 @@ class SpamChecker
 제목: {$title}
 내용: {$content}
 
-응답 형식: {"is_spam": true|false, "reason": "한 줄 이유"}
+응답 형식: {"is_spam": true|false, "reason": "한 줄 이유", "keywords": ["핵심스팸단어1", "단어2"]}
+keywords는 스팸일 때만 2~5개 추출해. 아니면 빈 배열.
 PROMPT;
 
         $payload = json_encode([
             'model'       => self::GROQ_MODEL,
             'messages'    => [['role' => 'user', 'content' => $prompt]],
             'temperature' => 0,
-            'max_tokens'  => 80,
+            'max_tokens'  => 120,
         ]);
 
         $ch = curl_init(self::GROQ_API_URL);
@@ -140,7 +153,6 @@ PROMPT;
             $response = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
             $aiText   = $response['choices'][0]['message']['content'] ?? '{}';
 
-            // JSON 블록 추출
             if (preg_match('/\{.*\}/s', $aiText, $m)) {
                 $aiText = $m[0];
             }
@@ -148,11 +160,22 @@ PROMPT;
             $aiResult = json_decode($aiText, true, 512, JSON_THROW_ON_ERROR);
             $isSpam   = (bool) ($aiResult['is_spam'] ?? false);
             $reason   = $aiResult['reason'] ?? 'AI 판정';
+            $keywords = $aiResult['keywords'] ?? [];
+
+            if ($isSpam && is_array($keywords)) {
+                $model = new SpamKeywordModel();
+                foreach ($keywords as $kw) {
+                    if (is_string($kw)) {
+                        $model->saveOrIncrement($kw);
+                    }
+                }
+            }
 
             return [
-                'status' => $isSpam ? 'spam' : 'approved',
-                'score'  => $ruleScore,
-                'reason' => $reason,
+                'status'   => $isSpam ? 'spam' : 'approved',
+                'score'    => $ruleScore,
+                'reason'   => $reason,
+                'keywords' => $keywords,
             ];
         } catch (\JsonException $e) {
             return ['status' => 'review', 'score' => $ruleScore, 'reason' => 'AI 응답 파싱 실패'];
