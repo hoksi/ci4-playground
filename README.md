@@ -166,14 +166,18 @@ GROQ_API_KEY = gsk_여기에_키_입력
 게시판(#7) 스팸 감지는 **3단계 하이브리드** 방식으로 동작합니다.
 
 ```
-1단계: 규칙 기반   → 내장 키워드 + AI 학습 키워드 DB (무료, 즉시)
+1단계: 규칙 기반   → spam_keywords DB (내장 키워드 + AI 학습 키워드 통합 관리)
 2단계: StopForumSpam → 알려진 스패머 IP 평판 DB 대조 (무료, 30분 캐시)
 3단계: Groq AI    → 불확실 구간(점수 31~69)만 호출 (비용 최소화)
 ```
 
+- 내장 키워드 24개가 `spam_keywords` DB에 시딩되며, SpamAdmin 페이지에서 통합 관리
 - AI가 스팸을 확정하면 핵심 키워드를 자동 추출해 DB에 저장 → 시간이 지날수록 1단계 적중률 상승
-- `/examples/spam-admin` 에서 학습된 키워드 관리 및 실시간 테스트 가능
+- `/examples/spam-admin` 에서 키워드 관리, 검토 대기 게시글 승인/차단, 실시간 테스트 가능
 - **Groq API 키 필요** (키 미설정 시 규칙+SFS 2단계까지만 동작)
+
+> **배포 시 주의**: `php spark db:seed SpamKeywordSeeder` 를 실행해 내장 키워드를 시딩해야 합니다.
+> `AllSeeder`에 포함되어 있으므로 `php spark db:seed AllSeeder` 로도 가능합니다 (기존 데이터 중복 없음).
 
 ---
 
@@ -244,7 +248,8 @@ app/
 │   └── UserEntity.php                ← Entity 심화 예제
 ├── Filters/
 │   ├── AuthFilter.php                ← 인증 필터
-│   └── ApiKeyFilter.php              ← API Key 필터
+│   ├── ApiKeyFilter.php              ← API Key 필터
+│   └── WriteThrottleFilter.php       ← 쓰기 요청 빈도 제한 (게시판·채팅·고양이 등)
 ├── Interfaces/
 │   └── PostRepositoryInterface.php   ← Repository 인터페이스
 ├── Jobs/
@@ -262,7 +267,7 @@ app/
 │   └── PostRepository.php            ← Repository 패턴 구현체
 ├── Services/
 │   ├── PostService.php               ← 서비스 레이어 예제
-│   └── SpamChecker.php               ← 3단계 스팸 감지 (규칙→SFS→AI)
+│   └── SpamChecker.php               ← 3단계 스팸 감지 (규칙→SFS→AI, 키워드 자가 학습)
 ├── Validation/
 │   └── PlaygroundRules.php           ← 커스텀 유효성 검사 규칙
 └── Views/
