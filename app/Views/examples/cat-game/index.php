@@ -57,6 +57,25 @@
 <!-- 레벨업 토스트 -->
 <div class="levelup-toast" id="levelupToast">✨ 레벨 업!</div>
 
+<?php if ($isDead): ?>
+<!-- 무지개 다리 화면 -->
+<div class="cat-card text-center">
+    <div class="example-card">
+        <div class="example-card-body py-5">
+            <div style="font-size:5rem; line-height:1;">🌈</div>
+            <h3 class="mt-3 mb-1"><?= esc($cat['name']) ?>이(가) 무지개 다리를 건넜습니다.</h3>
+            <p class="text-muted">Lv.<?= (int)$cat['level'] ?> · 함께한 시간이 소중했습니다.</p>
+            <hr>
+            <p class="text-muted small">세 가지 상태가 모두 0인 채로 24시간이 지났습니다.<br>
+            돌봐주지 못해서 미안해요 🥺</p>
+            <button class="btn btn-primary mt-3" id="restartBtn">
+                <i class="bi bi-arrow-counterclockwise me-2"></i>새 고양이 입양하기
+            </button>
+        </div>
+    </div>
+</div>
+<?php else: ?>
+
 <div class="cat-card">
     <div class="example-card text-center">
         <div class="example-card-body">
@@ -159,8 +178,11 @@
         <i class="bi bi-info-circle me-2"></i>
         방치하면 상태가 감소합니다. 행동마다 경험치가 쌓여 레벨업!
         <strong>Lv.1~5 아기 → Lv.6~15 성묘 → Lv.16+ 노령묘</strong>
+        · 세 가지 상태 모두 0인 채로 <strong>24시간</strong> 경과 시 무지개 다리 🌈
     </div>
 </div>
+
+<?php endif ?>
 
 <?= $this->endSection() ?>
 <?= $this->section('scripts') ?>
@@ -374,11 +396,30 @@ document.getElementById('refreshHistory').addEventListener('click', loadHistory)
 setInterval(async () => {
     const res  = await fetch('<?= base_url('examples/cat-game/status') ?>');
     const json = await res.json();
+    if (json.isDead) {
+        location.reload(); // 사망 → 무지개 다리 화면으로 전환
+        return;
+    }
     updateUI(json);
     if (json.mood === 'critical' || json.mood === 'hungry' || json.mood === 'tired') {
         showSpeech(MOODS[json.mood]?.adult ?? '냥~');
     }
 }, 30000);
+
+<?php if ($isDead): ?>
+// ─── 재시작 버튼 ──────────────────────────────────────
+document.getElementById('restartBtn')?.addEventListener('click', async () => {
+    const form = new URLSearchParams();
+    form.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+    const res  = await fetch('<?= base_url('examples/cat-game/reset') ?>', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+        body: form,
+    });
+    const json = await res.json();
+    if (json.success) location.reload();
+});
+<?php endif ?>
 
 loadHistory();
 </script>
