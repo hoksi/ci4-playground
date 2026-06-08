@@ -7,7 +7,12 @@
         <li class="breadcrumb-item"><a href="<?= base_url('examples/board') ?>">게시판</a></li>
         <li class="breadcrumb-item active text-white"><?= esc($post->title) ?></li>
     </ol></nav>
-    <h1><?= esc($post->title) ?></h1>
+    <h1>
+        <?= esc($post->title) ?>
+        <?php if ($post->needsReview()): ?>
+            <span class="badge bg-warning text-dark ms-2" style="font-size:.6em;vertical-align:middle;">검토중</span>
+        <?php endif; ?>
+    </h1>
     <div class="d-flex gap-3 mt-2" style="opacity:.8;font-size:.9rem;">
         <span><i class="bi bi-person me-1"></i><?= esc($post->author) ?></span>
         <span><i class="bi bi-clock me-1"></i><?= esc($post->getFormattedDate()) ?></span>

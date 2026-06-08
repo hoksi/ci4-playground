@@ -12,7 +12,7 @@ class PostModel extends Model
     protected $returnType    = Post::class;
     protected $useSoftDeletes = true;
 
-    protected $allowedFields = ['title', 'content', 'author', 'views'];
+    protected $allowedFields = ['title', 'content', 'author', 'views', 'spam_status'];
 
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
