@@ -3,27 +3,48 @@
 namespace App\Controllers\Examples;
 
 use App\Controllers\BaseController;
+use App\Models\PostModel;
 use App\Models\SpamKeywordModel;
 use App\Services\SpamChecker;
 
 class SpamAdmin extends BaseController
 {
     protected SpamKeywordModel $model;
+    protected PostModel $postModel;
 
     public function __construct()
     {
-        $this->model = new SpamKeywordModel();
+        $this->model     = new SpamKeywordModel();
+        $this->postModel = new PostModel();
     }
 
     public function index(): string
     {
-        $keywords = $this->model->orderBy('frequency', 'DESC')->findAll();
+        $keywords     = $this->model->orderBy('frequency', 'DESC')->findAll();
+        $reviewPosts  = $this->postModel->where('spam_status', 'review')->orderBy('created_at', 'DESC')->findAll();
 
         return view('examples/spam-admin/index', [
             'title'           => '스팸 키워드 관리',
             'keywords'        => $keywords,
             'builtinKeywords' => $this->getBuiltinKeywords(),
+            'reviewPosts'     => $reviewPosts,
         ]);
+    }
+
+    public function approvePost(int $id)
+    {
+        $this->postModel->update($id, ['spam_status' => 'approved']);
+
+        return redirect()->to(base_url('examples/spam-admin'))
+            ->with('success', '게시글이 승인되었습니다.');
+    }
+
+    public function spamPost(int $id)
+    {
+        $this->postModel->update($id, ['spam_status' => 'spam']);
+
+        return redirect()->to(base_url('examples/spam-admin'))
+            ->with('success', '게시글이 스팸으로 처리되었습니다.');
     }
 
     public function toggle(int $id)

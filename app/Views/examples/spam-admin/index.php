@@ -50,6 +50,71 @@ $inactive = $total - $active;
     </div>
 </div>
 
+<!-- 검토 대기 게시글 -->
+<?php $reviewCount = count($reviewPosts); ?>
+<div class="example-card mb-4">
+    <div class="example-card-header">
+        <span class="badge bg-warning text-dark">검토 대기</span>
+        <h5>
+            검토 대기 게시글
+            <?php if ($reviewCount > 0): ?>
+                <span class="badge bg-danger ms-1"><?= $reviewCount ?></span>
+            <?php endif; ?>
+        </h5>
+    </div>
+    <div class="example-card-body p-0">
+        <?php if (empty($reviewPosts)): ?>
+        <div class="text-center py-4 text-muted">
+            <i class="bi bi-check-circle" style="font-size:2rem;opacity:.3;"></i>
+            <p class="mt-2 mb-0">검토 대기 중인 게시글이 없습니다.</p>
+        </div>
+        <?php else: ?>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th width="60">번호</th>
+                        <th>제목 / 내용 요약</th>
+                        <th width="90">작성자</th>
+                        <th width="130">작성일</th>
+                        <th width="160" class="text-center">처리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($reviewPosts as $post): ?>
+                    <tr>
+                        <td class="text-muted"><?= esc($post->id) ?></td>
+                        <td>
+                            <a href="<?= base_url("examples/board/{$post->id}") ?>" target="_blank"
+                               class="fw-semibold text-decoration-none">
+                                <?= esc($post->title) ?>
+                                <i class="bi bi-box-arrow-up-right ms-1 small"></i>
+                            </a>
+                            <div class="text-muted small"><?= esc($post->getExcerpt(80)) ?></div>
+                        </td>
+                        <td><?= esc($post->author) ?></td>
+                        <td><small class="text-muted"><?= esc($post->getFormattedDate()) ?></small></td>
+                        <td class="text-center">
+                            <a href="<?= base_url("examples/spam-admin/post/{$post->id}/approve") ?>"
+                               class="btn btn-sm btn-success me-1"
+                               onclick="return confirm('이 게시글을 승인하시겠습니까?')">
+                                <i class="bi bi-check-lg"></i> 승인
+                            </a>
+                            <a href="<?= base_url("examples/spam-admin/post/{$post->id}/spam") ?>"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('이 게시글을 스팸으로 처리하시겠습니까?')">
+                                <i class="bi bi-shield-x"></i> 스팸
+                            </a>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
+
 <!-- 스팸 테스트 패널 -->
 <div class="example-card mb-4">
     <div class="example-card-header">
