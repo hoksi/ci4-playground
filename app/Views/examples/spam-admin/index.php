@@ -158,17 +158,17 @@ $inactive = $total - $active;
     </div>
 </div>
 
-<!-- 학습된 키워드 목록 -->
+<!-- 키워드 목록 -->
 <div class="example-card mb-4">
     <div class="example-card-header">
-        <span class="badge bg-danger">AI 학습</span>
-        <h5>학습된 스팸 키워드 (<?= $total ?>개)</h5>
+        <span class="badge bg-danger">키워드</span>
+        <h5>스팸 키워드 목록 (<?= $total ?>개)</h5>
     </div>
     <div class="example-card-body p-0">
         <?php if (empty($keywords)): ?>
         <div class="text-center py-5 text-muted">
             <i class="bi bi-robot" style="font-size:3rem;opacity:.3;"></i>
-            <p class="mt-2">아직 AI가 학습한 키워드가 없습니다.<br>스팸 게시글이 AI에 의해 감지되면 자동으로 추가됩니다.</p>
+            <p class="mt-2">키워드가 없습니다.<br>마이그레이션 및 시더를 실행해주세요.</p>
         </div>
         <?php else: ?>
         <div class="table-responsive">
@@ -185,9 +185,12 @@ $inactive = $total - $active;
                     <?php foreach ($keywords as $kw): ?>
                     <tr class="<?= $kw['active'] ? '' : 'table-secondary' ?>">
                         <td>
-                            <span class="badge <?= $kw['active'] ? 'bg-danger' : 'bg-secondary' ?> me-2">
+                            <span class="badge <?= $kw['active'] ? 'bg-danger' : 'bg-secondary' ?> me-1">
                                 <?= esc($kw['keyword']) ?>
                             </span>
+                            <?php if ($kw['is_builtin']): ?>
+                                <span class="badge bg-dark" title="기본 제공 키워드 (삭제 불가)">내장</span>
+                            <?php endif; ?>
                         </td>
                         <td class="text-center">
                             <span class="badge bg-dark"><?= esc($kw['frequency']) ?>회</span>
@@ -205,12 +208,18 @@ $inactive = $total - $active;
                                title="<?= $kw['active'] ? '비활성화' : '활성화' ?>">
                                 <i class="bi bi-<?= $kw['active'] ? 'pause' : 'play' ?>-fill"></i>
                             </a>
+                            <?php if (! $kw['is_builtin']): ?>
                             <a href="<?= base_url("examples/spam-admin/{$kw['id']}/delete") ?>"
                                class="btn btn-sm btn-outline-danger"
                                onclick="return confirm('<?= esc($kw['keyword']) ?> 키워드를 삭제할까요?')"
                                title="삭제">
                                 <i class="bi bi-trash"></i>
                             </a>
+                            <?php else: ?>
+                            <button class="btn btn-sm btn-outline-secondary" disabled title="내장 키워드는 삭제할 수 없습니다">
+                                <i class="bi bi-lock"></i>
+                            </button>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -218,25 +227,6 @@ $inactive = $total - $active;
             </table>
         </div>
         <?php endif; ?>
-    </div>
-</div>
-
-<!-- 기본 내장 키워드 (읽기 전용) -->
-<div class="example-card mb-4">
-    <div class="example-card-header">
-        <span class="badge bg-secondary">내장</span>
-        <h5>기본 내장 키워드 (<?= count($builtinKeywords) ?>개, 읽기 전용)</h5>
-    </div>
-    <div class="example-card-body">
-        <div class="d-flex flex-wrap gap-2">
-            <?php foreach ($builtinKeywords as $kw): ?>
-                <span class="badge bg-secondary"><?= esc($kw) ?></span>
-            <?php endforeach; ?>
-        </div>
-        <div class="text-muted small mt-2">
-            <i class="bi bi-info-circle me-1"></i>
-            기본 키워드는 <code>app/Services/SpamChecker.php</code>의 <code>BUILTIN_KEYWORDS</code> 상수에서 관리합니다.
-        </div>
     </div>
 </div>
 
@@ -253,12 +243,14 @@ if ($spam['status'] === 'spam') {
 $this->model->insert([..., 'spam_status' => $spam['status']]);
 
 // SpamChecker 흐름
-// 1단계: 규칙 기반 (내장 키워드 + DB 학습 키워드)
+// 1단계: 규칙 기반 (DB 키워드: 내장 + AI 학습 통합)
 //   점수 70+ → spam (즉시 차단)
 //   점수 30↓  → approved (즉시 허용)
-//   점수 31~69 → Groq AI 호출
-// 2단계: Groq AI
-//   is_spam: true  → spam + 키워드 DB 저장
+//   점수 31~69 → StopForumSpam IP 체크 후 Groq AI 호출
+// 2단계: StopForumSpam IP 평판 체크
+//   confidence 90+ → +40점, 60~89 → +20점, Tor Exit → +15점
+// 3단계: Groq AI
+//   is_spam: true  → spam + 키워드 자동 DB 저장
 //   is_spam: false → approved
 //   오류           → review (관리자 검토)</code></pre>
     </div>

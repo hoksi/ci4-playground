@@ -10,7 +10,7 @@ class SpamKeywordModel extends Model
     protected $primaryKey = 'id';
     protected $returnType = 'array';
 
-    protected $allowedFields = ['keyword', 'frequency', 'active'];
+    protected $allowedFields = ['keyword', 'frequency', 'active', 'is_builtin'];
 
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';

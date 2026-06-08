@@ -166,7 +166,7 @@ $routes->group('examples', function ($routes) {
     // 7. 게시판 (실전 CRUD)
     $routes->get('board',                      'Examples\Board::index');
     $routes->get('board/create',               'Examples\Board::create');
-    $routes->post('board/store',               'Examples\Board::store');
+    $routes->post('board/store',               'Examples\Board::store',        ['filter' => 'write-throttle:3,60']);
     $routes->get('board/(:num)',               'Examples\Board::show/$1');
     $routes->get('board/(:num)/edit',          'Examples\Board::edit/$1');
     $routes->post('board/(:num)/update',       'Examples\Board::update/$1');
@@ -272,19 +272,19 @@ $routes->group('examples', function ($routes) {
     // 51. 동기화 에디터
     $routes->get('sync-editor',          'Examples\SyncEditor::index');
     $routes->get('sync-editor/doc',      'Examples\SyncEditor::doc');
-    $routes->post('sync-editor/save',    'Examples\SyncEditor::save');
+    $routes->post('sync-editor/save',    'Examples\SyncEditor::save',    ['filter' => 'write-throttle:30,60']);
     $routes->get('sync-editor/stream',   'Examples\SyncEditor::stream');
 
     // 52. 챗봇
     $routes->get('chat',                 'Examples\Chat::index');
-    $routes->post('chat/send',           'Examples\Chat::send');
+    $routes->post('chat/send',           'Examples\Chat::send',          ['filter' => 'write-throttle:10,60']);
     $routes->post('chat/clear',          'Examples\Chat::clear');
 
     // 53. 고양이 키우기
     $routes->get('cat-game',             'Examples\CatGame::index');
     $routes->get('cat-game/status',      'Examples\CatGame::status');
     $routes->get('cat-game/history',     'Examples\CatGame::history');
-    $routes->post('cat-game/action',     'Examples\CatGame::action');
+    $routes->post('cat-game/action',     'Examples\CatGame::action',     ['filter' => 'write-throttle:20,60']);
     $routes->post('cat-game/rename',     'Examples\CatGame::rename');
     $routes->post('cat-game/reset',      'Examples\CatGame::reset');
 

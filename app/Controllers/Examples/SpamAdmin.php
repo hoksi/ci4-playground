@@ -20,14 +20,13 @@ class SpamAdmin extends BaseController
 
     public function index(): string
     {
-        $keywords     = $this->model->orderBy('frequency', 'DESC')->findAll();
-        $reviewPosts  = $this->postModel->where('spam_status', 'review')->orderBy('created_at', 'DESC')->findAll();
+        $keywords    = $this->model->orderBy('is_builtin', 'DESC')->orderBy('frequency', 'DESC')->findAll();
+        $reviewPosts = $this->postModel->where('spam_status', 'review')->orderBy('created_at', 'DESC')->findAll();
 
         return view('examples/spam-admin/index', [
-            'title'           => '스팸 키워드 관리',
-            'keywords'        => $keywords,
-            'builtinKeywords' => $this->getBuiltinKeywords(),
-            'reviewPosts'     => $reviewPosts,
+            'title'       => '스팸 키워드 관리',
+            'keywords'    => $keywords,
+            'reviewPosts' => $reviewPosts,
         ]);
     }
 
@@ -57,6 +56,12 @@ class SpamAdmin extends BaseController
 
     public function delete(int $id)
     {
+        $keyword = $this->model->find($id);
+        if ($keyword && $keyword['is_builtin']) {
+            return redirect()->to(base_url('examples/spam-admin'))
+                ->with('error', '내장 키워드는 삭제할 수 없습니다. 비활성화를 사용하세요.');
+        }
+
         $this->model->delete($id);
         cache()->delete('spam_keywords_active');
 
@@ -92,8 +97,4 @@ class SpamAdmin extends BaseController
         return $this->response->setJSON($result);
     }
 
-    private function getBuiltinKeywords(): array
-    {
-        return SpamChecker::builtinKeywords();
-    }
 }

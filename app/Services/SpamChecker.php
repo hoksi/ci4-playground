@@ -65,13 +65,8 @@ class SpamChecker
         $score     = 0;
         $lowerText = mb_strtolower($text);
 
-        $allKeywords = array_merge(
-            self::BUILTIN_KEYWORDS,
-            (new SpamKeywordModel())->getActiveKeywords()
-        );
-
-        foreach ($allKeywords as $kw) {
-            if (str_contains($lowerText, mb_strtolower($kw))) {
+        foreach ((new SpamKeywordModel())->getActiveKeywords() as $kw) {
+            if (str_contains($lowerText, $kw)) {
                 $score += 30;
                 break;
             }
