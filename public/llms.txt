@@ -1,0 +1,90 @@
+# CI4 Playground
+
+> CodeIgniter 4의 주요 기능을 코드와 실행 결과로 함께 배우는 55개 예제 모음입니다.
+> PHP 8.2+, CodeIgniter 4.7, SQLite3 기반으로 별도 DB 설치 없이 바로 실행 가능합니다.
+
+## 핵심 기능
+
+- [라우팅](examples/routing): 기본/파라미터/Named Route/HTTP 메서드/그룹/리다이렉트
+- [컨트롤러](examples/controllers): Request 객체, 폼 처리, 유효성 검사, Response 타입
+- [뷰](examples/views): 기본 렌더링, 레이아웃 시스템, 파셜, View Cell
+- [모델 & 데이터베이스](examples/models): CRUD, Query Builder, 페이지네이션, Entity 클래스
+- [Entity 심화](examples/entityadvanced): $casts, $datamap, virtual property getter/setter
+- [필터](examples/filters): Before/After 필터, 인증 필터 패턴
+
+## 고급 기능
+
+- [RESTful API](examples/api): JSON 응답, HTTP 상태 코드, POST API 라이브 테스트
+- [RESTful API v2 (JWT)](examples/apiv2): 라이브러리 없는 HS256 JWT 발급/검증, Bearer 인증
+
+## 입출력 처리
+
+- [파일 업로드](examples/fileupload): 단일/다중 업로드, 유효성 검사, 파일 관리
+- [파일 업로드 심화](examples/fileupload-advanced): Drag & Drop, XHR 진행률, AJAX 업로드
+- [TinyMCE 에디터](examples/tinymce): 리치 텍스트 편집, 이미지 업로드, HTML 저장
+- [세션 & 쿠키](examples/session): 세션 CRUD, 플래시 데이터, 쿠키 설정/삭제
+- [유효성 검사](examples/validation): 기본 규칙, 커스텀 메시지, 인라인 규칙
+- [HTTP 클라이언트](examples/httpclient): CURLRequest 외부 API 호출, GET/POST/헤더
+- [이메일 발송](examples/email): SMTP 설정, HTML 메일, 첨부파일
+
+## 아키텍처 패턴
+
+- [서비스 레이어](examples/servicelayer): Controller/Service/Model 레이어 분리
+- [Repository 패턴](examples/repository): Interface/Repository/Controller 레이어 분리
+- [커스텀 헬퍼](examples/helper): 헬퍼 함수 정의, 자동 로드
+- [캐싱](examples/cache): 파일/더미 캐시, TTL, 태그 기반 캐시
+- [다국어 i18n](examples/lang): 언어 파일, lang(), 런타임 언어 전환
+- [이벤트 시스템](examples/events): Events::on(), trigger(), 우선순위
+- [CLI 커맨드](examples/cli): BaseCommand 상속, spark 명령어 등록
+- [테스팅](examples/testing): PHPUnit, Feature 테스트, Mock, CI4 테스트 헬퍼
+
+## 실무 패턴
+
+- [DB 트랜잭션](examples/transaction): transStart/Complete/Rollback, 중첩 트랜잭션
+- [로깅](examples/logging): log_message(), PSR-3 레벨, 로그 파일 뷰어
+- [예외 처리](examples/exception): PageNotFoundException, 전역 핸들러, try/catch
+- [Throttler](examples/throttler): 토큰 버킷 속도 제한, 요청 횟수 제한
+- [Model 콜백](examples/modelcallback): beforeInsert, afterFind, 비밀번호 자동 해싱
+- [Config 환경 분리](examples/configenv): BaseConfig 서브클래스, .env 오버라이드
+- [유효성 검사 고급](examples/advancedvalidation): 커스텀 규칙 클래스, 규칙 그룹, 조건부
+- [API 인증](examples/apiauth): API Key 발급/검증/취소, Bearer 토큰 필터
+- [Security](examples/securitydemo): esc() 이스케이프, sanitizeFilename(), CSRF
+- [Query Builder 고급](examples/querybuilderadvanced): JOIN, 서브쿼리, GROUP BY/HAVING
+- [Pagination 심화](examples/paginationadvanced): 기본 pager, AJAX 전환, 무한 스크롤
+- [다중 DB 연결](examples/multidb): 런타임 DB 그룹, 두 SQLite 연결
+- [이미지 처리](examples/imageprocess): resize/fit/rotate, 썸네일 생성
+- [암호화 & 해싱](examples/encryption): bcrypt, password_verify, 해싱 vs 암호화
+
+## 실전 예제
+
+- [게시판 CRUD](examples/board): 완성형 게시판 + AI 3단계 스팸 감지 (규칙/StopForumSpam/Groq AI)
+- [스팸 관리](examples/spam-admin): AI 학습 키워드 DB, IP 평판 체크, 실시간 테스트 패널
+- [회원 인증](examples/auth): 회원가입/로그인/로그아웃/비밀번호 변경
+- [큐 시스템](examples/queue): DB 기반 커스텀 큐 push/process/retry/failed
+- [CSV/Excel](examples/csv-excel): fputcsv/fgetcsv + PhpSpreadsheet XLSX
+- [CI4 공식 Queue](examples/official-queue): codeigniter4/queue, 우선순위, 재시도
+- [Task Scheduler](examples/taskscheduler): codeigniter4/tasks, cron 연동
+- [PDF 생성](examples/pdfgeneration): dompdf HTML→PDF, 한글(NotoSansCJK) 폰트
+
+## AI & 실시간
+
+- [SSE 실시간](examples/sse): Server-Sent Events, EventSource, 자동 재연결
+- [알림 시스템](examples/notification): DB 기반 알림 + SSE 실시간 미읽음 배지
+- [동기화 에디터](examples/sync-editor): SSE + AJAX 실시간 공유 에디터
+- [챗봇](examples/chat): Groq AI(LLaMA 3.1 8B) + Serper 웹 검색, 대화 컨텍스트
+- [고양이 키우기](examples/cat-game): 다마고찌 AI 게임, 레벨/경험치, Groq AI 반응
+
+## 데이터 & 시각화
+
+- [AG Grid](examples/aggrid): Community + CI4 JSON API, 정렬·필터·페이지네이션
+- [AJAX 페이지네이션](examples/ajax-pagination): 검색·정렬 + pushState URL 상태 유지
+- [차트](examples/chart): Chart.js 꺾은선·막대·도넛·복합 차트
+
+## 기술 스택
+
+- Framework: CodeIgniter 4.7.3
+- Language: PHP 8.2+
+- Database: SQLite3
+- AI: Groq API (LLaMA 3.1 8B)
+- Search: Serper (Google 검색)
+- Spam: StopForumSpam + Groq AI

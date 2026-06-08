@@ -32,12 +32,19 @@ class Sitemap extends Controller
 
     private function buildUrls(): array
     {
-        $examples = [
+        // 인기 예제 (priority 0.9)
+        $popular = [
             'examples/routing', 'examples/controllers', 'examples/views',
-            'examples/models', 'examples/entityadvanced', 'examples/filters',
-            'examples/api', 'examples/apiv2', 'examples/fileupload',
-            'examples/fileupload-advanced', 'examples/tinymce', 'examples/session',
-            'examples/validation', 'examples/httpclient', 'examples/email',
+            'examples/models', 'examples/api', 'examples/board',
+            'examples/auth', 'examples/validation', 'examples/filters',
+            'examples/chat', 'examples/cat-game',
+        ];
+
+        // 일반 예제 (priority 0.8)
+        $standard = [
+            'examples/entityadvanced', 'examples/apiv2',
+            'examples/fileupload', 'examples/fileupload-advanced', 'examples/tinymce',
+            'examples/session', 'examples/httpclient', 'examples/email',
             'examples/servicelayer', 'examples/repository', 'examples/helper',
             'examples/cache', 'examples/lang', 'examples/events', 'examples/cli',
             'examples/testing', 'examples/transaction', 'examples/logging',
@@ -45,25 +52,20 @@ class Sitemap extends Controller
             'examples/configenv', 'examples/advancedvalidation', 'examples/apiauth',
             'examples/securitydemo', 'examples/querybuilderadvanced',
             'examples/paginationadvanced', 'examples/multidb', 'examples/imageprocess',
-            'examples/encryption', 'examples/board', 'examples/auth', 'examples/queue',
-            'examples/csv-excel', 'examples/official-queue', 'examples/taskscheduler',
-            'examples/pdfgeneration', 'examples/sse', 'examples/notification',
-            'examples/fileupload-advanced', 'examples/tinymce', 'examples/aggrid',
-            'examples/ajax-pagination', 'examples/sync-editor', 'examples/chat',
-            'examples/cat-game',
+            'examples/encryption', 'examples/queue', 'examples/csv-excel',
+            'examples/official-queue', 'examples/taskscheduler', 'examples/pdfgeneration',
+            'examples/sse', 'examples/notification', 'examples/aggrid',
+            'examples/ajax-pagination', 'examples/sync-editor', 'examples/chart',
+            'examples/spam-admin',
         ];
-
-        // 중복 제거
-        $examples = array_values(array_unique($examples));
 
         $urls = [['loc' => base_url('/'), 'priority' => '1.0', 'changefreq' => 'weekly']];
 
-        foreach ($examples as $path) {
-            $urls[] = [
-                'loc'        => base_url($path),
-                'priority'   => '0.8',
-                'changefreq' => 'monthly',
-            ];
+        foreach ($popular as $path) {
+            $urls[] = ['loc' => base_url($path), 'priority' => '0.9', 'changefreq' => 'monthly'];
+        }
+        foreach ($standard as $path) {
+            $urls[] = ['loc' => base_url($path), 'priority' => '0.8', 'changefreq' => 'monthly'];
         }
 
         return $urls;
