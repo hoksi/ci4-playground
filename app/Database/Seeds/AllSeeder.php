@@ -12,5 +12,6 @@ class AllSeeder extends Seeder
         $this->call('AccountSeeder');
         $this->call('ProductsSeeder');
         $this->call('NotificationSeeder');
+        $this->call('SpamKeywordSeeder');
     }
 }
