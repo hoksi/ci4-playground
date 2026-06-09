@@ -31,6 +31,29 @@ class Board extends BaseController
         $this->model = new PostModel();
     }
 
+    private function checkWriteRules(string $title, string $content): ?\CodeIgniter\HTTP\RedirectResponse
+    {
+        $ip = $this->request->getIPAddress();
+
+        // 쿨다운: 동일 IP 30초 이내 재작성 차단
+        $cdKey = 'board_cd_' . md5($ip);
+        if (cache($cdKey)) {
+            return redirect()->back()->withInput()
+                ->with('error', '너무 빠르게 작성하고 있습니다. 30초 후 다시 시도해주세요.');
+        }
+        cache()->save($cdKey, 1, 30);
+
+        // 중복 감지: 5분 이내 동일 제목+내용 차단
+        $dupKey = 'board_dup_' . md5($ip . $title . $content);
+        if (cache($dupKey)) {
+            return redirect()->back()->withInput()
+                ->with('error', '동일한 내용의 게시글이 최근에 등록되었습니다.');
+        }
+        cache()->save($dupKey, 1, 300);
+
+        return null;
+    }
+
     private function denyIfReadOnly(string $redirectUrl): ?\CodeIgniter\HTTP\RedirectResponse
     {
         if (! self::READ_ONLY) {
@@ -76,6 +99,10 @@ class Board extends BaseController
         $title   = $this->request->getPost('title');
         $content = $this->request->getPost('content');
         $author  = $this->request->getPost('author');
+
+        if ($deny = $this->checkWriteRules($title, $content)) {
+            return $deny;
+        }
 
         $spamStatus = 'approved';
         if (self::SPAM_CHECK) {
