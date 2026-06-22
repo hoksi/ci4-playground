@@ -310,12 +310,12 @@ actionBtns.forEach(btn => {
 });
 
 // ─── 이름 변경 ────────────────────────────────────────
-document.getElementById('editNameBtn').addEventListener('click', () => {
+document.getElementById('editNameBtn')?.addEventListener('click', () => {
     document.getElementById('renameForm').classList.toggle('d-none');
     document.getElementById('nameInput').focus();
 });
 
-document.getElementById('saveNameBtn').addEventListener('click', async () => {
+document.getElementById('saveNameBtn')?.addEventListener('click', async () => {
     const name = document.getElementById('nameInput').value.trim();
     if (! name) return;
     const form = new URLSearchParams({ name });
