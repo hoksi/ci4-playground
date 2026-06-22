@@ -332,7 +332,7 @@ document.getElementById('saveNameBtn').addEventListener('click', async () => {
 });
 
 // ─── 초기화 ───────────────────────────────────────────
-document.getElementById('resetBtn').addEventListener('click', async () => {
+document.getElementById('resetBtn')?.addEventListener('click', async () => {
     if (! confirm('고양이 상태와 레벨을 초기화할까요?')) return;
     const form = new URLSearchParams();
     form.append(CSRF_TOKEN, csrfHash);
@@ -390,9 +390,10 @@ async function loadHistory() {
     }
 }
 
-document.getElementById('refreshHistory').addEventListener('click', loadHistory);
+document.getElementById('refreshHistory')?.addEventListener('click', loadHistory);
 
 // ─── 30초 폴링 + 최초 히스토리 로드 ──────────────────
+<?php if (! $isDead): ?>
 setInterval(async () => {
     const res  = await fetch('<?= base_url('examples/cat-game/status') ?>');
     const json = await res.json();
@@ -405,6 +406,7 @@ setInterval(async () => {
         showSpeech(MOODS[json.mood]?.adult ?? '냥~');
     }
 }, 30000);
+<?php endif ?>
 
 <?php if ($isDead): ?>
 // ─── 재시작 버튼 ──────────────────────────────────────
@@ -421,6 +423,6 @@ document.getElementById('restartBtn')?.addEventListener('click', async () => {
 });
 <?php endif ?>
 
-loadHistory();
+<?php if (! $isDead): ?>loadHistory();<?php endif ?>
 </script>
 <?= $this->endSection() ?>
