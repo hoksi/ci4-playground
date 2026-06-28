@@ -167,9 +167,10 @@ $nextEx = $currentIdx >= 0 && $currentIdx < count($allExamples) - 1 ? $allExampl
 $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
 ?>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
+    <script>(function(){const t=localStorage.getItem('ci4pg-theme');if(t==='dark')document.documentElement.setAttribute('data-bs-theme','dark');}());</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title ?? 'CI4 Playground') ?> — CodeIgniter 4</title>
     <?php
@@ -385,6 +386,28 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
                 background: rgba(255,255,255,.1); color: #fff;
             }
         }
+
+        /* ── Dark mode ── */
+        [data-bs-theme="dark"] body { background: #0d1117; color: #e6edf3; }
+        [data-bs-theme="dark"] .example-card { background: #161b22; border-color: #30363d; }
+        [data-bs-theme="dark"] .example-card-header { background: #0d1117; border-color: #30363d; color: #e6edf3; }
+        [data-bs-theme="dark"] .page-header { background: linear-gradient(135deg, #010409 0%, #0d1117 100%); }
+        [data-bs-theme="dark"] .app-footer { background: #161b22; border-color: #30363d; color: #6e7681; }
+        [data-bs-theme="dark"] .result-box { background: #12261e; border-color: #1f4a2e; }
+        [data-bs-theme="dark"] .result-box.info    { background: #101c30; border-color: #1f3a5e; }
+        [data-bs-theme="dark"] .result-box.warning { background: #2a1f00; border-color: #5a4000; }
+        [data-bs-theme="dark"] .result-box.danger  { background: #2a0d0d; border-color: #5e1a1a; }
+        [data-bs-theme="dark"] .page-nav-btn { background: #161b22; border-color: #30363d; color: #e6edf3; }
+        [data-bs-theme="dark"] .page-nav-btn:hover { border-color: var(--ci-red); color: var(--ci-red); background: #1a0f0a; }
+        [data-bs-theme="dark"] .page-nav-btn .nav-dir { color: #6e7681; }
+        [data-bs-theme="dark"] .app-navbar .dropdown-menu { background: #161b22; }
+        [data-bs-theme="dark"] .app-navbar .dropdown-item { color: #c9d1d9; }
+        [data-bs-theme="dark"] .app-navbar .dropdown-item:hover { background: #1f2937; color: var(--ci-red); }
+        [data-bs-theme="dark"] .app-navbar .dropdown-item.active { background: #1f2937; color: var(--ci-red); }
+        [data-bs-theme="dark"] .code-label { color: #8b949e; }
+        [data-bs-theme="dark"] .speech-bubble { background: #161b22; border-color: #30363d; color: #e6edf3; }
+        [data-bs-theme="dark"] .speech-bubble::before { border-bottom-color: #30363d; }
+        [data-bs-theme="dark"] .speech-bubble::after  { border-bottom-color: #161b22; }
     </style>
 </head>
 <body>
@@ -443,12 +466,17 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
 
       </ul>
 
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item">
           <a href="https://www.cikorea.net" target="_blank"
              class="nav-link" style="font-size:.82rem;">
             <i class="bi bi-book me-1"></i>한국어 문서
           </a>
+        </li>
+        <li class="nav-item">
+          <button id="themeToggle" class="btn btn-link nav-link px-2" title="다크모드 전환" style="font-size:1rem;">
+            <i id="themeIcon" class="bi bi-moon-stars"></i>
+          </button>
         </li>
       </ul>
     </div>
@@ -502,6 +530,30 @@ $exMap = array_combine(array_column($allExamples, 'url'), $allExamples);
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+
+        // ── 다크모드 토글 ──
+        const htmlRoot    = document.getElementById('htmlRoot');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon   = document.getElementById('themeIcon');
+
+        function applyTheme(dark) {
+            if (dark) {
+                htmlRoot.setAttribute('data-bs-theme', 'dark');
+                themeIcon.className = 'bi bi-sun';
+            } else {
+                htmlRoot.removeAttribute('data-bs-theme');
+                themeIcon.className = 'bi bi-moon-stars';
+            }
+        }
+
+        // 페이지 로드 시 아이콘을 현재 테마에 맞게 동기화
+        applyTheme(htmlRoot.getAttribute('data-bs-theme') === 'dark');
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = htmlRoot.getAttribute('data-bs-theme') === 'dark';
+            localStorage.setItem('ci4pg-theme', isDark ? 'light' : 'dark');
+            applyTheme(!isDark);
+        });
 
         // 모바일: 네비게이션 열릴 때 현재 페이지 카테고리 드롭다운 자동 펼침
         const activeItem = document.querySelector('.app-navbar .dropdown-item.active');
